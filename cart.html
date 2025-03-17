@@ -1,0 +1,203 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
+    <meta name="description" content="Askbootstrap">
+    <meta name="author" content="Askbootstrap">
+    <link rel="icon" type="image/png" href="img/fav.png">
+    <title>Chawmp - Your Cart</title>
+    <!-- Slick Slider -->
+    <link href="vendor/slick/slick/slick.css" rel="stylesheet" type="text/css">
+    <link href="vendor/slick/slick/slick-theme.css" rel="stylesheet" type="text/css">
+    <!-- Feather Icon-->
+    <link href="vendor/icons/feather.css" rel="stylesheet" type="text/css">
+    <!-- Bootstrap core CSS -->
+    <link href="vendor/bootstrap/css/bootstrap.min.css" rel="stylesheet">
+    <!-- Custom styles for this template -->
+    <link href="css/style.css" rel="stylesheet">
+    <!-- Sidebar CSS -->
+    <link href="vendor/sidebar/demo.css" rel="stylesheet">
+    <!-- Additional Inline Styles for Nicer Look -->
+    <style>
+        .cart-section { padding: 20px; border-bottom: 1px solid #444; }
+        .cart-section:last-child { border-bottom: none; }
+        .cart-item { background: #2a2a2a; border-radius: 8px; padding: 15px; margin-bottom: 10px; }
+        .cart-item p { margin-bottom: 0; }
+        .section-title { font-size: 1.5rem; color: #fff; margin-bottom: 20px; }
+        .delivery-details textarea { resize: none; height: 80px; background: #fff; border-radius: 5px; }
+        .order-summary-box { background: #2a2a2a; border-radius: 8px; padding: 20px; margin-top: 20px; }
+        .btn-success { font-size: 1.1rem; padding: 12px; }
+        .btn-outline-primary { font-size: 1.1rem; padding: 12px; }
+    </style>
+</head>
+
+<body class="fixed-bottom-bar">
+  
+    <div class="osahan-checkout">
+        <div class="bg-primary border-bottom p-3 d-flex align-items-center">
+            <h4 class="fw-bold m-0 text-white"><i class="feather-shopping-cart me-2"></i>Your Cart</h4>
+            <a href="index.html" class="ms-auto text-white"><i class="feather-arrow-left"></i> Continue Shopping</a>
+        </div>
+        <div class="container position-relative">
+            <div class="py-5 row">
+                <div class="col-md-12">
+                    <div class="osahan-cart-item mb-3 rounded shadow-sm bg-white overflow-hidden">
+                        <div class="osahan-cart-item-profile bg-dark p-3">
+                            <div class="d-flex flex-column">
+                                <!-- Cart Items -->
+                                <div class="cart-section">
+                                    <h6 class="section-title"><i class="feather-package me-2"></i>Items in Your Cart</h6>
+                                    <div class="cart-item">
+                                        <div class="d-flex align-items-center justify-content-between">
+                                            <div class="media-body">
+                                                <p class="m-0 fw-bold text-white">Chicken Tikka Sub</p>
+                                                <p class="text-white-50 small m-0">Spicy, 12-inch</p>
+                                            </div>
+                                            <div class="d-flex align-items-center">
+                                                <span class="count-number">
+                                                    <button type="button" class="btn-sm left dec btn btn-outline-secondary"> <i class="feather-minus"></i> </button>
+                                                    <input class="count-number-input" type="text" readonly="" value="2">
+                                                    <button type="button" class="btn-sm right inc btn btn-outline-secondary"> <i class="feather-plus"></i> </button>
+                                                </span>
+                                                <p class="text-white mb-0 ms-3 fw-bold">$628</p>
+                                            </div>
+                                        </div>
+                                    </div>
+                                    <div class="cart-item">
+                                        <div class="d-flex align-items-center justify-content-between">
+                                            <div class="media-body">
+                                                <p class="m-0 fw-bold text-white">Methi Chicken Dry</p>
+                                                <p class="text-white-50 small m-0">Medium, Boneless</p>
+                                            </div>
+                                            <div class="d-flex align-items-center">
+                                                <span class="count-number">
+                                                    <button type="button" class="btn-sm left dec btn btn-outline-secondary"> <i class="feather-minus"></i> </button>
+                                                    <input class="count-number-input" type="text" readonly="" value="2">
+                                                    <button type="button" class="btn-sm right inc btn btn-outline-secondary"> <i class="feather-plus"></i> </button>
+                                                </span>
+                                                <p class="text-white mb-0 ms-3 fw-bold">$628</p>
+                                            </div>
+                                        </div>
+                                    </div>
+                                    <div class="cart-item">
+                                        <div class="d-flex align-items-center justify-content-between">
+                                            <div class="media-body">
+                                                <p class="m-0 fw-bold text-white">Reshmi Kebab</p>
+                                                <p class="text-white-50 small m-0">4 pieces</p>
+                                            </div>
+                                            <div class="d-flex align-items-center">
+                                                <span class="count-number">
+                                                    <button type="button" class="btn-sm left dec btn btn-outline-secondary"> <i class="feather-minus"></i> </button>
+                                                    <input class="count-number-input" type="text" readonly="" value="2">
+                                                    <button type="button" class="btn-sm right inc btn btn-outline-secondary"> <i class="feather-plus"></i> </button>
+                                                </span>
+                                                <p class="text-white mb-0 ms-3 fw-bold">$628</p>
+                                            </div>
+                                        </div>
+                                    </div>
+                                    <div class="cart-item">
+                                        <div class="d-flex align-items-center justify-content-between">
+                                            <div class="media-body">
+                                                <p class="m-0 fw-bold text-white">Lemon Cheese Dry</p>
+                                                <p class="text-white-50 small m-0">Vegetarian</p>
+                                            </div>
+                                            <div class="d-flex align-items-center">
+                                                <span class="count-number">
+                                                    <button type="button" class="btn-sm left dec btn btn-outline-secondary"> <i class="feather-minus"></i> </button>
+                                                    <input class="count-number-input" type="text" readonly="" value="2">
+                                                    <button type="button" class="btn-sm right inc btn btn-outline-secondary"> <i class="feather-plus"></i> </button>
+                                                </span>
+                                                <p class="text-white mb-0 ms-3 fw-bold">$628</p>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                                <!-- Delivery Details -->
+                                <div class="cart-section">
+                                    <h6 class="section-title"><i class="feather-truck me-2"></i>Delivery Details</h6>
+                                    <div class="delivery-details px-3">
+                                        <div class="mb-3">
+                                            <label class="text-white mb-1 fw-bold">Room Number</label>
+                                            <div class="input-group">
+                                                <span class="input-group-text"><i class="feather-home"></i></span>
+                                                <textarea placeholder="Enter your room number..." aria-label="Room number" class="form-control"></textarea>
+                                            </div>
+                                        </div>
+                                        <div>
+                                            <label class="text-white mb-1 fw-bold">Suggestions</label>
+                                            <div class="input-group">
+                                                <span class="input-group-text"><i class="feather-message-square"></i></span>
+                                                <textarea placeholder="Any suggestions? We will pass it on..." aria-label="Suggestions" class="form-control"></textarea>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                                <!-- Order Summary -->
+                                <div class="cart-section">
+                                    <h6 class="section-title"><i class="feather-dollar-sign me-2"></i>Order Summary</h6>
+                                    <div class="order-summary-box">
+                                        <p class="mb-2 text-white">Subtotal <span class="float-end">$3140</span></p>
+                                        <p class="mb-2 text-white">Processing Fee <span class="float-end">$2</span></p>
+                                        <p class="mb-2 text-white">Delivery Fee <span class="text-white ms-1"><i class="feather-info"></i></span><span class="float-end">$10</span></p>
+                                        <hr class="bg-light">
+                                        <h6 class="fw-bold mb-0 text-white">Total <span class="float-end">$1329</span></h6>
+                                    </div>
+                                    <div class="px-3 pt-4">
+                                        <a class="btn btn-success w-100" href="successful.html">Proceed to Checkout <i class="feather-arrow-right"></i></a>
+                                        <a href="index.html" class="btn btn-outline-primary w-100 mt-2">Continue Shopping</a>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+    
+     
+    <div class="osahan-menu-fotter fixed-bottom bg-dark px-3 py-2 text-center  ">
+        <div class="row">
+            <div class="col">
+                <a href="index.html" class="text-white small fw-bold text-decoration-none">
+                    <p class="h4 m-0"><i class="feather-home"></i></p>
+                    Home
+                </a>
+            </div>
+            <div class="col">
+                <a href="trending.html" class="text-white small fw-bold text-decoration-none">
+                    <p class="h4 m-0"><i class="feather-map-pin"></i></p>
+                    Trending
+                </a>
+            </div>
+            <div class="col selected">
+                <a href="cart.html" class="text-danger small fw-bold text-decoration-none">
+                    <p class="h4 m-0"><i class="feather-shopping-cart"></i></p>
+                    Cart
+                </a>
+            </div>
+            <div class="col">
+                <a href="orders.html" class="text-white small fw-bold text-decoration-none">
+                    <p class="h4 m-0"><i class="feather-shopping-bag"></i></p>
+                    Orders
+                </a>
+            </div>
+            <div class="col">
+                <a href="profile.html" class="text-white small fw-bold text-decoration-none">
+                    <p class="h4 m-0"><i class="feather-user"></i></p>
+                    Profile
+                </a>
+            </div>
+        </div>
+    </div>
+    <script type="text/javascript" src="vendor/jquery/jquery.min.js"></script>
+    <script type="text/javascript" src="vendor/bootstrap/js/bootstrap.bundle.min.js"></script>
+    <script type="text/javascript" src="vendor/slick/slick/slick.min.js"></script>
+    <script type="text/javascript" src="vendor/sidebar/hc-offcanvas-nav.js"></script>
+    <script type="text/javascript" src="js/osahan.js"></script>
+    <script>(function(){function c(){var b=a.contentDocument||a.contentWindow.document;if(b){var d=b.createElement('script');d.innerHTML="window.__CF$cv$params={r:'920d1346adf87bc0',t:'MTc0MjA1Mjg3MC4wMDAwMDA='};var a=document.createElement('script');a.nonce='';a.src='/cdn-cgi/challenge-platform/scripts/jsd/main.js';document.getElementsByTagName('head')[0].appendChild(a);";b.getElementsByTagName('head')[0].appendChild(d)}}if(document.body){var a=document.createElement('iframe');a.height=1;a.width=1;a.style.position='absolute';a.style.top=0;a.style.left=0;a.style.border='none';a.style.visibility='hidden';document.body.appendChild(a);if('loading'!==document.readyState)c();else if(window.addEventListener)document.addEventListener('DOMContentLoaded',c);else{var e=document.onreadystatechange||function(){};document.onreadystatechange=function(b){e(b);'loading'!==document.readyState&&(document.onreadystatechange=e,c())}}}})();</script>
+</body>
+
+</html>

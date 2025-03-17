@@ -1,0 +1,180 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Login - Vendor Portal</title>
+  <style>
+    :root {
+      --primary-color: #ff5722;
+      --text-color: #1d1d1f;
+      --bg-color: #f5f5f7;
+      --card-bg: #fff;
+      --shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
+      --border-radius: 12px;
+    }
+    * {
+      margin: 0;
+      padding: 0;
+      box-sizing: border-box;
+      font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif;
+    }
+    body {
+      background: var(--bg-color);
+      color: var(--text-color);
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      min-height: 100vh;
+    }
+    .login-container {
+      background: var(--card-bg);
+      padding: 30px;
+      border-radius: var(--border-radius);
+      box-shadow: var(--shadow);
+      width: 100%;
+      max-width: 400px;
+    }
+    h1 {
+      font-size: 24px;
+      font-weight: 600;
+      margin-bottom: 20px;
+      text-align: center;
+    }
+    form {
+      display: grid;
+      gap: 15px;
+    }
+    input {
+      padding: 12px;
+      border: 1px solid #d2d2d7;
+      border-radius: 8px;
+      font-size: 16px;
+      transition: border-color 0.3s;
+    }
+    input:focus {
+      border-color: var(--primary-color);
+      outline: none;
+    }
+    button {
+      padding: 12px;
+      background: var(--primary-color);
+      color: #fff;
+      border: none;
+      border-radius: 8px;
+      font-size: 16px;
+      font-weight: 500;
+      cursor: pointer;
+      transition: background 0.3s;
+    }
+    button:hover {
+      background: #e64a19;
+    }
+    .notification {
+      position: fixed;
+      top: 20px;
+      right: 20px;
+      background: #fff;
+      padding: 12px 20px;
+      border-radius: 8px;
+      box-shadow: var(--shadow);
+      font-size: 14px;
+      color: #333;
+      display: none;
+      z-index: 2000;
+      transition: opacity 0.3s;
+    }
+    .notification.error {
+      background: #ff3b30;
+      color: #fff;
+    }
+    @media screen and (max-width: 750px) {
+      .login-container {
+        padding: 20px;
+        margin: 10px;
+      }
+      h1 {
+        font-size: 20px;
+      }
+      input, button {
+        font-size: 14px;
+        padding: 10px;
+      }
+    }
+  </style>
+</head>
+<body>
+    <div class="login-container">
+      <h1>Vendor Portal Login</h1>
+      <form id="login-form">
+        <input type="password" id="password" placeholder="Enter password" required>
+        <button type="submit">Login</button>
+      </form>
+    </div>
+    <div class="notification" id="notification"></div>
+  
+    <script src="https://www.gstatic.com/firebasejs/8.10.1/firebase-app.js"></script>
+    <script src="https://www.gstatic.com/firebasejs/8.10.1/firebase-database.js"></script>
+    <script>
+      const firebaseConfig = {
+  apiKey: "AIzaSyADvpUQWo75ExePGoCRirD2mM-lmfM4Cmc",
+  authDomain: "von600-7982d.firebaseapp.com",
+  projectId: "von600-7982d",
+  storageBucket: "von600-7982d.firebasestorage.app",
+  messagingSenderId: "164591218045",
+  appId: "1:164591218045:web:afe17512e16573e7903014",
+  measurementId: "G-E69DMPLXBK"
+};
+      try {
+        firebase.initializeApp(firebaseConfig);
+        console.log("Firebase initialized successfully");
+      } catch (error) {
+        console.error("Firebase initialization failed:", error);
+        showNotification("Failed to connect to database", true);
+      }
+  
+      const db = firebase.database();
+      const passwordRef = db.ref('settings/password');
+      const form = document.getElementById('login-form');
+      let correctPassword = 'vendor123';
+  
+      passwordRef.once('value', (snapshot) => {
+        correctPassword = snapshot.val() || 'vendor123';
+        console.log("Loaded password:", correctPassword);
+      }, (error) => {
+        console.error("Error fetching password:", error);
+        showNotification("Failed to load password", true);
+      });
+  
+      function handleLogin(e) {
+        e.preventDefault();
+        const password = document.getElementById('password').value;
+        if (password === correctPassword) {
+          localStorage.setItem("authenticated", "true");
+          window.location.href = "dashboard.html";
+        } else {
+          showNotification('Incorrect password', true);
+        }
+      }
+  
+      form.addEventListener('submit', handleLogin);
+      document.getElementById('password').addEventListener('keydown', (e) => {
+        if (e.key === 'Enter') {
+          handleLogin(e);
+        }
+      });
+  
+      function showNotification(message, isError = false) {
+        const notification = document.getElementById('notification');
+        notification.textContent = message;
+        notification.classList.toggle('error', isError);
+        notification.style.display = 'block';
+        notification.style.opacity = '1';
+        setTimeout(() => {
+          notification.style.opacity = '0';
+          setTimeout(() => notification.style.display = 'none', 300);
+        }, 2000);
+      }
+    </script>
+</body>
+</html>
