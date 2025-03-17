@@ -504,48 +504,71 @@
 
 <script type="module">
     import { initializeApp } from "https://www.gstatic.com/firebasejs/10.9.0/firebase-app.js";
-    import { getFirestore, collection, getDocs, query, orderBy, limit } from "https://www.gstatic.com/firebasejs/10.9.0/firebase-firestore.js";
+    import { getFirestore, collection, getDocs, query, orderBy, limit, startAfter, enableIndexedDbPersistence } from "https://www.gstatic.com/firebasejs/10.9.0/firebase-firestore.js";
 
     // 🔥 Firebase Config (Make sure it's correct)
     const firebaseConfig = {
-      apiKey: "AIzaSyADvpUQWo75ExePGoCRirD2mM-lmfM4Cmc",
-      authDomain: "von600-7982d.firebaseapp.com",
-      projectId: "von600-7982d",
-      storageBucket: "von600-7982d.appspot.com",
-      messagingSenderId: "164591218045",
-      appId: "1:164591218045:web:afe17512e16573e7903014",
-      measurementId: "G-E69DMPLXBK"
+        apiKey: "AIzaSyADvpUQWo75ExePGoCRirD2mM-lmfM4Cmc",
+        authDomain: "von600-7982d.firebaseapp.com",
+        projectId: "von600-7982d",
+        storageBucket: "von600-7982d.appspot.com",
+        messagingSenderId: "164591218045",
+        appId: "1:164591218045:web:afe17512e16573e7903014",
+        measurementId: "G-E69DMPLXBK"
     };
 
     // ✅ Initialize Firebase
     const app = initializeApp(firebaseConfig);
     const db = getFirestore(app);
 
-    async function loadRestaurants() {
-        const restaurantList = document.getElementById("restaurant-list");
+    // ✅ Enable Firestore Persistence (Load from Cache First)
+    enableIndexedDbPersistence(db).catch(err => console.error("Persistence failed:", err));
 
+    let lastVisible = null; // Track last loaded document for pagination
+    let isLoading = false;  // Prevent multiple requests at the same time
+
+    async function loadRestaurants(loadMore = false) {
+        if (isLoading) return; // Prevent duplicate requests
+        isLoading = true;
+
+        const restaurantList = document.getElementById("restaurant-list");
         if (!restaurantList) {
             console.error("❌ ERROR: #restaurant-list div not found in HTML!");
             return;
         }
 
-        restaurantList.innerHTML = "<p>Loading restaurants...</p>";
+        // ✅ Load cached data first for faster display
+        if (!loadMore) {
+            const cachedData = localStorage.getItem("restaurants");
+            if (cachedData) {
+                console.log("✅ Loaded restaurants from cache");
+                restaurantList.innerHTML = cachedData;
+            } else {
+                restaurantList.innerHTML = "<p>Loading restaurants...</p>";
+            }
+        }
 
         try {
-            // ✅ Fetch only 10 restaurants
-            const q = query(collection(db, "restaurant"), orderBy("rating", "desc"), limit(10));
-            const querySnapshot = await getDocs(q);
+            // ✅ Fetch only 10 restaurants at a time
+            let q = query(collection(db, "restaurant"), orderBy("rating", "desc"), limit(10));
 
+            if (loadMore && lastVisible) {
+                q = query(collection(db, "restaurant"), orderBy("rating", "desc"), startAfter(lastVisible), limit(10));
+            }
+
+            const querySnapshot = await getDocs(q);
             if (querySnapshot.empty) {
-                console.warn("⚠️ Firestore collection is EMPTY! Add restaurants in Firestore.");
-                restaurantList.innerHTML = "<p>No restaurants found.</p>";
+                console.warn("⚠️ No more restaurants to load.");
+                isLoading = false;
                 return;
             }
 
-            let output = "";
+            lastVisible = querySnapshot.docs[querySnapshot.docs.length - 1]; // Track last doc for pagination
+
+            let output = loadMore ? restaurantList.innerHTML : ""; // Append to existing list if lazy loading
             querySnapshot.forEach(doc => {
                 const data = doc.data();
-                console.log("✅ Loaded restaurant:", data); // Debugging
+                console.log("✅ Loaded restaurant:", data);
 
                 output += `
                     <div class="osahan-slider-item">
@@ -574,16 +597,27 @@
             });
 
             restaurantList.innerHTML = output;
+            localStorage.setItem("restaurants", output); // ✅ Store in cache for faster reloads
 
         } catch (error) {
             console.error("❌ ERROR fetching restaurants:", error);
             restaurantList.innerHTML = "<p>Failed to load restaurants.</p>";
+        } finally {
+            isLoading = false; // Allow new requests
         }
     }
 
+    // ✅ Load More Restaurants on Scroll
+    window.addEventListener("scroll", () => {
+        if (window.innerHeight + window.scrollY >= document.body.offsetHeight - 500) {
+            loadRestaurants(true);
+        }
+    });
+
     // ✅ Run function when page loads
-    document.addEventListener("DOMContentLoaded", loadRestaurants);
+    document.addEventListener("DOMContentLoaded", () => loadRestaurants(false));
 </script>
+
 
     
     
