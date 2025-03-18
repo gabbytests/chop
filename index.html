@@ -567,36 +567,35 @@
             lastVisible = querySnapshot.docs[querySnapshot.docs.length - 1]; // Track last doc for pagination
 
             let output = loadMore ? restaurantList.innerHTML : ""; // Append to existing list if lazy loading
-            querySnapshot.forEach(doc => {
-                const data = doc.data();
-                console.log("✅ Loaded restaurant:", data);
+querySnapshot.forEach(doc => {
+    const data = doc.data();
+    console.log("✅ Loaded restaurant:", data);
 
-                output += `
-    <div class="osahan-slider-item" style="margin-bottom: 15px;"> <!-- 🔥 Added margin-bottom for spacing -->
-        <div class="list-card bg-white h-100 rounded overflow-hidden position-relative shadow-sm">
-            <div class="list-card-image">
-                <div class="star position-absolute">
-                    <span class="badge text-bg-success"><i class="feather-star"></i> ${data.rating}</span>
+    output += `
+        <div class="osahan-slider-item"> 
+            <div class="list-card bg-white h-100 rounded overflow-hidden position-relative shadow-sm">
+                <div class="list-card-image">
+                    <div class="star position-absolute">
+                        <span class="badge text-bg-success"><i class="feather-star"></i> ${data.rating}</span>
+                    </div>
+                    <a href="restaurant.html">
+                        <img alt="${data.name}" src="${data.image}" class="img-fluid item-img w-100">
+                    </a>
                 </div>
-                <a href="restaurant.html">
-                    <img alt="${data.name}" src="${data.image}" class="img-fluid item-img w-100">
-                </a>
-            </div>
-            <div class="p-3 position-relative">
-                <h6 class="mb-1"><a href="restaurant.html" class="text-black">${data.name}</a></h6>
-                <p class="text-gray mb-3">${data.category}</p>
-                <p class="text-gray mb-3 time">
-                    <span class="bg-light text-dark rounded-sm py-1 px-2">
-                        <i class="feather-clock"></i> ${Math.max(5, data.delivery_time - 15)}-${data.delivery_time} mins
-                    </span>
-                    <span class="float-end text-black-50">$${data.price}</span>
-                </p>
+                <div class="p-3 position-relative">
+                    <h6 class="mb-1"><a href="restaurant.html" class="text-black">${data.name}</a></h6>
+                    <p class="text-gray mb-3 time">
+                        <span class="bg-light text-dark rounded-sm py-1 px-2">
+                            <i class="feather-clock"></i> ${Math.max(5, data.delivery_time - 15)}-${data.delivery_time} mins
+                        </span>
+                    </p>
+                </div>
             </div>
         </div>
-    </div>
-`;
+    `;
+});
 
-            });
+
 
             restaurantList.innerHTML = output;
             localStorage.setItem("restaurants", output); // ✅ Store in cache for faster reloads

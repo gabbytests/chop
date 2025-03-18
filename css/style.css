@@ -481,6 +481,13 @@ p {
 .landing-page-skip .slick-dotted.slick-slider {
     margin: 0;
 }
+.osahan-slider-item {
+    width: 100% !important; /* 🔥 Forces wider cards */
+    max-width: 700px !important; /* 🔥 Expands max width */
+    margin: auto !important;
+    padding: 10px !important; /* Adds slight padding */
+}
+
 
 .landing-page-skip .osahan-slider-item {
     padding: 0 20px;
