@@ -1,160 +1,136 @@
 <!DOCTYPE html>
 <html lang="en">
-
 <head>
     <meta charset="utf-8">
     <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
-    <meta name="description" content="Askbootstrap">
-    <meta name="author" content="Askbootstrap">
-    <link rel="icon" type="image/png" href="img/fav.png">
-    <title>Chawmp</title>
-    <!-- Slick Slider -->
-    <link href="vendor/slick/slick/slick.css" rel="stylesheet" type="text/css">
-    <link href="vendor/slick/slick/slick-theme.css" rel="stylesheet" type="text/css">
-    <!-- Feather Icon-->
-    <link href="vendor/icons/feather.css" rel="stylesheet" type="text/css">
-    <!-- Bootstrap core CSS -->
+    <meta name="description" content="Restaurant Menu">
+    <title>Restaurant Menu</title>
     <link href="vendor/bootstrap/css/bootstrap.min.css" rel="stylesheet">
-    <!-- Custom styles for this template -->
     <link href="css/style.css" rel="stylesheet">
-    <!-- Sidebar CSS -->
-    <link href="vendor/sidebar/demo.css" rel="stylesheet">
+    <style>
+        .restaurant-header {
+            text-align: center;
+            padding: 30px;
+            background: #2c2c2c;
+            color: white;
+        }
+        .restaurant-header img {
+            width: 150px;
+            height: 150px;
+            border-radius: 10px;
+            object-fit: cover;
+        }
+        .menu-section {
+            padding: 20px;
+        }
+        .menu-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(180px, 1fr));
+            gap: 15px;
+        }
+        .menu-item {
+            background: white;
+            padding: 10px;
+            border-radius: 10px;
+            box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+            text-align: center;
+        }
+        .menu-item img {
+            width: 100%;
+            height: 120px;
+            object-fit: cover;
+            border-radius: 10px;
+        }
+    </style>
 </head>
+<body>
 
-<body class="fixed-bottom-bar">
-  
-    <div class=" ">
-        <div class="">
-            <img src="img/trending1.png" alt="Osahan Bar Logo" class="img-fluid" style="max-height: 1000px;">
-        </div>
-        
+    <div class="restaurant-header">
+        <img id="restaurant-image" src="" alt="Restaurant">
+        <h1 id="restaurant-name"></h1>
+        <p id="restaurant-info"></p>
     </div>
 
-    <div class="container ">
-    <div class="body-color pt-4 pb-2 title d-flex align-items-center">
-        <h5 class="m-0">Famous Dave's Bar-B-Que</h5>
+    <div class="menu-section">
+        <h2>Menu</h2>
+        <div id="menu-list" class="menu-grid"></div>
     </div>
-    </div>
-   
-   
-    
-    <!-- Menu -->
-    <div class="container position-relative">
-        <div class="row">
-            <div class="col-md-8 pt-3">
-                <div class="shadow-sm rounded bg-darkish mb-3 overflow-hidden">
-                   
-                   
-                    
-                    <div class="row m-0">
-                        <h6 class="p-3 m-0 bg-dark w-100">Menu </h6>
-                        <div class="col-md-12 px-0 border-top">
-                            <div class="bg-darkish">
-                                <div class="d-flex gap-2 p-3 border-bottom gold-members">
-                                    <div class="fw-bold text-danger non_veg">.</div>
-                                    <div>
-                                        <h6 class="mb-1">Chicken Tikka Sub </h6>
-                                        <p class="text-white mb-0">$250</p>
-                                    </div>
-                                    <span class="ms-auto"><a href="restaurant.html#" class="btn btn-outline-secondary btn-sm" data-bs-toggle="modal" data-bs-target="#extras">ADD</a></span>
-                                </div>
-                                <div class="d-flex gap-2 p-3 border-bottom gold-members">
-                                    <div class="fw-bold text-danger non_veg">.</div>
-                                    <div>
-                                        <h6 class="mb-1">Cheese corn Roll <span class="badge text-bg-danger">BEST SELLER</span></h6>
-                                            <p class="text-white mb-0">$600</p>
-                                    </div>
-                                    <span class="ms-auto"><a href="restaurant.html#" class="btn btn-outline-secondary btn-sm" data-bs-toggle="modal" data-bs-target="#extras">ADD</a></span>
-                                </div>
-                                <div class="d-flex gap-2 p-3 border-bottom gold-members">
-                                    <div class="fw-bold text-success veg">.</div>
-                                    <div>
-                                        <h6 class="mb-1">Chicken Tikka Sub <span class="badge text-bg-success">Pure Veg</span></h6>
-                                            <p class="text-white mb-0">$250</p>
-                                    </div>
-                                    <span class="ms-auto"><a href="restaurant.html#" class="btn btn-outline-secondary btn-sm" data-bs-toggle="modal" data-bs-target="#extras">ADD</a></span>
-                                </div>
-                                <div class="d-flex gap-2 p-3 border-bottom gold-members">
-                                    <div class="fw-bold text-success veg">.</div>
-                                    <div>
-                                        <h6 class="mb-1">Chicken Tikka Sub </h6>
-                                            <p class="text-white mb-0">$250</p>
-                                    </div>
-                                    <span class="ms-auto"><a href="restaurant.html#" class="btn btn-outline-secondary btn-sm" data-bs-toggle="modal" data-bs-target="#extras">ADD</a></span>
-                                </div>
-                                <div class="d-flex gap-2 p-3 border-bottom gold-members">
-                                    <div class="fw-bold text-danger non_veg">.</div>
-                                    <div>
-                                        <h6 class="mb-1">Cheese corn Roll <span class="badge text-bg-danger">BEST SELLER</span></h6>
-                                            <p class="text-white mb-0">$600</p>
-                                    </div>
-                                    <span class="ms-auto"><a href="restaurant.html#" class="btn btn-outline-secondary btn-sm" data-bs-toggle="modal" data-bs-target="#extras">ADD</a></span>
-                                </div>
-                                <div class="d-flex gap-2 p-3 border-bottom gold-members">
-                                    <div class="fw-bold text-success veg">.</div>
-                                    <div>
-                                        <h6 class="mb-1">Chicken Tikka Sub <span class="badge text-bg-success">Pure Veg</span></h6>
-                                            <p class="text-white mb-0">$250</p>
-                                    </div>
-                                    <span class="ms-auto"><a href="restaurant.html#" class="btn btn-outline-secondary btn-sm" data-bs-toggle="modal" data-bs-target="#extras">ADD</a></span>
-                                </div>
-                            </div>
-                        </div>
+
+    <script type="module">
+        import { initializeApp } from "https://www.gstatic.com/firebasejs/10.9.0/firebase-app.js";
+        import { getFirestore, doc, getDoc, collection, getDocs, enableIndexedDbPersistence } from "https://www.gstatic.com/firebasejs/10.9.0/firebase-firestore.js";
+
+        // 🔥 Firebase Config
+        const firebaseConfig = {
+            apiKey: "AIzaSyADvpUQWo75ExePGoCRirD2mM-lmfM4Cmc",
+            authDomain: "von600-7982d.firebaseapp.com",
+            projectId: "von600-7982d",
+            storageBucket: "von600-7982d.appspot.com",
+            messagingSenderId: "164591218045",
+            appId: "1:164591218045:web:afe17512e16573e7903014",
+            measurementId: "G-E69DMPLXBK"
+        };
+
+        // ✅ Initialize Firebase
+        const app = initializeApp(firebaseConfig);
+        const db = getFirestore(app);
+
+        // ✅ Enable Firestore Caching for Faster Load
+        enableIndexedDbPersistence(db).catch(err => console.warn("Firestore persistence failed:", err));
+
+        // ✅ Get Restaurant ID from URL
+        const urlParams = new URLSearchParams(window.location.search);
+        const restaurantId = urlParams.get("id");
+
+        if (!restaurantId) {
+            document.body.innerHTML = "<h2>Restaurant not found.</h2>";
+            throw new Error("Restaurant ID missing!");
+        }
+
+        // ✅ Load Restaurant Info
+        async function loadRestaurant() {
+            const docRef = doc(db, "restaurant", restaurantId);
+            const docSnap = await getDoc(docRef);
+
+            if (!docSnap.exists()) {
+                document.body.innerHTML = "<h2>Restaurant not found.</h2>";
+                return;
+            }
+
+            const data = docSnap.data();
+            document.getElementById("restaurant-name").innerText = data.name;
+            document.getElementById("restaurant-info").innerText = `⭐ ${data.rating} | ⏳ ${data.delivery_time} mins`;
+            document.getElementById("restaurant-image").src = data.image;
+        }
+
+        // ✅ Load Menu Items
+        async function loadMenu() {
+            const menuList = document.getElementById("menu-list");
+            menuList.innerHTML = "<p>Loading menu...</p>";
+
+            const menuRef = collection(db, "restaurant", restaurantId, "menu");
+            const querySnapshot = await getDocs(menuRef);
+
+            let output = "";
+            querySnapshot.forEach(docSnapshot => {
+                const data = docSnapshot.data();
+                output += `
+                    <div class="menu-item">
+                        <img src="${data.image}" alt="${data.name}" loading="lazy">
+                        <h4>${data.name}</h4>
+                        <p>$${data.price}</p>
                     </div>
-                </div>
-               
-            </div>
-           
-        </div>
-    </div>
-    <!-- Footer -->
-    <div class="osahan-menu-fotter fixed-bottom bg-dark px-3 py-2 text-center  ">
-        <div class="row">
-            <div class="col selected">
-                <a href="index.html" class="text-white small fw-bold text-decoration-none">
-                    <p class="h4 m-0"><i class="feather-home text-white"></i></p>
-                    Home
-                </a>
-            </div>
-            <div class="col">
-                <a href="trending.html" class="text-white small fw-bold text-decoration-none">
-                    <p class="h4 m-0"><i class="feather-map-pin"></i></p>
-                    Trending
-                </a>
-            </div>
-            <div class="col">
-                    <a href="cart.html" class="text-white small fw-bold text-decoration-none">
-                       <p class="h4 m-0"> <i class="feather-shopping-cart"></i></p>
-                       Cart
-                    </a>
-               
-            </div>
-            <div class="col">
-                <a href="orders.html" class="text-white small fw-bold text-decoration-none">
-                    <p class="h4 m-0"><i class="feather-shopping-bag"></i></p>
-                    Orders
-                </a>
-            </div>
-            <div class="col">
-                <a href="profile.html" class="text-white small fw-bold text-decoration-none">
-                    <p class="h4 m-0"><i class="feather-user"></i></p>
-                    Profile
-                </a>
-            </div>
-        </div>
-    </div>
-    <!-- footer -->
-   
-     
-    <!-- Bootstrap core JavaScript -->
-    <script type="85186f7eed47c0f9a39a1e7c-text/javascript" src="vendor/jquery/jquery.min.js"></script>
-    <script type="85186f7eed47c0f9a39a1e7c-text/javascript" src="vendor/bootstrap/js/bootstrap.bundle.min.js"></script>
-    <!-- slick Slider JS-->
-    <script type="85186f7eed47c0f9a39a1e7c-text/javascript" src="vendor/slick/slick/slick.min.js"></script>
-    <!-- Sidebar JS-->
-    <script type="85186f7eed47c0f9a39a1e7c-text/javascript" src="vendor/sidebar/hc-offcanvas-nav.js"></script>
-    <!-- Custom scripts for all pages-->
-    <script type="85186f7eed47c0f9a39a1e7c-text/javascript" src="js/osahan.js"></script>
-<script src="cdn-cgi/scripts/7d0fa10a/cloudflare-static/rocket-loader.min.js" data-cf-settings="85186f7eed47c0f9a39a1e7c-|49" defer></script></body>
+                `;
+            });
 
+            menuList.innerHTML = output || "<p>No menu items found.</p>";
+        }
+
+        // ✅ Load Everything in Parallel for Maximum Speed
+        document.addEventListener("DOMContentLoaded", () => {
+            Promise.all([loadRestaurant(), loadMenu()]);
+        });
+    </script>
+
+</body>
 </html>
