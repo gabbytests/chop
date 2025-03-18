@@ -60,8 +60,8 @@
 
     <script type="module">
         import { initializeApp } from "https://www.gstatic.com/firebasejs/10.9.0/firebase-app.js";
-        import { getFirestore, doc, getDoc, collection, getDocs, enableIndexedDbPersistence } from "https://www.gstatic.com/firebasejs/10.9.0/firebase-firestore.js";
-
+        import { getFirestore, doc, getDoc, collection, getDocs, addDoc } from "https://www.gstatic.com/firebasejs/10.9.0/firebase-firestore.js";
+    
         // 🔥 Firebase Config
         const firebaseConfig = {
             apiKey: "AIzaSyADvpUQWo75ExePGoCRirD2mM-lmfM4Cmc",
@@ -72,67 +72,106 @@
             appId: "1:164591218045:web:afe17512e16573e7903014",
             measurementId: "G-E69DMPLXBK"
         };
-
+    
         // ✅ Initialize Firebase
         const app = initializeApp(firebaseConfig);
         const db = getFirestore(app);
-
-        // ✅ Enable Firestore Caching for Faster Load
-        enableIndexedDbPersistence(db).catch(err => console.warn("Firestore persistence failed:", err));
-
+    
         // ✅ Get Restaurant ID from URL
         const urlParams = new URLSearchParams(window.location.search);
         const restaurantId = urlParams.get("id");
-
+    
         if (!restaurantId) {
             document.body.innerHTML = "<h2>Restaurant not found.</h2>";
             throw new Error("Restaurant ID missing!");
         }
-
+    
         // ✅ Load Restaurant Info
         async function loadRestaurant() {
-            const docRef = doc(db, "restaurant", restaurantId);
-            const docSnap = await getDoc(docRef);
-
-            if (!docSnap.exists()) {
-                document.body.innerHTML = "<h2>Restaurant not found.</h2>";
-                return;
+            try {
+                const docRef = doc(db, "restaurant", restaurantId);
+                const docSnap = await getDoc(docRef);
+    
+                if (!docSnap.exists()) {
+                    document.body.innerHTML = "<h2>Restaurant not found.</h2>";
+                    return;
+                }
+    
+                const data = docSnap.data();
+                document.getElementById("restaurant-name").innerText = data.name;
+                document.getElementById("restaurant-info").innerText = `⭐ ${data.rating} | ⏳ ${data.delivery_time} mins`;
+                document.getElementById("restaurant-image").src = data.image;
+            } catch (error) {
+                console.error("❌ Error loading restaurant:", error);
+                document.body.innerHTML = "<h2>Failed to load restaurant.</h2>";
             }
-
-            const data = docSnap.data();
-            document.getElementById("restaurant-name").innerText = data.name;
-            document.getElementById("restaurant-info").innerText = `⭐ ${data.rating} | ⏳ ${data.delivery_time} mins`;
-            document.getElementById("restaurant-image").src = data.image;
         }
-
+    
         // ✅ Load Menu Items
         async function loadMenu() {
             const menuList = document.getElementById("menu-list");
             menuList.innerHTML = "<p>Loading menu...</p>";
-
-            const menuRef = collection(db, "restaurant", restaurantId, "menu");
-            const querySnapshot = await getDocs(menuRef);
-
-            let output = "";
-            querySnapshot.forEach(docSnapshot => {
-                const data = docSnapshot.data();
-                output += `
-                    <div class="menu-item">
-                        <img src="${data.image}" alt="${data.name}" loading="lazy">
-                        <h4>${data.name}</h4>
-                        <p>$${data.price}</p>
-                    </div>
-                `;
-            });
-
-            menuList.innerHTML = output || "<p>No menu items found.</p>";
+    
+            try {
+                const menuRef = collection(db, "restaurant", restaurantId, "menu");
+                const querySnapshot = await getDocs(menuRef);
+    
+                if (querySnapshot.empty) {
+                    menuList.innerHTML = "<p>No menu items found.</p>";
+                    return;
+                }
+    
+                let output = "";
+                querySnapshot.forEach(docSnapshot => {
+                    const data = docSnapshot.data();
+                    output += `
+                        <div class="menu-item">
+                            <img src="${data.image}" alt="${data.name}" loading="lazy">
+                            <h4>${data.name}</h4>
+                            <p>$${data.price.toFixed(2)}</p>
+                            <button class="bg-blue-500 text-white px-3 py-1 rounded add-to-cart" 
+                                data-id="${docSnapshot.id}" 
+                                data-name="${data.name}" 
+                                data-price="${data.price}" 
+                                data-image="${data.image}">
+                                Add to Cart
+                            </button>
+                        </div>
+                    `;
+                });
+    
+                menuList.innerHTML = output;
+            } catch (error) {
+                console.error("❌ Error loading menu:", error);
+                menuList.innerHTML = "<p>Failed to load menu.</p>";
+            }
         }
-
+    
+        // ✅ Add to Cart Functionality
+        document.addEventListener("click", async (e) => {
+            if (e.target.classList.contains("add-to-cart")) {
+                try {
+                    const item = {
+                        name: e.target.dataset.name,
+                        price: parseFloat(e.target.dataset.price),
+                        image: e.target.dataset.image,
+                        restaurantId: restaurantId
+                    };
+    
+                    await addDoc(collection(db, "cart"), item);
+                    alert(`${item.name} added to cart!`);
+                } catch (error) {
+                    console.error("❌ Error adding to cart:", error);
+                }
+            }
+        });
+    
         // ✅ Load Everything in Parallel for Maximum Speed
         document.addEventListener("DOMContentLoaded", () => {
             Promise.all([loadRestaurant(), loadMenu()]);
         });
     </script>
+    
 
 </body>
 </html>
