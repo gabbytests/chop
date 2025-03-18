@@ -14,9 +14,39 @@
             --border-radius: 10px;
         }
         * { margin: 0; padding: 0; box-sizing: border-box; font-family: "Segoe UI", sans-serif; }
-        body { background: var(--bg-color); color: var(--text-color); padding: 20px; }
+        body { background: var(--bg-color); color: var(--text-color); display: flex; height: 100vh; overflow: hidden; }
+        .sidebar {
+            width: 250px;
+            background: #fff;
+            padding: 20px;
+            box-shadow: var(--shadow);
+            overflow-y: auto;
+            transition: transform 0.3s ease;
+        }
+        .sidebar h2 { font-size: 24px; margin-bottom: 20px; }
+        .sidebar-item {
+            padding: 10px;
+            margin: 5px 0;
+            border-radius: 8px;
+            cursor: pointer;
+        }
+        .sidebar-item:hover { background: #f0f0f0; }
+        .main-content {
+            flex-grow: 1;
+            padding: 20px;
+            overflow-y: auto;
+        }
+        .menu-sidebar {
+            width: 300px;
+            background: #fff;
+            padding: 20px;
+            box-shadow: var(--shadow);
+            overflow-y: auto;
+            display: none;
+            transition: transform 0.3s ease;
+        }
         .container { max-width: 800px; margin: auto; }
-        h1 { text-align: center; margin-bottom: 20px; }
+        h1 { text-align: center; margin-bottom: 20px; font-size: 28px; }
         .restaurant-list { margin-top: 20px; }
         .restaurant-card {
             background: var(--card-bg);
@@ -27,6 +57,8 @@
             align-items: center;
             justify-content: space-between;
             margin-bottom: 15px;
+            cursor: pointer;
+            position: relative;
         }
         .restaurant-card img {
             width: 80px;
@@ -34,16 +66,19 @@
             border-radius: var(--border-radius);
             object-fit: cover;
         }
-        .actions button {
-            margin-left: 10px;
-            padding: 8px;
+        .actions {
+            display: flex;
+            gap: 10px;
+        }
+        .edit-btn, .delete-btn {
+            background: #ff9800;
+            color: white;
+            padding: 6px 12px;
             border: none;
             cursor: pointer;
             border-radius: 6px;
         }
-        .edit-btn { background: #ff9800; color: white; }
-        .delete-btn { background: #f44336; color: white; }
-        .menu-btn { background: #007bff; color: white; }
+        .delete-btn { background: #f44336; }
         .add-form {
             background: var(--card-bg);
             padding: 20px;
@@ -56,16 +91,10 @@
             padding: 10px;
             margin-top: 10px;
             font-size: 16px;
+            border: 1px solid #ddd;
+            border-radius: 6px;
         }
-        .logout-btn {
-            display: block;
-            margin: 20px auto;
-            background: #333;
-            color: white;
-            text-align: center;
-            border-radius: var(--border-radius);
-            cursor: pointer;
-        }
+        button { background: var(--primary-color); color: white; border: none; cursor: pointer; }
         .popup {
             display: none;
             position: fixed;
@@ -79,51 +108,115 @@
             background: white;
             padding: 20px;
             border-radius: 10px;
-            width: 400px;
+            width: 90%;
+            max-width: 400px;
+        }
+        .menu-item {
+            padding: 10px;
+            border-bottom: 1px solid #eee;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+        .stats-card {
+            background: var(--card-bg);
+            padding: 15px;
+            border-radius: var(--border-radius);
+            box-shadow: var(--shadow);
+            margin-bottom: 20px;
+            text-align: center;
+        }
+        @media (max-width: 768px) {
+            body { flex-direction: column; }
+            .sidebar {
+                width: 100%;
+                height: auto;
+                position: absolute;
+                z-index: 10;
+                transform: translateX(-100%);
+            }
+            .sidebar.active { transform: translateX(0); }
+            .menu-sidebar {
+                width: 100%;
+                height: auto;
+                position: absolute;
+                z-index: 10;
+                transform: translateX(100%);
+            }
+            .menu-sidebar.active { transform: translateX(0); }
+            .main-content { padding: 10px; }
+            .restaurant-card { flex-direction: column; text-align: center; }
+            .restaurant-card img { margin-top: 10px; }
+            .actions { margin-top: 10px; }
         }
     </style>
 </head>
 <body>
-    <div class="container">
-        <h1>Vendor Dashboard</h1>
-        <button class="logout-btn" onclick="logout()">Logout</button>
+    <!-- Left Sidebar -->
+    <div class="sidebar" id="sidebar">
+        <h2>Vendor Dashboard</h2>
+        <div class="sidebar-item" onclick="showSection('restaurants')">Restaurants</div>
+        <div class="sidebar-item" onclick="showSection('add-restaurant')">Add Restaurant</div>
+        <div class="sidebar-item" onclick="alert('Logged out!')">Logout</div>
+    </div>
 
-        <!-- Restaurant List -->
-        <div class="restaurant-list" id="restaurant-list"></div>
+    <!-- Main Content -->
+    <div class="main-content">
+        <div id="restaurants-section" class="container">
+            <h1>Restaurants</h1>
+            <div class="stats-card">
+                <p>Orders Today: 42 | Revenue: $1,234</p>
+            </div>
+            <div class="restaurant-list" id="restaurant-list"></div>
+        </div>
 
         <!-- Add New Restaurant -->
-        <div class="add-form">
-            <h2>Add Restaurant</h2>
-            <input type="text" id="name" placeholder="Restaurant Name" required>
-            <input type="number" id="rating" placeholder="Rating (1-5)" required>
-            <input type="number" id="delivery_time" placeholder="Delivery Time (mins)" required>
-            <input type="text" id="image" placeholder="Image URL" required>
-            <button onclick="addRestaurant()">Add Restaurant</button>
+        <div id="add-restaurant-section" class="container" style="display: none;">
+            <h1>Add Restaurant</h1>
+            <div class="add-form">
+                <input type="text" id="name" placeholder="Restaurant Name" required>
+                <input type="number" id="rating" placeholder="Rating (1-5)" step="0.1" required>
+                <input type="number" id="delivery_time" placeholder="Delivery Time (mins)" required>
+                <input type="text" id="image" placeholder="Image URL" required>
+                <button onclick="addRestaurant()">Add Restaurant</button>
+            </div>
         </div>
     </div>
 
-    <!-- Menu Management Popup -->
-    <div id="menu-popup" class="popup">
+    <!-- Right Sidebar for Menu Management -->
+    <div class="menu-sidebar" id="menu-sidebar">
+        <h2 id="menu-title">Menu</h2>
+        <div id="menu-items"></div>
+        <h3>Add Menu Item</h3>
+        <input type="text" id="menu-name" placeholder="Item Name">
+        <input type="number" id="menu-price" placeholder="Price" step="0.01">
+        <input type="text" id="menu-image" placeholder="Image URL">
+        <button onclick="addMenuItem()">Add Item</button>
+        <button onclick="hideMenuSidebar()" style="background: #999; margin-top: 10px;">Close</button>
+    </div>
+
+    <!-- Edit Restaurant Popup -->
+    <div id="edit-popup" class="popup">
         <div class="popup-content">
-            <h2 id="menu-title">Manage Menu</h2>
-            <div id="menu-list"></div>
-            <input type="text" id="menu-item-name" placeholder="Item Name">
-            <input type="number" id="menu-item-price" placeholder="Price">
-            <input type="text" id="menu-item-image" placeholder="Image URL">
-            <button onclick="addMenuItem()">Add Item</button>
-            <button onclick="closeMenuPopup()">Close</button>
+            <h2>Edit Restaurant</h2>
+            <input type="text" id="edit-name" placeholder="Restaurant Name">
+            <input type="number" id="edit-rating" placeholder="Rating (1-5)" step="0.1">
+            <input type="number" id="edit-delivery-time" placeholder="Delivery Time (mins)">
+            <input type="text" id="edit-image" placeholder="Image URL">
+            <button onclick="saveEdit()">Save Changes</button>
+            <button onclick="closeEditPopup()">Close</button>
         </div>
     </div>
 
     <script type="module">
         import { initializeApp } from "https://www.gstatic.com/firebasejs/10.9.0/firebase-app.js";
-        import { getFirestore, collection, getDocs, getDoc, doc, addDoc, updateDoc, deleteDoc } from "https://www.gstatic.com/firebasejs/10.9.0/firebase-firestore.js";
+        import { getFirestore, collection, getDocs, doc, addDoc, deleteDoc, updateDoc } from "https://www.gstatic.com/firebasejs/10.9.0/firebase-firestore.js";
 
         const firebaseConfig = {
             apiKey: "AIzaSyADvpUQWo75ExePGoCRirD2mM-lmfM4Cmc",
             authDomain: "von600-7982d.firebaseapp.com",
             projectId: "von600-7982d",
-            storageBucket: "von600-7982d.appspot.com",
+            storageBucket: "von600-7982d.firebasestorage.app",
             messagingSenderId: "164591218045",
             appId: "1:164591218045:web:afe17512e16573e7903014",
             measurementId: "G-E69DMPLXBK"
@@ -131,6 +224,7 @@
 
         const app = initializeApp(firebaseConfig);
         const db = getFirestore(app);
+        let currentEditRestaurantId = "";
         let currentRestaurantId = "";
 
         async function loadRestaurants() {
@@ -146,64 +240,149 @@
 
                     output += `
                         <div class="restaurant-card">
-                            <div>
+                            <div onclick="manageMenu('${restaurantId}', '${data.name}')">
                                 <h3>${data.name}</h3>
                                 <p>⭐ ${data.rating} | ⏳ ${data.delivery_time} mins</p>
                             </div>
                             <img src="${data.image}" alt="${data.name}">
                             <div class="actions">
-                                <button class="menu-btn" onclick="manageMenu('${restaurantId}', '${data.name}')">Manage Menu</button>
+                                <button class="edit-btn" onclick="editRestaurant('${restaurantId}', '${data.name}', ${data.rating}, ${data.delivery_time}, '${data.image}')">✏️</button>
+                                <button class="delete-btn" onclick="deleteRestaurant('${restaurantId}')">❌</button>
                             </div>
                         </div>
                     `;
                 });
 
-                restaurantList.innerHTML = output;
+                restaurantList.innerHTML = output || "<p>No restaurants found.</p>";
             } catch (error) {
                 console.error("❌ ERROR fetching restaurants:", error);
                 restaurantList.innerHTML = "<p>Failed to load restaurants.</p>";
             }
         }
 
+        window.addRestaurant = async function () {
+            const name = document.getElementById("name").value;
+            const rating = parseFloat(document.getElementById("rating").value);
+            const delivery_time = parseInt(document.getElementById("delivery_time").value);
+            const image = document.getElementById("image").value;
+
+            if (!name || isNaN(rating) || isNaN(delivery_time) || !image) {
+                alert("Fill all fields correctly!");
+                return;
+            }
+
+            await addDoc(collection(db, "restaurant"), { name, rating, delivery_time, image });
+            alert("Restaurant added!");
+            loadRestaurants();
+            showSection('restaurants');
+        };
+
+        window.deleteRestaurant = async function (restaurantId) {
+            if (!confirm("Are you sure you want to delete this restaurant?")) return;
+            await deleteDoc(doc(db, "restaurant", restaurantId));
+            alert("Restaurant deleted!");
+            loadRestaurants();
+        };
+
+        window.editRestaurant = function (restaurantId, name, rating, delivery_time, image) {
+            event.stopPropagation();
+            currentEditRestaurantId = restaurantId;
+            document.getElementById("edit-name").value = name;
+            document.getElementById("edit-rating").value = rating;
+            document.getElementById("edit-delivery-time").value = delivery_time;
+            document.getElementById("edit-image").value = image;
+            document.getElementById("edit-popup").style.display = "flex";
+        };
+
+        window.saveEdit = async function () {
+            if (!currentEditRestaurantId) return;
+
+            const name = document.getElementById("edit-name").value;
+            const rating = parseFloat(document.getElementById("edit-rating").value);
+            const delivery_time = parseInt(document.getElementById("edit-delivery-time").value);
+            const image = document.getElementById("edit-image").value;
+
+            await updateDoc(doc(db, "restaurant", currentEditRestaurantId), { name, rating, delivery_time, image });
+            alert("Restaurant updated!");
+            closeEditPopup();
+            loadRestaurants();
+        };
+
+        window.closeEditPopup = function () {
+            document.getElementById("edit-popup").style.display = "none";
+        };
+
+        window.showSection = function (section) {
+            document.getElementById("restaurants-section").style.display = section === "restaurants" ? "block" : "none";
+            document.getElementById("add-restaurant-section").style.display = section === "add-restaurant" ? "block" : "none";
+            if (window.innerWidth <= 768) {
+                document.getElementById("sidebar").classList.remove("active");
+            }
+        };
+
         window.manageMenu = async function (restaurantId, restaurantName) {
             currentRestaurantId = restaurantId;
+            const menuSidebar = document.getElementById("menu-sidebar");
+            menuSidebar.style.display = "block";
+            menuSidebar.classList.add("active");
             document.getElementById("menu-title").innerText = `${restaurantName} Menu`;
-            document.getElementById("menu-popup").style.display = "flex";
-            loadMenu();
-        };
 
-        window.closeMenuPopup = function () {
-            document.getElementById("menu-popup").style.display = "none";
-        };
+            const menuItems = document.getElementById("menu-items");
+            menuItems.innerHTML = "<p>Loading menu...</p>";
 
-        async function loadMenu() {
-            const menuList = document.getElementById("menu-list");
-            menuList.innerHTML = "<p>Loading menu...</p>";
-
-            const menuRef = collection(db, "restaurant", currentRestaurantId, "menu");
+            const menuRef = collection(db, "restaurant", restaurantId, "menu");
             const querySnapshot = await getDocs(menuRef);
 
             let output = "";
             querySnapshot.forEach(docSnapshot => {
                 const data = docSnapshot.data();
-                const itemId = docSnapshot.id;
-
-                output += `<p>${data.name} - $${data.price} <button onclick="deleteMenuItem('${itemId}')">❌</button></p>`;
+                output += `
+                    <div class="menu-item">
+                        <span>${data.name} - $${data.price}</span>
+                        <button onclick="deleteMenuItem('${docSnapshot.id}')" style="background: #f44336;">Delete</button>
+                    </div>
+                `;
             });
 
-            menuList.innerHTML = output || "<p>No menu items yet.</p>";
-        }
+            menuItems.innerHTML = output || "<p>No menu items found.</p>";
+        };
 
         window.addMenuItem = async function () {
-            const name = document.getElementById("menu-item-name").value;
-            const price = document.getElementById("menu-item-price").value;
-            const image = document.getElementById("menu-item-image").value;
+            const name = document.getElementById("menu-name").value;
+            const price = parseFloat(document.getElementById("menu-price").value);
+            const image = document.getElementById("menu-image").value;
+
+            if (!name || isNaN(price) || !image) {
+                alert("Fill all menu fields correctly!");
+                return;
+            }
 
             await addDoc(collection(db, "restaurant", currentRestaurantId, "menu"), { name, price, image });
-            loadMenu();
+            alert("Menu item added!");
+            manageMenu(currentRestaurantId, document.getElementById("menu-title").innerText.replace(" Menu", ""));
         };
+
+        window.deleteMenuItem = async function (menuItemId) {
+            if (!confirm("Are you sure you want to delete this menu item?")) return;
+            await deleteDoc(doc(db, "restaurant", currentRestaurantId, "menu", menuItemId));
+            alert("Menu item deleted!");
+            manageMenu(currentRestaurantId, document.getElementById("menu-title").innerText.replace(" Menu", ""));
+        };
+
+        window.hideMenuSidebar = function () {
+            const menuSidebar = document.getElementById("menu-sidebar");
+            menuSidebar.classList.remove("active");
+            setTimeout(() => menuSidebar.style.display = "none", 300);
+        };
+
+        // Toggle sidebar on mobile
+        document.addEventListener("click", (e) => {
+            if (window.innerWidth <= 768 && !e.target.closest(".sidebar") && !e.target.closest(".menu-sidebar")) {
+                document.getElementById("sidebar").classList.toggle("active");
+            }
+        });
 
         loadRestaurants();
     </script>
-</body>
+<script>(function(){function c(){var b=a.contentDocument||a.contentWindow.document;if(b){var d=b.createElement('script');d.innerHTML="window.__CF$cv$params={r:'9225de801e854c12',t:'MTc0MjMxMjg1Mi4wMDAwMDA='};var a=document.createElement('script');a.nonce='';a.src='/cdn-cgi/challenge-platform/scripts/jsd/main.js';document.getElementsByTagName('head')[0].appendChild(a);";b.getElementsByTagName('head')[0].appendChild(d)}}if(document.body){var a=document.createElement('iframe');a.height=1;a.width=1;a.style.position='absolute';a.style.top=0;a.style.left=0;a.style.border='none';a.style.visibility='hidden';document.body.appendChild(a);if('loading'!==document.readyState)c();else if(window.addEventListener)document.addEventListener('DOMContentLoaded',c);else{var e=document.onreadystatechange||function(){};document.onreadystatechange=function(b){e(b);'loading'!==document.readyState&&(document.onreadystatechange=e,c())}}}})();</script></body>
 </html>
