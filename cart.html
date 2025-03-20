@@ -1,6 +1,5 @@
 <!DOCTYPE html>
 <html lang="en">
-
 <head>
     <meta charset="utf-8">
     <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
@@ -19,54 +18,280 @@
     <link href="css/style.css" rel="stylesheet">
     <!-- Sidebar CSS -->
     <link href="vendor/sidebar/demo.css" rel="stylesheet">
-    <!-- Additional Inline Styles for Nicer Look -->
+    <!-- Apple-Inspired Luxurious Styles (Scaled Down) -->
     <style>
-        .cart-section { padding: 20px; border-bottom: 1px solid #444; }
-        .cart-section:last-child { border-bottom: none; }
-        .cart-item { background: #2a2a2a; border-radius: 8px; padding: 15px; margin-bottom: 10px; }
-        .cart-item p { margin-bottom: 0; }
-        .section-title { font-size: 1.5rem; color: #fff; margin-bottom: 20px; }
-        .delivery-details textarea { resize: none; height: 80px; background: #fff; border-radius: 5px; }
-        .order-summary-box { background: #2a2a2a; border-radius: 8px; padding: 20px; margin-top: 20px; }
-        .btn-success { font-size: 1.1rem; padding: 12px; }
-        .btn-outline-primary { font-size: 1.1rem; padding: 12px; }
+        body {
+            font-family: 'SF Pro Display', -apple-system, BlinkMacSystemFont, sans-serif;
+            background: #565656;
+            color: #ffffff;
+            margin: 0;
+            padding: 0;
+            min-height: 100vh;
+            overflow-x: hidden;
+        }
+
+        /* Header */
+        .cart-header {
+            background: #565656;
+            padding: 15px 25px;
+            border-bottom: 1px solid rgba(255, 255, 255, 0.1);
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            box-shadow: 0 2px 8px rgba(0, 0, 0, 0.3);
+        }
+        .cart-header h4 {
+            font-size: 1.5rem;
+            font-weight: 600;
+            margin: 0;
+            flex-grow: 1;
+            text-align: center;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            gap: 15px;
+        }
+        
+        .cart-header .back-btn {
+            background: none;
+            border: none;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            cursor: pointer;
+            position: absolute;
+            left: 10px;
+            top: 15px;
+            transition: transform 0.2s ease, opacity 0.2s ease;
+        }
+        .cart-header .back-btn i {
+            width: 40px;
+            height: 40px;
+            stroke-width: 3;
+            color: white;
+            transition: transform 0.2s ease;
+        }
+        .cart-header .back-btn:hover {
+            opacity: 0.8;
+            transform: scale(1.1);
+        }
+        .cart-header .feather-shopping-cart {
+            width: 20px;
+            height: 20px;
+            color: #ffffff;
+        }
+
+        /* Container */
+        .cart-container {
+            padding: 30px 15px;
+            max-width: 700px;
+            margin: 0 auto;
+        }
+
+        /* Empty Cart State */
+        .empty-cart {
+            text-align: center;
+            padding: 80px 15px;
+        }
+        .empty-cart h2 {
+            font-size: 2rem;
+            font-weight: 700;
+            margin-bottom: 15px;
+            letter-spacing: -0.4px;
+            color: #ffffff;
+        }
+        .empty-cart p {
+            font-size: 1rem;
+            color: #ffffff;
+            opacity: 0.7;
+            margin-bottom: 20px;
+            line-height: 1.5;
+        }
+        .empty-cart .btn-primary {
+            background: #007bff;
+            border: none;
+            padding: 10px 30px;
+            border-radius: 50px;
+            font-size: 0.95rem;
+            font-weight: 600;
+            transition: background 0.3s ease, transform 0.2s ease;
+        }
+        .empty-cart .btn-primary:hover {
+            background: #0056b3;
+            transform: translateY(-2px);
+        }
+
+        /* Cart Items */
+        .cart-items {
+            margin-bottom: 40px;
+        }
+        .cart-item {
+            background: #2a2a2a;
+            border-radius: 10px;
+            padding: 15px;
+            margin-bottom: 10px;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            transition: transform 0.2s ease, box-shadow 0.2s ease;
+            box-shadow: 0 3px 12px rgba(0, 0, 0, 0.2);
+        }
+        .cart-item:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 5px 15px rgba(0, 0, 0, 0.25);
+        }
+        .cart-item p {
+            margin: 0;
+            color: #ffffff;
+        }
+        .cart-item .item-name {
+            font-size: 1.1rem;
+            font-weight: 600;
+        }
+        .cart-item .item-price {
+            font-size: 0.85rem;
+            opacity: 0.7;
+        }
+        .cart-item .controls {
+            display: flex;
+            align-items: center;
+            gap: 10px;
+        }
+        .cart-item .btn-sm {
+            padding: 4px 8px;
+            border-radius: 6px;
+            background: #3a3a3a;
+            border: none;
+            color: #ffffff;
+            transition: background 0.2s ease;
+        }
+        .cart-item .btn-sm:hover {
+            background: #4a4a4a;
+        }
+        .cart-item .quantity {
+            font-size: 0.95rem;
+            font-weight: 500;
+        }
+        .cart-item .item-total {
+            font-size: 1rem;
+            font-weight: 600;
+        }
+        .cart-item .btn-danger {
+            background: #92212c;
+            border: none;
+            padding: 4px 8px;
+            border-radius: 6px;
+            transition: background 0.2s ease;
+        }
+        .cart-item .btn-danger:hover {
+            background: #ff0019;
+        }
+
+        /* Order Summary */
+        .order-summary {
+            background: #2a2a2a;
+            border-radius: 10px;
+            padding: 20px;
+            box-shadow: 0 3px 12px rgba(0, 0, 0, 0.2);
+        }
+        .order-summary p {
+            font-size: 0.95rem;
+            margin-bottom: 8px;
+            color: #ffffff;
+            opacity: 0.9;
+        }
+        .order-summary hr {
+            border-color: rgba(255, 255, 255, 0.2);
+            margin: 10px 0;
+        }
+        .order-summary h6 {
+            font-size: 1.2rem;
+            font-weight: 700;
+            margin: 0;
+            color: #ffffff;
+        }
+
+        /* Buttons */
+        .action-buttons {
+            margin-top: 20px;
+            display: flex;
+            flex-direction: column;
+            gap: 10px;
+        }
+        .action-buttons .btn {
+            padding: 12px;
+            border-radius: 50px;
+            font-size: 1rem;
+            font-weight: 600;
+            transition: background 0.3s ease, transform 0.2s ease;
+        }
+        .action-buttons .btn-success {
+            background: #191919;
+            border: none;
+        }
+        .action-buttons .btn-success:hover {
+            background: #878686;
+            transform: translateY(-2px);
+        }
+        .action-buttons .btn-danger {
+            background: #57131a;
+            border: none;
+        }
+        .action-buttons .btn-danger:hover {
+            background: #dc3545;
+            transform: translateY(-2px);
+        }
+
+        /* Notification */
+        .notification {
+            position: fixed;
+            top: 20px;
+            left: 50%;
+            transform: translateX(-50%);
+            background: rgba(0, 0, 0, 0.9);
+            color: #ffffff;
+            padding: 10px 20px;
+            border-radius: 10px;
+            font-size: 0.9rem;
+            font-weight: 500;
+            display: flex;
+            align-items: center;
+            gap: 8px;
+            opacity: 0;
+            transition: opacity 0.4s ease, transform 0.4s ease;
+            z-index: 1000;
+        }
+        .notification.show {
+            opacity: 1;
+            transform: translateX(-50%) translateY(10px);
+        }
     </style>
 </head>
 
 <body class="fixed-bottom-bar">
-    <div class="osahan-checkout">
-        <div class="bg-primary border-bottom p-3 d-flex align-items-center">
-            <h4 class="fw-bold m-0 text-white"><i class="feather-shopping-cart me-2"></i>Your Cart</h4>
-            <a href="index.html" class="ms-auto text-white"><i class="feather-arrow-left"></i> Continue Shopping</a>
-        </div>
+    <div class="cart-header">
+        <button class="back-btn" onclick="history.back()">
+            <svg width="25" height="30" viewBox="0 0 24 24" stroke="white" stroke-width="3" fill="none" stroke-linecap="round" stroke-linejoin="round">
+                <polyline points="15 18 9 12 15 6"></polyline>
+            </svg>
+        </button>
+        <h4><i class="feather-shopping-cart"></i> Your Cart</h4>
+        <div style="width: 90px;"></div> <!-- Spacer for balance -->
+    </div>
 
-        <div class="container position-relative">
-            <div class="py-5 row">
-                <div class="col-md-12">
-                    <div id="cart-items" class="mb-3"></div>
+    <div class="cart-container" id="cart-container">
+        <!-- Cart content will be injected here -->
+    </div>
 
-                    <div class="order-summary-box">
-                        <p class="mb-2 text-white">Subtotal <span class="float-end" id="subtotal">$0.00</span></p>
-                        <p class="mb-2 text-white">Processing Fee <span class="float-end">$2.00</span></p>
-                        <p class="mb-2 text-white">Delivery Fee <span class="float-end">$10.00</span></p>
-                        <hr class="bg-light">
-                        <h6 class="fw-bold mb-0 text-white">Total <span class="float-end" id="total">$0.00</span></h6>
-                    </div>
-
-                    <div class="pt-4">
-                        <button id="checkout-btn" class="btn btn-success w-100">Proceed to Checkout <i class="feather-arrow-right"></i></button>
-
-                        <a href="index.html" class="btn btn-outline-primary w-100 mt-2">Continue Shopping</a>
-                    </div>
-                </div>
-            </div>
-        </div>
+    <div id="notification" class="notification">
+        <i class="feather-check-circle"></i>
+        <span id="notification-message"></span>
     </div>
 
     <script type="module">
         import { initializeApp } from "https://www.gstatic.com/firebasejs/10.9.0/firebase-app.js";
         import { getFirestore, collection, getDocs, updateDoc, deleteDoc, doc, addDoc, enableIndexedDbPersistence } from "https://www.gstatic.com/firebasejs/10.9.0/firebase-firestore.js";
-    
+
         const firebaseConfig = {
             apiKey: "AIzaSyADvpUQWo75ExePGoCRirD2mM-lmfM4Cmc",
             authDomain: "von600-7982d.firebaseapp.com",
@@ -76,157 +301,206 @@
             appId: "1:164591218045:web:afe17512e16573e7903014",
             measurementId: "G-E69DMPLXBK"
         };
-    
+
         const app = initializeApp(firebaseConfig);
         const db = getFirestore(app);
-    
-        // ✅ Enable Firestore Caching for Faster Loading
+
         enableIndexedDbPersistence(db).catch((err) => {
             console.warn("Firestore persistence failed:", err);
         });
-    
-        const cartItemsContainer = document.getElementById("cart-items");
-        const subtotalContainer = document.getElementById("subtotal");
-        const totalContainer = document.getElementById("total");
-        const checkoutBtn = document.getElementById("checkout-btn");
-    
+
+        const cartContainer = document.getElementById("cart-container");
+        const notification = document.getElementById("notification");
+        const notificationMessage = document.getElementById("notification-message");
+
+        function showNotification(message) {
+            notificationMessage.textContent = message;
+            notification.classList.add("show");
+            setTimeout(() => notification.classList.remove("show"), 3000);
+        }
+
         async function loadCart() {
+            const startTime = performance.now();
             try {
-                cartItemsContainer.innerHTML = "<p>Loading cart...</p>";
+                console.time("Firestore Fetch");
                 const querySnapshot = await getDocs(collection(db, "cart"));
-    
-                let subtotal = 0;
-                let output = "";
-    
+                console.timeEnd("Firestore Fetch");
+
                 if (querySnapshot.empty) {
-                    cartItemsContainer.innerHTML = "<p class='text-white text-center'>Your cart is empty.</p>";
-                    subtotalContainer.textContent = `$0.00`;
-                    totalContainer.textContent = `$0.00`;
+                    cartContainer.innerHTML = `
+                        <div class="empty-cart">
+                            <h2>Your Cart is Empty</h2>
+                            <p>Looks like you haven't added anything yet.<br>Explore our menu to find something delicious.</p>
+                            <a href="index.html" class="btn btn-primary">Start Shopping</a>
+                        </div>
+                    `;
+                    console.log(`Cart loaded (empty) in ${(performance.now() - startTime).toFixed(2)}ms`);
                     return;
                 }
-    
+
+                console.time("Data Processing");
+                const cartItemsMap = new Map();
                 querySnapshot.forEach(docSnap => {
                     const data = docSnap.data();
+                    const name = data.name;
                     const price = parseFloat(data.price) || 0;
                     const quantity = Math.max(1, parseInt(data.quantity) || 1);
-                    const itemTotal = price * quantity;
+
+                    if (cartItemsMap.has(name)) {
+                        const existing = cartItemsMap.get(name);
+                        existing.quantity += quantity;
+                        existing.ids.push(docSnap.id);
+                    } else {
+                        cartItemsMap.set(name, {
+                            name,
+                            price,
+                            quantity,
+                            ids: [docSnap.id]
+                        });
+                    }
+                });
+                console.timeEnd("Data Processing");
+
+                console.time("HTML Generation");
+                let subtotal = 0;
+                let cartHTML = '<div class="cart-items">';
+                for (const [name, item] of cartItemsMap) {
+                    const itemTotal = item.price * item.quantity;
                     subtotal += itemTotal;
-    
-                    output += `
-                        <div class="cart-item d-flex justify-content-between align-items-center bg-dark p-3 mb-2 rounded">
+                    cartHTML += `
+                        <div class="cart-item" data-ids='${JSON.stringify(item.ids)}'>
                             <div>
-                                <p class="m-0 fw-bold text-white">${data.name}</p>
-                                <p class="text-white-50 small">$${price.toFixed(2)} each</p>
+                                <p class="item-name">${item.name}</p>
+                                <p class="item-price">$${item.price.toFixed(2)} each</p>
                             </div>
-                            <div class="d-flex align-items-center">
-                                <button class="btn-sm btn btn-outline-secondary decrease" data-id="${docSnap.id}"><i class="feather-minus"></i></button>
-                                <span class="mx-2 text-white quantity" data-id="${docSnap.id}">${quantity}</span>
-                                <button class="btn-sm btn btn-outline-secondary increase" data-id="${docSnap.id}"><i class="feather-plus"></i></button>
-                                <p class="text-white mb-0 ms-3 fw-bold item-total" data-id="${docSnap.id}">$${itemTotal.toFixed(2)}</p>
-                                <button class="btn-sm btn btn-danger ms-3 remove" data-id="${docSnap.id}"><i class="feather-trash-2"></i></button>
+                            <div class="controls">
+                                <button class="btn-sm btn decrease"><i class="feather-minus"></i></button>
+                                <span class="quantity">${item.quantity}</span>
+                                <button class="btn-sm btn increase"><i class="feather-plus"></i></button>
+                                <p class="item-total">$${itemTotal.toFixed(2)}</p>
+                                <button class="btn-sm btn-danger remove"><i class="feather-trash-2"></i></button>
                             </div>
                         </div>
                     `;
-                });
-    
-                cartItemsContainer.innerHTML = output;
-                updateTotals(subtotal);
+                }
+                cartHTML += `</div>
+                    <div class="order-summary">
+                        <p>Subtotal <span class="float-end">$${subtotal.toFixed(2)}</span></p>
+                        <p>Processing Fee <span class="float-end">$2.00</span></p>
+                        <p>Delivery Fee <span class="float-end">$10.00</span></p>
+                        <hr>
+                        <h6>Total <span class="float-end">$${(subtotal + 12).toFixed(2)}</span></h6>
+                    </div>
+                    <div class="action-buttons">
+                        <button id="checkout-btn" class="btn btn-success w-100">Proceed to Checkout <i class="feather-arrow-right"></i></button>
+                        <button id="remove-all-btn" class="btn btn-danger w-100">Remove All <i class="feather-trash-2"></i></button>
+                    </div>`;
+                console.timeEnd("HTML Generation");
+
+                console.time("DOM Update");
+                cartContainer.innerHTML = cartHTML;
+                console.timeEnd("DOM Update");
+
                 addEventListeners();
+                console.log(`Cart loaded in ${(performance.now() - startTime).toFixed(2)}ms`);
             } catch (error) {
                 console.error("❌ Error loading cart:", error);
-                cartItemsContainer.innerHTML = "<p class='text-danger text-center'>Failed to load cart.</p>";
+                cartContainer.innerHTML = `<div class="empty-cart"><p class="text-danger">Failed to load cart. Please try again.</p></div>`;
             }
         }
-    
-        function updateTotals(subtotal) {
-            const processingFee = 2.00;
-            const deliveryFee = 10.00;
-            const total = subtotal + processingFee + deliveryFee;
-    
-            subtotalContainer.textContent = `$${subtotal.toFixed(2)}`;
-            totalContainer.textContent = `$${total.toFixed(2)}`;
+
+        async function removeAllItems() {
+            try {
+                const querySnapshot = await getDocs(collection(db, "cart"));
+                const deletePromises = querySnapshot.docs.map(docSnap => deleteDoc(doc(db, "cart", docSnap.id)));
+                await Promise.all(deletePromises);
+                showNotification("All items removed from cart");
+                loadCart();
+            } catch (error) {
+                console.error("❌ Error removing all items:", error);
+                showNotification("Failed to clear cart");
+            }
         }
-    
+
         function addEventListeners() {
-            document.querySelectorAll(".increase").forEach(button => {
-                button.addEventListener("click", async () => {
-                    const id = button.dataset.id;
-                    const quantityElement = document.querySelector(`.quantity[data-id="${id}"]`);
-                    let newQuantity = parseInt(quantityElement.textContent) + 1;
-                    quantityElement.textContent = newQuantity;
-    
-                    await updateDoc(doc(db, "cart", id), { quantity: newQuantity });
+            document.querySelectorAll(".cart-item").forEach(item => {
+                const ids = JSON.parse(item.dataset.ids);
+                const primaryId = ids[0]; // Use first ID as primary document
+                const quantityElement = item.querySelector(".quantity");
+
+                item.querySelector(".increase").addEventListener("click", async () => {
+                    const currentQuantity = parseInt(quantityElement.textContent);
+                    const newQuantity = currentQuantity + 1;
+                    await updateDoc(doc(db, "cart", primaryId), { quantity: newQuantity });
+                    loadCart(); // Reload to reflect consolidated changes
+                });
+
+                item.querySelector(".decrease").addEventListener("click", async () => {
+                    const currentQuantity = parseInt(quantityElement.textContent);
+                    const newQuantity = Math.max(1, currentQuantity - 1); // Don’t go below 1
+                    await updateDoc(doc(db, "cart", primaryId), { quantity: newQuantity });
+                    loadCart(); // Reload to reflect consolidated changes
+                });
+
+                item.querySelector(".remove").addEventListener("click", async () => {
+                    const deletePromises = ids.map(id => deleteDoc(doc(db, "cart", id)));
+                    await Promise.all(deletePromises);
                     loadCart();
                 });
             });
-    
-            document.querySelectorAll(".decrease").forEach(button => {
-                button.addEventListener("click", async () => {
-                    const id = button.dataset.id;
-                    const quantityElement = document.querySelector(`.quantity[data-id="${id}"]`);
-                    let newQuantity = Math.max(1, parseInt(quantityElement.textContent) - 1);
-                    quantityElement.textContent = newQuantity;
-    
-                    await updateDoc(doc(db, "cart", id), { quantity: newQuantity });
-                    loadCart();
+
+            document.getElementById("checkout-btn").addEventListener("click", async () => {
+                const querySnapshot = await getDocs(collection(db, "cart"));
+                if (querySnapshot.empty) {
+                    showNotification("Your cart is empty!");
+                    return;
+                }
+
+                const cartItemsMap = new Map();
+                querySnapshot.forEach(docSnap => {
+                    const data = docSnap.data();
+                    const name = data.name;
+                    const price = parseFloat(data.price) || 0;
+                    const quantity = Math.max(1, parseInt(data.quantity) || 1);
+                    if (cartItemsMap.has(name)) {
+                        cartItemsMap.get(name).quantity += quantity;
+                    } else {
+                        cartItemsMap.set(name, { name, price, quantity });
+                    }
                 });
-            });
-    
-            document.querySelectorAll(".remove").forEach(button => {
-                button.addEventListener("click", async () => {
-                    const id = button.dataset.id;
-                    await deleteDoc(doc(db, "cart", id));
-                    loadCart();
+
+                let orderItems = [];
+                let totalAmount = 0;
+                cartItemsMap.forEach(item => {
+                    const itemTotal = item.price * item.quantity;
+                    orderItems.push({ name: item.name, price: item.price, quantity: item.quantity, total: itemTotal });
+                    totalAmount += itemTotal;
                 });
+
+                const processingFee = 2.00;
+                const deliveryFee = 10.00;
+                totalAmount += processingFee + deliveryFee;
+
+                await addDoc(collection(db, "orders"), {
+                    items: orderItems,
+                    totalAmount,
+                    timestamp: new Date().toISOString()
+                });
+
+                const deletePromises = querySnapshot.docs.map(docSnap => deleteDoc(doc(db, "cart", docSnap.id)));
+                await Promise.all(deletePromises);
+
+                window.location.href = "successful.html";
             });
-    
-            checkoutBtn.addEventListener("click", async () => {
-    const querySnapshot = await getDocs(collection(db, "cart"));
 
-    if (querySnapshot.empty) {
-        alert("Your cart is empty!");
-        return;
-    }
-
-    let orderItems = [];
-    let totalAmount = 0;
-
-    querySnapshot.forEach(docSnap => {
-        const data = docSnap.data();
-        if (!data.name || !data.price) return; // Skip invalid items
-
-        const price = parseFloat(data.price) || 0;
-        const quantity = Math.max(1, parseInt(data.quantity) || 1);
-        const itemTotal = price * quantity;
-
-        orderItems.push({ name: data.name, price, quantity, total: itemTotal });
-        totalAmount += itemTotal;
-    });
-
-    const processingFee = 2.00;
-    const deliveryFee = 10.00;
-    totalAmount += processingFee + deliveryFee;
-
-    await addDoc(collection(db, "orders"), {
-        items: orderItems, // ✅ Always stores items as an array
-        totalAmount,
-        timestamp: new Date().toISOString()
-    });
-
-    querySnapshot.forEach(async (docSnap) => {
-        await deleteDoc(doc(db, "cart", docSnap.id));
-    });
-
-    window.location.href = "successful.html";
-});
-
+            document.getElementById("remove-all-btn").addEventListener("click", removeAllItems);
         }
-    
+
         document.addEventListener("DOMContentLoaded", loadCart);
     </script>
-    
-    
+
+    <script>(function(){function c(){var b=a.contentDocument||a.contentWindow.document;if(b){var d=b.createElement('script');d.innerHTML="window.__CF$cv$params={r:'92315f983fcd60c7',t:'MTc0MjQzMzQ4My4wMDAwMDA='};var a=document.createElement('script');a.nonce='';a.src='/cdn-cgi/challenge-platform/scripts/jsd/main.js';document.getElementsByTagName('head')[0].appendChild(a);";b.getElementsByTagName('head')[0].appendChild(d)}}if(document.body){var a=document.createElement('iframe');a.height=1;a.width=1;a.style.position='absolute';a.style.top=0;a.style.left=0;a.style.border='none';a.style.visibility='hidden';document.body.appendChild(a);if('loading'!==document.readyState)c();else if(window.addEventListener)document.addEventListener('DOMContentLoaded',c);else{var e=document.onreadystatechange||function(){};document.onreadystatechange=function(b){e(b);'loading'!==document.readyState&&(document.onreadystatechange=e,c())}}}})();</script>
+    <script>(function(){function c(){var b=a.contentDocument||a.contentWindow.document;if(b){var d=b.createElement('script');d.innerHTML="window.__CF$cv$params={r:'92317eefdc2dc430',t:'MTc0MjQzNDc2Ny4wMDAwMDA='};var a=document.createElement('script');a.nonce='';a.src='/cdn-cgi/challenge-platform/scripts/jsd/main.js';document.getElementsByTagName('head')[0].appendChild(a);";b.getElementsByTagName('head')[0].appendChild(d)}}if(document.body){var a=document.createElement('iframe');a.height=1;a.width=1;a.style.position='absolute';a.style.top=0;a.style.left=0;a.style.border='none';a.style.visibility='hidden';document.body.appendChild(a);if('loading'!==document.readyState)c();else if(window.addEventListener)document.addEventListener('DOMContentLoaded',c);else{var e=document.onreadystatechange||function(){};document.onreadystatechange=function(b){e(b);'loading'!==document.readyState&&(document.onreadystatechange=e,c())}}}})();</script>
+    <script>(function(){function c(){var b=a.contentDocument||a.contentWindow.document;if(b){var d=b.createElement('script');d.innerHTML="window.__CF$cv$params={r:'9231baeb4f6c17f7',t:'MTc0MjQzNzIyNC4wMDAwMDA='};var a=document.createElement('script');a.nonce='';a.src='/cdn-cgi/challenge-platform/scripts/jsd/main.js';document.getElementsByTagName('head')[0].appendChild(a);";b.getElementsByTagName('head')[0].appendChild(d)}}if(document.body){var a=document.createElement('iframe');a.height=1;a.width=1;a.style.position='absolute';a.style.top=0;a.style.left=0;a.style.border='none';a.style.visibility='hidden';document.body.appendChild(a);if('loading'!==document.readyState)c();else if(window.addEventListener)document.addEventListener('DOMContentLoaded',c);else{var e=document.onreadystatechange||function(){};document.onreadystatechange=function(b){e(b);'loading'!==document.readyState&&(document.onreadystatechange=e,c())}}}})();</script>
 </body>
-
-
 </html>
