@@ -32,7 +32,6 @@
         .view-cart-btn:hover{background:#333}
         .back-arrow{position:absolute;top:20px;left:20px;background:rgba(0,0,0,0.647);color:white;padding:10px;border-radius:50%;transition:background 0.2s ease}
         .back-arrow:hover{background:rgba(0,0,0,0.8)}
-        /* Menu Loading Style */
         .menu-loading{font-size:1.5rem;font-weight:600;opacity:0.7;margin:0}
     </style>
 
@@ -48,12 +47,11 @@
             </svg>
         </button>
         <div class="restaurant-info">
-            <h1 id="restaurant-name"></h1>
-            <p id="restaurant-info"></p>
+            <h1 id="restaurant-name">Preparing Your Feast...</h1>
+            <p id="restaurant-info">Hang tight, deliciousness is on the way!</p>
         </div>
     </div>
 
-    <!-- Override Entire Menu Section -->
     <div class="menu-section" id="menu-section">
         <p class="menu-loading">Heating up the menu... 🍲</p>
     </div>
@@ -69,7 +67,7 @@
 
     <script type="module">
         import { initializeApp } from "https://www.gstatic.com/firebasejs/10.9.0/firebase-app.js";
-        import { initializeFirestore, persistentLocalCache, collection, getDocs, doc, getDoc, addDoc } from "https://www.gstatic.com/firebasejs/10.9.0/firebase-firestore.js";
+        import { getFirestore, collection, getDocs, doc, getDoc, enableIndexedDbPersistence } from "https://www.gstatic.com/firebasejs/10.9.0/firebase-firestore.js";
 
         const firebaseConfig = {
             apiKey: "AIzaSyADvpUQWo75ExePGoCRirD2mM-lmfM4Cmc",
@@ -82,20 +80,22 @@
         };
 
         const app = initializeApp(firebaseConfig);
-        const db = initializeFirestore(app, { localCache: persistentLocalCache() });
+        const db = getFirestore(app);
+        enableIndexedDbPersistence(db).catch(err => console.warn("Firestore persistence failed:", err));
 
         const urlParams = new URLSearchParams(window.location.search);
         const restaurantId = urlParams.get("id");
-
-        // Local state
-        let menuCache = null;
         let cartCount = 0;
 
         async function loadRestaurant() {
             const start = performance.now();
             const docRef = doc(db, "restaurant", restaurantId);
             const docSnap = await getDoc(docRef);
-            if (!docSnap.exists()) return;
+            if (!docSnap.exists()) {
+                document.getElementById("restaurant-name").textContent = "Restaurant Not Found";
+                document.getElementById("restaurant-info").textContent = "";
+                return;
+            }
             const data = docSnap.data();
             requestAnimationFrame(() => {
                 document.getElementById("restaurant-name").textContent = data.name;
@@ -107,22 +107,18 @@
 
         async function loadMenu() {
             const start = performance.now();
-            if (menuCache) {
-                renderMenu(menuCache);
-                return;
-            }
             const menuRef = collection(db, "restaurant", restaurantId, "menu");
             const querySnapshot = await getDocs(menuRef);
-            menuCache = [];
+            const menuItems = [];
             querySnapshot.forEach(docSnapshot => {
                 const data = docSnapshot.data();
-                menuCache.push({
+                menuItems.push({
                     id: docSnapshot.id,
                     name: data.name,
-                    price: parseFloat(data.price)
+                    price: parseFloat(data.price) || 0
                 });
             });
-            renderMenu(menuCache);
+            renderMenu(menuItems);
             console.log(`Menu loaded in ${(performance.now() - start).toFixed(2)}ms`);
         }
 
@@ -154,7 +150,7 @@
             fragment.appendChild(menuHeader);
             fragment.appendChild(menuList);
             requestAnimationFrame(() => {
-                menuSection.innerHTML = ""; // Clear loading message
+                menuSection.innerHTML = "";
                 menuSection.appendChild(fragment);
             });
         }
@@ -175,24 +171,19 @@
             });
         }
 
-        async function checkCart() {
-            const cartRef = collection(db, "cart");
-            const cartSnapshot = await getDocs(cartRef);
-            cartCount = cartSnapshot.size;
+        function loadCartCount() {
+            const cart = JSON.parse(localStorage.getItem("cart") || "[]");
+            cartCount = cart.length;
             updateCartButton();
         }
 
-        let pendingCartItems = [];
-        function debounceAddToCart(item) {
-            pendingCartItems.push(item);
-            clearTimeout(window.cartDebounce);
-            window.cartDebounce = setTimeout(async () => {
-                const items = pendingCartItems.slice();
-                pendingCartItems = [];
-                await Promise.all(items.map(item => addDoc(collection(db, "cart"), item)));
-                cartCount += items.length;
-                updateCartButton();
-            }, 200);
+        function addToCart(item) {
+            const cart = JSON.parse(localStorage.getItem("cart") || "[]");
+            cart.push(item);
+            localStorage.setItem("cart", JSON.stringify(cart));
+            cartCount++;
+            updateCartButton();
+            showToast(`${item.name} added to cart!`);
         }
 
         document.addEventListener("click", e => {
@@ -201,18 +192,17 @@
                     name: e.target.dataset.name,
                     price: parseFloat(e.target.dataset.price),
                     restaurantId: restaurantId,
-                    quantity: 1
+                    quantity: 1,
+                    id: Date.now() // Unique ID for local cart
                 };
-                debounceAddToCart(item);
-                showToast(`${item.name} added to cart!`);
-                cartCount++;
-                updateCartButton();
+                addToCart(item);
             }
         });
 
         document.addEventListener("DOMContentLoaded", async () => {
             const start = performance.now();
-            await Promise.all([loadRestaurant(), loadMenu(), checkCart()]);
+            await Promise.all([loadRestaurant(), loadMenu()]);
+            loadCartCount();
             feather.replace();
             console.log(`Page fully loaded in ${(performance.now() - start).toFixed(2)}ms`);
         });

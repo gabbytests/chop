@@ -7,271 +7,51 @@
     <meta name="author" content="Askbootstrap">
     <link rel="icon" type="image/png" href="img/fav.png">
     <title>Chawmp - Your Cart</title>
-    <!-- Slick Slider -->
-    <link href="vendor/slick/slick/slick.css" rel="stylesheet" type="text/css">
-    <link href="vendor/slick/slick/slick-theme.css" rel="stylesheet" type="text/css">
-    <!-- Feather Icon-->
-    <link href="vendor/icons/feather.css" rel="stylesheet" type="text/css">
-    <!-- Bootstrap core CSS -->
     <link href="vendor/bootstrap/css/bootstrap.min.css" rel="stylesheet">
-    <!-- Custom styles for this template -->
-    <link href="css/style.css" rel="stylesheet">
-    <!-- Sidebar CSS -->
-    <link href="vendor/sidebar/demo.css" rel="stylesheet">
-    <!-- Apple-Inspired Luxurious Styles -->
+    <link href="vendor/icons/feather.css" rel="stylesheet" type="text/css">
     <style>
-        body {
-            font-family: 'SF Pro Display', -apple-system, BlinkMacSystemFont, sans-serif;
-            background: #565656;
-            color: #ffffff;
-            margin: 0;
-            padding: 0;
-            min-height: 100vh;
-            overflow-x: hidden;
-        }
-
-        .cart-header {
-            background: #565656;
-            padding: 15px 25px;
-            border-bottom: 1px solid rgba(255, 255, 255, 0.1);
-            display: flex;
-            align-items: center;
-            justify-content: space-between;
-            box-shadow: 0 2px 8px rgba(0, 0, 0, 0.3);
-        }
-        .cart-header h4 {
-            font-size: 1.5rem;
-            font-weight: 600;
-            margin: 0;
-            flex-grow: 1;
-            text-align: center;
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            gap: 15px;
-        }
-        .cart-header .back-btn {
-            background: none;
-            border: none;
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            cursor: pointer;
-            position: absolute;
-            left: 10px;
-            top: 15px;
-            transition: transform 0.2s ease, opacity 0.2s ease;
-        }
-        .cart-header .back-btn i {
-            width: 40px;
-            height: 40px;
-            stroke-width: 3;
-            color: white;
-            transition: transform 0.2s ease;
-        }
-        .cart-header .back-btn:hover {
-            opacity: 0.8;
-            transform: scale(1.1);
-        }
-        .cart-header .feather-shopping-cart {
-            width: 20px;
-            height: 20px;
-            color: #ffffff;
-        }
-
-        .cart-container {
-            padding: 30px 15px;
-            max-width: 700px;
-            margin: 0 auto;
-        }
-
-        .empty-cart {
-            text-align: center;
-            padding: 80px 15px;
-        }
-        .empty-cart h2 {
-            font-size: 2rem;
-            font-weight: 700;
-            margin-bottom: 15px;
-            letter-spacing: -0.4px;
-            color: #ffffff;
-        }
-        .empty-cart p {
-            font-size: 1rem;
-            color: #ffffff;
-            opacity: 0.7;
-            margin-bottom: 20px;
-            line-height: 1.5;
-        }
-        .empty-cart .btn-primary {
-            background: #007bff;
-            border: none;
-            padding: 10px 30px;
-            border-radius: 50px;
-            font-size: 0.95rem;
-            font-weight: 600;
-            transition: background 0.3s ease, transform 0.2s ease;
-        }
-        .empty-cart .btn-primary:hover {
-            background: #0056b3;
-            transform: translateY(-2px);
-        }
-
-        .cart-items {
-            margin-bottom: 40px;
-        }
-        .cart-item {
-            background: #2a2a2a;
-            border-radius: 10px;
-            padding: 15px;
-            margin-bottom: 10px;
-            display: flex;
-            justify-content: space-between;
-            align-items: center;
-            transition: transform 0.2s ease, box-shadow 0.2s ease;
-            box-shadow: 0 3px 12px rgba(0, 0, 0, 0.2);
-        }
-        .cart-item:hover {
-            transform: translateY(-2px);
-            box-shadow: 0 5px 15px rgba(0, 0, 0, 0.25);
-        }
-        .cart-item p {
-            margin: 0;
-            color: #ffffff;
-        }
-        .cart-item .item-name {
-            font-size: 1.1rem;
-            font-weight: 600;
-        }
-        .cart-item .item-price {
-            font-size: 0.85rem;
-            opacity: 0.7;
-        }
-        .cart-item .controls {
-            display: flex;
-            align-items: center;
-            gap: 10px;
-        }
-        .cart-item .btn-sm {
-            padding: 4px 8px;
-            border-radius: 6px;
-            background: #3a3a3a;
-            border: none;
-            color: #ffffff;
-            transition: background 0.2s ease;
-        }
-        .cart-item .btn-sm:hover {
-            background: #4a4a4a;
-        }
-        .cart-item .quantity {
-            font-size: 0.95rem;
-            font-weight: 500;
-        }
-        .cart-item .item-total {
-            font-size: 1rem;
-            font-weight: 600;
-        }
-        .cart-item .btn-danger {
-            background: #ba2837;
-            border: none;
-            padding: 4px 8px;
-            border-radius: 6px;
-            transition: background 0.2s ease;
-        }
-        .cart-item .btn-danger:hover {
-            background: #ff0019;
-        }
-
-        .order-summary {
-            background: #2a2a2a;
-            border-radius: 10px;
-            padding: 20px;
-            box-shadow: 0 3px 12px rgba(0, 0, 0, 0.2);
-        }
-        .order-summary p {
-            font-size: 0.95rem;
-            margin-bottom: 8px;
-            color: #ffffff;
-            opacity: 0.9;
-        }
-        .order-summary hr {
-            border-color: rgba(255, 255, 255, 0.2);
-            margin: 10px 0;
-        }
-        .order-summary h6 {
-            font-size: 1.2rem;
-            font-weight: 700;
-            margin: 0;
-            color: #ffffff;
-        }
-
-        .action-buttons {
-            margin-top: 20px;
-            display: flex;
-            flex-direction: column;
-            gap: 10px;
-        }
-        .action-buttons .btn {
-            padding: 12px;
-            border-radius: 50px;
-            font-size: 1rem;
-            font-weight: 600;
-            transition: background 0.3s ease, transform 0.2s ease;
-        }
-        .action-buttons .btn-success {
-            background: #191919;
-            border: none;
-        }
-        .action-buttons .btn-success:hover {
-            background: #878686;
-            transform: translateY(-2px);
-        }
-        .action-buttons .btn-danger {
-            background: #7c1822;
-            border: none;
-        }
-        .action-buttons .btn-danger:hover {
-            background: #dc3545;
-            transform: translateY(-2px);
-        }
-
-        .notification {
-            position: fixed;
-            top: 20px;
-            left: 50%;
-            transform: translateX(-50%);
-            background: rgba(0, 0, 0, 0.9);
-            color: #ffffff;
-            padding: 10px 20px;
-            border-radius: 10px;
-            font-size: 0.9rem;
-            font-weight: 500;
-            display: flex;
-            align-items: center;
-            gap: 8px;
-            opacity: 0;
-            transition: opacity 0.4s ease, transform 0.4s ease;
-            z-index: 1000;
-        }
-        .notification.show {
-            opacity: 1;
-            transform: translateX(-50%) translateY(10px);
-        }
-        /* 🔥 Custom Red Color for Text & Icon */
-.text-danger {
-    color: #00c8ff !important; /* 🔴 Bootstrap Danger Red */
-    transition: color 0.3s ease, transform 0.2s ease;
-}
-
-/* 🔥 Hover Effect for a Smooth Interaction */
-.text-danger:hover {
-    color: #00c8ff !important; /* 🔴 Darker Red on Hover */
-    transform: scale(1.05); /* 🔥 Slight zoom effect */
-}
-
+        body{font-family:'SF Pro Display',-apple-system,BlinkMacSystemFont,sans-serif;background:#565656;color:#ffffff;margin:0;padding:0;min-height:100vh;overflow-x:hidden}
+        .cart-header{background:#565656;padding:15px 25px;border-bottom:1px solid rgba(255,255,255,0.1);display:flex;align-items:center;justify-content:space-between;box-shadow:0 2px 8px rgba(0,0,0,0.3)}
+        .cart-header h4{font-size:1.5rem;font-weight:600;margin:0;flex-grow:1;text-align:center;display:flex;align-items:center;justify-content:center;gap:15px}
+        .cart-header .back-btn{background:none;border:none;display:flex;align-items:center;justify-content:center;cursor:pointer;position:absolute;left:10px;top:15px;transition:transform 0.2s ease,opacity 0.2s ease}
+        .cart-header .back-btn i{width:40px;height:40px;stroke-width:3;color:white;transition:transform 0.2s ease}
+        .cart-header .back-btn:hover{opacity:0.8;transform:scale(1.1)}
+        .cart-header .feather-shopping-cart{width:20px;height:20px;color:#ffffff}
+        .cart-container{padding:30px 15px;max-width:700px;margin:0 auto}
+        .empty-cart{text-align:center;padding:80px 15px}
+        .empty-cart h2{font-size:2rem;font-weight:700;margin-bottom:15px;letter-spacing:-0.4px;color:#ffffff}
+        .empty-cart p{font-size:1rem;color:#ffffff;opacity:0.7;margin-bottom:20px;line-height:1.5}
+        .empty-cart .btn-primary{background:#007bff;border:none;padding:10px 30px;border-radius:50px;font-size:0.95rem;font-weight:600;transition:background 0.3s ease,transform 0.2s ease}
+        .empty-cart .btn-primary:hover{background:#0056b3;transform:translateY(-2px)}
+        .cart-items{margin-bottom:40px}
+        .cart-item{background:#2a2a2a;border-radius:10px;padding:15px;margin-bottom:10px;display:flex;justify-content:space-between;align-items:center;transition:transform 0.2s ease,box-shadow 0.2s ease;box-shadow:0 3px 12px rgba(0,0,0,0.2)}
+        .cart-item:hover{transform:translateY(-2px);box-shadow:0 5px 15px rgba(0,0,0,0.25)}
+        .cart-item p{margin:0;color:#ffffff}
+        .cart-item .item-name{font-size:1.1rem;font-weight:600}
+        .cart-item .item-price{font-size:0.85rem;opacity:0.7}
+        .cart-item .controls{display:flex;align-items:center;gap:10px}
+        .cart-item .btn-sm{padding:4px 8px;border-radius:6px;background:#3a3a3a;border:none;color:#ffffff;transition:background 0.2s ease}
+        .cart-item .btn-sm:hover{background:#4a4a4a}
+        .cart-item .quantity{font-size:0.95rem;font-weight:500}
+        .cart-item .item-total{font-size:1rem;font-weight:600}
+        .cart-item .btn-danger{background:#ba2837;border:none;padding:4px 8px;border-radius:6px;transition:background 0.2s ease}
+        .cart-item .btn-danger:hover{background:#ff0019}
+        .order-summary{background:#2a2a2a;border-radius:10px;padding:20px;box-shadow:0 3px 12px rgba(0,0,0,0.2)}
+        .order-summary p{font-size:0.95rem;margin-bottom:8px;color:#ffffff;opacity:0.9}
+        .order-summary hr{border-color:rgba(255,255,255,0.2);margin:10px 0}
+        .order-summary h6{font-size:1.2rem;font-weight:700;margin:0;color:#ffffff}
+        .action-buttons{margin-top:20px;display:flex;flex-direction:column;gap:10px}
+        .action-buttons .btn{padding:12px;border-radius:50px;font-size:1rem;font-weight:600;transition:background 0.3s ease,transform 0.2s ease}
+        .action-buttons .btn-success{background:#191919;border:none}
+        .action-buttons .btn-success:hover{background:#878686;transform:translateY(-2px)}
+        .action-buttons .btn-danger{background:#7c1822;border:none}
+        .action-buttons .btn-danger:hover{background:#dc3545;transform:translateY(-2px)}
+        .notification{position:fixed;top:20px;left:50%;transform:translateX(-50%);background:rgba(0,0,0,0.9);color:#ffffff;padding:10px 20px;border-radius:10px;font-size:0.9rem;font-weight:500;display:flex;align-items:center;gap:8px;opacity:0;transition:opacity 0.4s ease,transform 0.4s ease;z-index:1000}
+        .notification.show{opacity:1;transform:translateX(-50%) translateY(10px)}
+        .text-danger{color:#00c8ff !important;transition:color 0.3s ease,transform 0.2s ease}
+        .text-danger:hover{color:#00c8ff !important;transform:scale(1.05)}
     </style>
 </head>
-
 <body class="fixed-bottom-bar">
     <div class="cart-header">
         <button class="back-btn" onclick="history.back()">
@@ -290,70 +70,20 @@
         <span id="notification-message"></span>
     </div>
 
-
-    <!-- Footer -->
     <div class="osahan-menu-fotter fixed-bottom bg-dark px-3 py-2 text-center">
         <div class="row">
-            
-            <div class="col">
-                <a href="index.html" class="text-white small fw-bold text-decoration-none">
-                    <p class="h4 m-0"><i class="feather-map-pin"></i></p>
-                    Trending
-                </a>
-            </div>
-            <div class="col">
-                <a href="trending.html" class="text-white small fw-bold text-decoration-none">
-                    <p class="h4 m-0"><i class="feather-home text-white"></i></p>
-                    Home
-                </a>
-            </div>
-            <div class="col selected">
-                    <a href="cart.html" class="text-danger small fw-bold text-decoration-none">
-                       <p class="h4 m-0"> <i class="feather-shopping-cart text-danger"></i></p>
-                       Cart
-                    </a>
-               
-            </div>
-            <div class="col">
-                <a href="orders.html" class="text-white small fw-bold text-decoration-none">
-                    <p class="h4 m-0"><i class="feather-shopping-bag"></i></p>
-                    Orders
-                </a>
-            </div>
-            <div class="col">
-                <a href="profile.html" class="text-white small fw-bold text-decoration-none">
-                    <p class="h4 m-0"><i class="feather-user"></i></p>
-                    Profile
-                </a>
-            </div>
+            <div class="col"><a href="index.html" class="text-white small fw-bold text-decoration-none"><p class="h4 m-0"><i class="feather-map-pin"></i></p>Trending</a></div>
+            <div class="col"><a href="trending.html" class="text-white small fw-bold text-decoration-none"><p class="h4 m-0"><i class="feather-home text-white"></i></p>Home</a></div>
+            <div class="col selected"><a href="cart.html" class="text-danger small fw-bold text-decoration-none"><p class="h4 m-0"><i class="feather-shopping-cart text-danger"></i></p>Cart</a></div>
+            <div class="col"><a href="orders.html" class="text-white small fw-bold text-decoration-none"><p class="h4 m-0"><i class="feather-shopping-bag"></i></p>Orders</a></div>
+            <div class="col"><a href="profile.html" class="text-white small fw-bold text-decoration-none"><p class="h4 m-0"><i class="feather-user"></i></p>Profile</a></div>
         </div>
     </div>
 
-
-    <script type="module">
-        import { initializeApp } from "https://www.gstatic.com/firebasejs/10.9.0/firebase-app.js";
-        import { getFirestore, collection, getDocs, updateDoc, deleteDoc, doc, addDoc, enableIndexedDbPersistence } from "https://www.gstatic.com/firebasejs/10.9.0/firebase-firestore.js";
-
-        const firebaseConfig = {
-            apiKey: "AIzaSyADvpUQWo75ExePGoCRirD2mM-lmfM4Cmc",
-            authDomain: "von600-7982d.firebaseapp.com",
-            projectId: "von600-7982d",
-            storageBucket: "von600-7982d.appspot.com",
-            messagingSenderId: "164591218045",
-            appId: "1:164591218045:web:afe17512e16573e7903014",
-            measurementId: "G-E69DMPLXBK"
-        };
-
-        const app = initializeApp(firebaseConfig);
-        const db = getFirestore(app);
-        enableIndexedDbPersistence(db).catch(err => console.warn("Persistence failed:", err));
-
+    <script>
         const cartContainer = document.getElementById("cart-container");
         const notification = document.getElementById("notification");
         const notificationMessage = document.getElementById("notification-message");
-
-        // Local cart state
-        let cart = new Map(); // name -> { name, price, quantity, ids }
 
         function showNotification(message) {
             notificationMessage.textContent = message;
@@ -361,9 +91,18 @@
             setTimeout(() => notification.classList.remove("show"), 2000);
         }
 
+        function getCart() {
+            return JSON.parse(localStorage.getItem("cart") || "[]");
+        }
+
+        function saveCart(cart) {
+            localStorage.setItem("cart", JSON.stringify(cart));
+        }
+
         function renderCart() {
             const startTime = performance.now();
-            if (cart.size === 0) {
+            const cart = getCart();
+            if (cart.length === 0) {
                 cartContainer.innerHTML = `
                     <div class="empty-cart">
                         <h2>Your Cart is Empty</h2>
@@ -376,7 +115,18 @@
             }
 
             let subtotal = 0;
-            const itemsHTML = Array.from(cart.values()).map(item => {
+            const groupedCart = new Map();
+            cart.forEach(item => {
+                if (groupedCart.has(item.name)) {
+                    const existing = groupedCart.get(item.name);
+                    existing.quantity += item.quantity;
+                    existing.ids.push(item.id);
+                } else {
+                    groupedCart.set(item.name, { ...item, ids: [item.id] });
+                }
+            });
+
+            const itemsHTML = Array.from(groupedCart.values()).map(item => {
                 const itemTotal = item.price * item.quantity;
                 subtotal += itemTotal;
                 return `
@@ -415,87 +165,27 @@
             console.log(`Rendered cart in ${(performance.now() - startTime).toFixed(2)}ms`);
         }
 
-        async function loadCartFromFirestore() {
-            const startTime = performance.now();
-            try {
-                const querySnapshot = await getDocs(collection(db, "cart"));
-                cart.clear();
-                querySnapshot.forEach(docSnap => {
-                    const data = docSnap.data();
-                    const name = data.name;
-                    const price = parseFloat(data.price) || 0;
-                    const quantity = Math.max(1, parseInt(data.quantity) || 1);
-                    if (cart.has(name)) {
-                        const existing = cart.get(name);
-                        existing.quantity += quantity;
-                        existing.ids.push(docSnap.id);
-                    } else {
-                        cart.set(name, { name, price, quantity, ids: [docSnap.id] });
-                    }
-                });
-                renderCart();
-                console.log(`Loaded cart from Firestore in ${(performance.now() - startTime).toFixed(2)}ms`);
-            } catch (error) {
-                console.error("❌ Error loading cart:", error);
-                cartContainer.innerHTML = `<div class="empty-cart"><p class="text-danger">Failed to load cart.</p></div>`;
-            }
-        }
-
         function updateItemQuantity(name, delta) {
-            const item = cart.get(name);
+            const cart = getCart();
+            const item = cart.find(i => i.name === name);
             if (!item) return;
-            const newQuantity = Math.max(1, item.quantity + delta);
-            item.quantity = newQuantity;
-
-            // Update DOM incrementally
-            const itemElement = cartContainer.querySelector(`.cart-item[data-name="${name}"]`);
-            const quantityElement = itemElement.querySelector(".quantity");
-            const totalElement = itemElement.querySelector(".item-total");
-            quantityElement.textContent = newQuantity;
-            totalElement.textContent = `$${(item.price * newQuantity).toFixed(2)}`;
-
-            // Update subtotal and total
-            const subtotal = Array.from(cart.values()).reduce((sum, i) => sum + i.price * i.quantity, 0);
-            cartContainer.querySelector(".order-summary .float-end").textContent = `$${subtotal.toFixed(2)}`;
-            cartContainer.querySelector(".order-summary h6 .float-end").textContent = `$${(subtotal + 12).toFixed(2)}`;
-
-            // Sync to Firestore (debounced)
-            debounceFirestoreUpdate(item.ids[0], { quantity: newQuantity });
+            item.quantity = Math.max(1, item.quantity + delta);
+            saveCart(cart);
+            renderCart();
         }
 
         function removeItem(name) {
-            const item = cart.get(name);
-            if (!item) return;
-            const deletePromises = item.ids.map(id => deleteDoc(doc(db, "cart", id)));
-            Promise.all(deletePromises).catch(err => console.error("Error removing item:", err));
-            cart.delete(name);
-            renderCart(); // Full render since layout changes
+            let cart = getCart();
+            cart = cart.filter(i => i.name !== name);
+            saveCart(cart);
+            renderCart();
+            showNotification(`${name} removed from cart`);
         }
 
         function removeAllItems() {
-            const deletePromises = Array.from(cart.values()).flatMap(item => item.ids.map(id => deleteDoc(doc(db, "cart", id))));
-            Promise.all(deletePromises)
-                .then(() => {
-                    cart.clear();
-                    renderCart();
-                    showNotification("All items removed from cart");
-                })
-                .catch(err => {
-                    console.error("Error removing all items:", err);
-                    showNotification("Failed to clear cart");
-                });
-        }
-
-        // Debounce Firestore updates
-        let pendingUpdates = new Map();
-        function debounceFirestoreUpdate(docId, updateData) {
-            pendingUpdates.set(docId, updateData);
-            clearTimeout(window.firestoreDebounce);
-            window.firestoreDebounce = setTimeout(async () => {
-                const updates = Array.from(pendingUpdates.entries());
-                pendingUpdates.clear();
-                await Promise.all(updates.map(([id, data]) => updateDoc(doc(db, "cart", id), data)));
-            }, 300); // 300ms debounce
+            saveCart([]);
+            renderCart();
+            showNotification("All items removed from cart");
         }
 
         function addEventListeners() {
@@ -506,44 +196,36 @@
                 item.querySelector(".remove").addEventListener("click", () => removeItem(name));
             });
 
-            const checkoutBtn = document.getElementById("checkout-btn");
-            const removeAllBtn = document.getElementById("remove-all-btn");
-            if (checkoutBtn) checkoutBtn.addEventListener("click", checkout);
-            if (removeAllBtn) removeAllBtn.addEventListener("click", removeAllItems);
+            document.getElementById("checkout-btn")?.addEventListener("click", checkout);
+            document.getElementById("remove-all-btn")?.addEventListener("click", removeAllItems);
         }
 
-        async function checkout() {
-            if (cart.size === 0) {
+        function checkout() {
+            const cart = getCart();
+            if (cart.length === 0) {
                 showNotification("Your cart is empty!");
                 return;
             }
 
-            const orderItems = Array.from(cart.values()).map(item => ({
+            const orderItems = cart.map(item => ({
                 name: item.name,
                 price: item.price,
                 quantity: item.quantity,
                 total: item.price * item.quantity
             }));
-            const totalAmount = orderItems.reduce((sum, item) => sum + item.total, 0) + 2.00 + 10.00;
-
-            try {
-                await addDoc(collection(db, "orders"), {
-                    items: orderItems,
-                    totalAmount,
-                    timestamp: new Date().toISOString()
-                });
-                removeAllItems();
-                window.location.href = "successful.html";
-            } catch (error) {
-                console.error("Error during checkout:", error);
-                showNotification("Checkout failed!");
-            }
+            const totalAmount = orderItems.reduce((sum, item) => sum + item.total, 0) + 12;
+            const orders = JSON.parse(localStorage.getItem("orders") || "[]");
+            orders.push({ items: orderItems, totalAmount, timestamp: new Date().toISOString(), id: Date.now() });
+            localStorage.setItem("orders", JSON.stringify(orders));
+            saveCart([]);
+            window.location.href = "successful.html";
         }
 
-        // Initial load
         document.addEventListener("DOMContentLoaded", () => {
             const startTime = performance.now();
-            loadCartFromFirestore().then(() => console.log(`Page fully loaded in ${(performance.now() - startTime).toFixed(2)}ms`));
+            renderCart();
+            feather.replace();
+            console.log(`Page fully loaded in ${(performance.now() - startTime).toFixed(2)}ms`);
         });
     </script>
 </body>

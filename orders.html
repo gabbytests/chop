@@ -1,6 +1,5 @@
 <!DOCTYPE html>
 <html lang="en">
-
 <head>
     <meta charset="utf-8">
     <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
@@ -8,36 +7,37 @@
     <meta name="author" content="Askbootstrap">
     <link rel="icon" type="image/png" href="img/fav.png">
     <title>Chawmp</title>
-    <!-- Slick Slider -->
-    <link href="vendor/slick/slick/slick.css" rel="stylesheet" type="text/css">
-    <link href="vendor/slick/slick/slick-theme.css" rel="stylesheet" type="text/css">
-    <!-- Feather Icon-->
-    <link href="vendor/icons/feather.css" rel="stylesheet" type="text/css">
-    <!-- Bootstrap core CSS -->
     <link href="vendor/bootstrap/css/bootstrap.min.css" rel="stylesheet">
-    <!-- Custom styles for this template -->
-    <link href="css/style.css" rel="stylesheet">
-    <!-- Sidebar CSS -->
-    <link href="vendor/sidebar/demo.css" rel="stylesheet">
-
+    <link href="vendor/icons/feather.css" rel="stylesheet" type="text/css">
     <style>
-    .text-danger {
-        color: #00c8ff !important; /* 🔴 Bootstrap Danger Red */
-        transition: color 0.3s ease, transform 0.2s ease;
-    }
-    
-    /* 🔥 Hover Effect for a Smooth Interaction */
-    .text-danger:hover {
-        color: #00c8ff !important; /* 🔴 Darker Red on Hover */
-        transform: scale(1.05); /* 🔥 Slight zoom effect */
-    }
+        body{font-family:'SF Pro Display',-apple-system,BlinkMacSystemFont,sans-serif;background:#565656;color:#ffffff;margin:0;padding:0;min-height:100vh;overflow-x:hidden}
+        .bg-primary{background:#565656;padding:15px;border-bottom:1px solid rgba(255,255,255,0.1);display:flex;align-items:center}
+        .bg-primary h4{font-size:1.5rem;font-weight:600;margin:0;color:#ffffff}
+        .bg-primary i{margin-right:10px}
+        .container{padding:30px 15px}
+        .order-box{background:#2a2a2a;padding:15px;margin-bottom:15px;border-radius:10px;box-shadow:0 3px 12px rgba(0,0,0,0.2)}
+        .order-box h5{font-size:1.2rem;font-weight:600;margin-bottom:5px}
+        .order-box .order-id{font-size:0.85rem;opacity:0.7}
+        .order-box ul{list-style:none;padding:0;margin:10px 0}
+        .order-box ul li{font-size:0.9rem}
+        .order-box hr{border-color:rgba(255,255,255,0.2);margin:10px 0}
+        .order-box .order-total{font-size:1rem;font-weight:600}
+        .text-center{text-align:center}
+        .text-white-50{opacity:0.7}
+        .text-danger{color:#00c8ff !important;transition:color 0.3s ease,transform 0.2s ease}
+        .text-danger:hover{color:#00c8ff !important;transform:scale(1.05)}
+        .osahan-menu-fotter{background:#1a1a1a;padding:10px 15px;text-align:center}
+        .osahan-menu-fotter .row{display:flex;justify-content:space-around}
+        .osahan-menu-fotter .col{flex:1}
+        .osahan-menu-fotter a{color:#ffffff;text-decoration:none;font-weight:600}
+        .osahan-menu-fotter a p{margin:0;font-size:1.5rem}
+        .osahan-menu-fotter a small{font-size:0.75rem}
+        .fixed-bottom{position:fixed;bottom:0;left:0;right:0}
     </style>
 </head>
-
-
 <body class="fixed-bottom-bar">
     <div class="osahan-checkout">
-        <div class="bg-primary border-bottom p-3 d-flex align-items-center">
+        <div class="bg-transparent border-bottom p-3 d-flex align-items-center">
             <h4 class="fw-bold m-0 text-white"><i class="feather-list me-2"></i>My Orders</h4>
         </div>
 
@@ -46,140 +46,56 @@
         </div>
     </div>
 
-   
-        <!-- Footer -->
-        <div class="osahan-menu-fotter fixed-bottom bg-dark px-3 py-2 text-center  ">
-            <div class="row">
-                <div class="col">
-                    <a href="index.html" class="text-white small fw-bold text-decoration-none">
-                        <p class="h4 m-0"><i class="feather-map-pin"></i></p>
-                        Trending
-                    </a>
-                </div>
-                <div class="col selected">
-                    <a href="trending.html" class="text-white small fw-bold text-decoration-none">
-                        <p class="h4 m-0"><i class="feather-home text-white"></i></p>
-                        Home
-                    </a>
-                </div>
-                <div class="col">
-                        <a href="cart.html" class="text-white small fw-bold text-decoration-none">
-                           <p class="h4 m-0"> <i class="feather-shopping-cart"></i></p>
-                           Cart
-                        </a>
-                   
-                </div>
-                <div class="col">
-                    <a href="orders.html" class="text-danger small fw-bold text-decoration-none">
-                        <p class="h4 m-0"><i class="feather-shopping-bag"></i></p>
-                        Orders
-                    </a>
-                </div>
-                <div class="col">
-                    <a href="profile.html" class="text-white small fw-bold text-decoration-none">
-                        <p class="h4 m-0"><i class="feather-user"></i></p>
-                        Profile
-                    </a>
-                </div>
-            </div>
+    <div class="osahan-menu-fotter fixed-bottom bg-dark px-3 py-2 text-center">
+        <div class="row">
+            <div class="col"><a href="index.html" class="text-white small fw-bold text-decoration-none"><p class="h4 m-0"><i class="feather-map-pin"></i></p>Trending</a></div>
+            <div class="col"><a href="trending.html" class="text-white small fw-bold text-decoration-none"><p class="h4 m-0"><i class="feather-home text-white"></i></p>Home</a></div>
+            <div class="col"><a href="cart.html" class="text-white small fw-bold text-decoration-none"><p class="h4 m-0"><i class="feather-shopping-cart"></i></p>Cart</a></div>
+            <div class="col selected"><a href="orders.html" class="text-danger small fw-bold text-decoration-none"><p class="h4 m-0"><i class="feather-shopping-bag"></i></p>Orders</a></div>
+            <div class="col"><a href="profile.html" class="text-white small fw-bold text-decoration-none"><p class="h4 m-0"><i class="feather-user"></i></p>Profile</a></div>
         </div>
     </div>
-    <!-- footer -->
-     
 
+    <script>
+        function loadOrders() {
+            const start = performance.now();
+            const ordersList = document.getElementById("orders-list");
+            ordersList.innerHTML = "<p class='text-center text-white'>Loading orders...</p>";
 
-   
-    <!-- Bootstrap core JavaScript -->
-    <script type="0ca9ecdeaaf0ffdafb98bd0b-text/javascript" src="vendor/jquery/jquery.min.js"></script>
-    <script type="0ca9ecdeaaf0ffdafb98bd0b-text/javascript" src="vendor/bootstrap/js/bootstrap.bundle.min.js"></script>
-    <!-- slick Slider JS-->
-    <script type="0ca9ecdeaaf0ffdafb98bd0b-text/javascript" src="vendor/slick/slick/slick.min.js"></script>
-    <!-- Sidebar JS-->
-    <script type="0ca9ecdeaaf0ffdafb98bd0b-text/javascript" src="vendor/sidebar/hc-offcanvas-nav.js"></script>
-    <!-- Custom scripts for all pages-->
-    <script type="0ca9ecdeaaf0ffdafb98bd0b-text/javascript" src="js/osahan.js"></script>
-<script src="cdn-cgi/scripts/7d0fa10a/cloudflare-static/rocket-loader.min.js" data-cf-settings="0ca9ecdeaaf0ffdafb98bd0b-|49" defer></script>
-
-
-
-
-<script type="module">
-    import { initializeApp } from "https://www.gstatic.com/firebasejs/10.9.0/firebase-app.js";
-    import { getFirestore, collection, getDocs, orderBy, query, enableIndexedDbPersistence } from "https://www.gstatic.com/firebasejs/10.9.0/firebase-firestore.js";
-
-    const firebaseConfig = {
-        apiKey: "AIzaSyADvpUQWo75ExePGoCRirD2mM-lmfM4Cmc",
-        authDomain: "von600-7982d.firebaseapp.com",
-        projectId: "von600-7982d",
-        storageBucket: "von600-7982d.appspot.com",
-        messagingSenderId: "164591218045",
-        appId: "1:164591218045:web:afe17512e16573e7903014",
-        measurementId: "G-E69DMPLXBK"
-    };
-
-    const app = initializeApp(firebaseConfig);
-    const db = getFirestore(app);
-
-    // ✅ Enable offline caching to fix slow loading
-    enableIndexedDbPersistence(db).catch((err) => {
-        console.warn("⚠️ Firestore offline persistence failed:", err);
-    });
-
-    async function loadOrders() {
-    const ordersList = document.getElementById("orders-list");
-    ordersList.innerHTML = "<p class='text-center text-white'>Loading orders...</p>";
-
-    try {
-        const q = query(collection(db, "orders"), orderBy("timestamp", "desc"));
-        const querySnapshot = await getDocs(q);
-
-        if (!querySnapshot || querySnapshot.empty) {
-            ordersList.innerHTML = "<p class='text-center text-white'>No orders found.</p>";
-            return;
-        }
-
-        let output = "";
-        querySnapshot.docs.forEach(docSnap => {
-            const data = docSnap.data();
-            
-            // ✅ Fallback to empty array if items are missing
-            const orderItems = Array.isArray(data.items) ? data.items : [];
-            if (orderItems.length === 0) {
-                console.warn(`⚠️ Order ${docSnap.id} has no items, skipping...`);
+            const orders = JSON.parse(localStorage.getItem("orders") || "[]");
+            if (orders.length === 0) {
+                ordersList.innerHTML = "<p class='text-center text-white'>No orders found.</p>";
+                console.log(`Orders loaded in ${(performance.now() - start).toFixed(2)}ms`);
                 return;
             }
 
-            const orderTime = new Date(data.timestamp).toLocaleString();
-            let itemsList = orderItems.map(item => `
-                <li class="text-white small">${item.quantity}x ${item.name} - $${item.total.toFixed(2)}</li>
-            `).join("");
+            let output = "";
+            orders.sort((a, b) => new Date(b.timestamp) - new Date(a.timestamp)).forEach(order => {
+                const orderTime = new Date(order.timestamp).toLocaleString();
+                const itemsList = order.items.map(item => `
+                    <li class="text-white small">${item.quantity}x ${item.name} - $${item.total.toFixed(2)}</li>
+                `).join("");
+                output += `
+                    <div class="order-box bg-dark p-3 mb-3 rounded">
+                        <h5 class="fw-bold text-white">Order on ${orderTime}</h5>
+                        <p class="order-id text-white-50 small">Order ID: <span>${order.id}</span></p>
+                        <ul class="list-unstyled">${itemsList}</ul>
+                        <hr class="bg-light">
+                        <p class="order-total text-white fw-bold">Total: $${order.totalAmount.toFixed(2)}</p>
+                    </div>
+                `;
+            });
 
-            output += `
-                <div class="order-box bg-dark p-3 mb-3 rounded">
-                    <h5 class="fw-bold text-white">Order on ${orderTime}</h5>
-                    <p class="order-id text-white-50 small">Order ID: <span>${docSnap.id}</span></p>
-                    <ul class="list-unstyled">${itemsList}</ul>
-                    <hr class="bg-light">
-                    <p class="order-total text-white fw-bold">Total: $${data.totalAmount.toFixed(2)}</p>
-                </div>
-            `;
+            ordersList.innerHTML = output;
+            console.log(`Orders loaded in ${(performance.now() - start).toFixed(2)}ms`);
+        }
+
+        document.addEventListener("DOMContentLoaded", () => {
+            const start = performance.now();
+            loadOrders();
+            feather.replace();
+            console.log(`Page fully loaded in ${(performance.now() - start).toFixed(2)}ms`);
         });
-
-        ordersList.innerHTML = output;
-
-    } catch (error) {
-        console.error("❌ Error loading orders:", error);
-        ordersList.innerHTML = "<p class='text-center text-danger'>Failed to load orders.</p>";
-    }
-}
-
-
-    document.addEventListener("DOMContentLoaded", loadOrders);
-</script>
-
-
-
+    </script>
 </body>
-
 </html>
-
