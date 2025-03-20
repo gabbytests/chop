@@ -4,63 +4,176 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Order Successful</title>
-    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css">
-    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/feather-icons/dist/feather.css">
+
+    <!-- Preload Critical Assets -->
+    <link rel="preload" href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" as="style" onload="this.rel='stylesheet'">
+    <noscript><link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css"></noscript>
+
+    <!-- Inline All CSS -->
     <style>
         body {
-            background-color: #121212;
-            color: white;
+            background: linear-gradient(135deg, #121212 0%, #1a1a1a 100%);
+            color: #ffffff;
+            font-family: 'SF Pro Display', -apple-system, BlinkMacSystemFont, sans-serif;
+            margin: 0;
+            padding: 0;
+            min-height: 100vh;
             display: flex;
             align-items: center;
             justify-content: center;
-            height: 100vh;
             flex-direction: column;
             text-align: center;
+            overflow-x: hidden;
         }
         .success-box {
-            background-color: #1f1f1f;
-            padding: 30px;
-            border-radius: 10px;
-            box-shadow: 0px 0px 10px rgba(255, 255, 255, 0.1);
+            background: #1f1f1f;
+            padding: 2rem;
+            border-radius: 16px;
+            box-shadow: 0 8px 24px rgba(255, 255, 255, 0.05);
+            max-width: 90%;
+            width: 400px;
+            margin: 1rem;
+            transition: transform 0.3s ease;
+        }
+        .success-box:hover {
+            transform: translateY(-5px);
         }
         .icon-success {
-            font-size: 50px;
+            font-size: 4rem;
             color: #28a745;
+            margin-bottom: 1rem;
+            display: block;
+        }
+        h2 {
+            font-size: 2rem;
+            font-weight: 700;
+            margin: 0 0 0.5rem;
+        }
+        p {
+            font-size: 1.1rem;
+            opacity: 0.85;
+            margin: 0 0 1.5rem;
+        }
+        .order-summary {
+            text-align: left;
+            font-size: 1rem;
+            background: #252525;
+            padding: 1rem;
+            border-radius: 8px;
+            margin-bottom: 1.5rem;
+        }
+        .order-summary p {
+            margin: 0.5rem 0;
+            font-size: 1rem;
+        }
+        .order-summary strong {
+            color: #ffffff;
+            font-weight: 600;
         }
         .btn-custom {
+            display: block;
             width: 100%;
+            padding: 0.9rem;
+            font-size: 1.1rem;
+            font-weight: 600;
+            border-radius: 50px;
+            text-decoration: none;
+            transition: background 0.2s ease, transform 0.2s ease;
+            margin: 0.5rem 0;
+            touch-action: manipulation; /* Better touch response */
+        }
+        .btn-success {
+            background: #28a745;
+            color: #ffffff;
+            border: none;
+        }
+        .btn-success:hover {
+            background: #218838;
+            transform: translateY(-2px);
+        }
+        .btn-outline-primary {
+            background: transparent;
+            color: #0d6efd;
+            border: 2px solid #0d6efd;
+        }
+        .btn-outline-primary:hover {
+            background: #0d6efd;
+            color: #ffffff;
+            transform: translateY(-2px);
+        }
+
+        /* Mobile Adjustments */
+        @media (max-width: 768px) {
+            .success-box {
+                padding: 1.5rem;
+                width: 90%;
+            }
+            .icon-success {
+                font-size: 3rem;
+            }
+            h2 {
+                font-size: 1.75rem;
+            }
+            p, .order-summary p {
+                font-size: 0.95rem;
+            }
+            .btn-custom {
+                padding: 0.8rem;
+                font-size: 1rem;
+            }
+        }
+        @media (max-width: 480px) {
+            .success-box {
+                padding: 1rem;
+            }
+            .icon-success {
+                font-size: 2.5rem;
+            }
+            h2 {
+                font-size: 1.5rem;
+            }
+            p, .order-summary p {
+                font-size: 0.9rem;
+            }
+            .btn-custom {
+                padding: 0.7rem;
+            }
         }
     </style>
 </head>
 <body>
-
     <div class="success-box">
-        <i class="feather-check-circle icon-success"></i>
-        <h2 class="mt-3">Order Confirmed!</h2>
+        <!-- Inline SVG instead of Feather Icons for speed -->
+        <svg class="icon-success" width="64" height="64" viewBox="0 0 24 24" fill="none" stroke="#28a745" stroke-width="2">
+            <path d="M22 11.08V12a10 10 0 11-5.93-9.14"></path>
+            <polyline points="22 4 12 14.01 9 11.01"></polyline>
+        </svg>
+        <h2>Order Confirmed!</h2>
         <p>Your order has been placed successfully.</p>
 
-        <div class="order-summary text-start mt-4">
+        <div class="order-summary">
             <p><strong>Order ID:</strong> #<span id="order-id">12345</span></p>
             <p><strong>Total Amount:</strong> <span id="order-total">$0.00</span></p>
         </div>
 
-        <a href="index.html" class="btn btn-success mt-3 btn-custom">Back to Home</a>
-        <a href="orders.html" class="btn btn-outline-primary mt-2 btn-custom">View My Orders</a>
+        <a href="index.html" class="btn btn-success btn-custom">Back to Home</a>
+        <a href="orders.html" class="btn btn-outline-primary btn-custom">View My Orders</a>
     </div>
 
     <script>
         document.addEventListener("DOMContentLoaded", () => {
-            // Retrieve order details from localStorage (if applicable)
+            const start = performance.now();
             const totalAmount = localStorage.getItem("cartTotal") || "$0.00";
-            const orderId = Math.floor(Math.random() * 90000) + 10000; // Random Order ID
+            const orderId = Math.floor(Math.random() * 90000) + 10000;
 
-            document.getElementById("order-total").textContent = totalAmount;
-            document.getElementById("order-id").textContent = orderId;
+            requestAnimationFrame(() => {
+                document.getElementById("order-total").textContent = totalAmount;
+                document.getElementById("order-id").textContent = orderId;
+                localStorage.removeItem("cartTotal");
+            });
 
-            // Optionally clear the cart after checkout
-            localStorage.removeItem("cartTotal");
+            console.log(`Page loaded in ${(performance.now() - start).toFixed(2)}ms`);
         });
     </script>
-
 </body>
 </html>
