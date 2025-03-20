@@ -172,7 +172,7 @@
             font-weight: 600;
         }
         .cart-item .btn-danger {
-            background: #92212c;
+            background: #ba2837;
             border: none;
             padding: 4px 8px;
             border-radius: 6px;
@@ -227,7 +227,7 @@
             transform: translateY(-2px);
         }
         .action-buttons .btn-danger {
-            background: #57131a;
+            background: #7c1822;
             border: none;
         }
         .action-buttons .btn-danger:hover {
@@ -257,6 +257,18 @@
             opacity: 1;
             transform: translateX(-50%) translateY(10px);
         }
+        /* 🔥 Custom Red Color for Text & Icon */
+.text-danger {
+    color: #00c8ff !important; /* 🔴 Bootstrap Danger Red */
+    transition: color 0.3s ease, transform 0.2s ease;
+}
+
+/* 🔥 Hover Effect for a Smooth Interaction */
+.text-danger:hover {
+    color: #00c8ff !important; /* 🔴 Darker Red on Hover */
+    transform: scale(1.05); /* 🔥 Slight zoom effect */
+}
+
     </style>
 </head>
 
@@ -277,6 +289,46 @@
         <i class="feather-check-circle"></i>
         <span id="notification-message"></span>
     </div>
+
+
+    <!-- Footer -->
+    <div class="osahan-menu-fotter fixed-bottom bg-dark px-3 py-2 text-center">
+        <div class="row">
+            
+            <div class="col">
+                <a href="index.html" class="text-white small fw-bold text-decoration-none">
+                    <p class="h4 m-0"><i class="feather-map-pin"></i></p>
+                    Trending
+                </a>
+            </div>
+            <div class="col">
+                <a href="trending.html" class="text-white small fw-bold text-decoration-none">
+                    <p class="h4 m-0"><i class="feather-home text-white"></i></p>
+                    Home
+                </a>
+            </div>
+            <div class="col selected">
+                    <a href="cart.html" class="text-danger small fw-bold text-decoration-none">
+                       <p class="h4 m-0"> <i class="feather-shopping-cart text-danger"></i></p>
+                       Cart
+                    </a>
+               
+            </div>
+            <div class="col">
+                <a href="orders.html" class="text-white small fw-bold text-decoration-none">
+                    <p class="h4 m-0"><i class="feather-shopping-bag"></i></p>
+                    Orders
+                </a>
+            </div>
+            <div class="col">
+                <a href="profile.html" class="text-white small fw-bold text-decoration-none">
+                    <p class="h4 m-0"><i class="feather-user"></i></p>
+                    Profile
+                </a>
+            </div>
+        </div>
+    </div>
+
 
     <script type="module">
         import { initializeApp } from "https://www.gstatic.com/firebasejs/10.9.0/firebase-app.js";
