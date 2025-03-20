@@ -32,6 +32,8 @@
         .view-cart-btn:hover{background:#333}
         .back-arrow{position:absolute;top:20px;left:20px;background:rgba(0,0,0,0.647);color:white;padding:10px;border-radius:50%;transition:background 0.2s ease}
         .back-arrow:hover{background:rgba(0,0,0,0.8)}
+        /* Menu Loading Style */
+        .menu-loading{font-size:1.5rem;font-weight:600;opacity:0.7;margin:0}
     </style>
 
     <!-- Defer Non-Critical JS -->
@@ -46,15 +48,14 @@
             </svg>
         </button>
         <div class="restaurant-info">
-            <!-- Static Loading Message -->
-            <h1 id="restaurant-name">Preparing Your Feast...</h1>
-            <p id="restaurant-info">Hang tight, deliciousness is on the way!</p>
+            <h1 id="restaurant-name"></h1>
+            <p id="restaurant-info"></p>
         </div>
     </div>
 
-    <div class="menu-section">
-        <h2 class="fw-bold">Menu</h2>
-        <div id="menu-list"></div>
+    <!-- Override Entire Menu Section -->
+    <div class="menu-section" id="menu-section">
+        <p class="menu-loading">Heating up the menu... 🍳</p>
     </div>
 
     <div id="toast" class="toast-container">
@@ -126,8 +127,10 @@
         }
 
         function renderMenu(items) {
-            const menuList = document.getElementById("menu-list");
+            const menuSection = document.getElementById("menu-section");
             const fragment = document.createDocumentFragment();
+            const menuList = document.createElement("div");
+            menuList.id = "menu-list";
             items.forEach(item => {
                 const div = document.createElement("div");
                 div.className = "menu-item";
@@ -143,9 +146,17 @@
                         Add +
                     </button>
                 `;
-                fragment.appendChild(div);
+                menuList.appendChild(div);
             });
-            requestAnimationFrame(() => menuList.appendChild(fragment));
+            const menuHeader = document.createElement("h2");
+            menuHeader.className = "fw-bold";
+            menuHeader.textContent = "Menu";
+            fragment.appendChild(menuHeader);
+            fragment.appendChild(menuList);
+            requestAnimationFrame(() => {
+                menuSection.innerHTML = ""; // Clear loading message
+                menuSection.appendChild(fragment);
+            });
         }
 
         function showToast(message) {
