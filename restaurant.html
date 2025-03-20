@@ -27,8 +27,8 @@
         .add-to-cart:hover{background:#ddd}
         .toast-container{position:fixed;top:20px;left:50%;transform:translateX(-50%);background:rgba(0,0,0,0.85);color:white;padding:12px 20px;border-radius:12px;font-size:1rem;font-weight:500;display:flex;align-items:center;gap:10px;opacity:0;pointer-events:none;transition:opacity 0.4s ease,transform 0.4s ease}
         .toast-container.show{opacity:1;transform:translateX(-50%) translateY(10px);pointer-events:auto}
-        .view-cart-btn{position:fixed;bottom:20px;left:50%;transform:translateX(-50%);background:black;color:white;padding:16px 50px;border-radius:50px;font-size:1.2rem;font-weight:bold;text-decoration:none;transition:background 0.2s ease-in-out,transform 0.2s ease-in-out,opacity 0.2s ease-in-out;box-shadow:0 5px 15px rgba(0,0,0,0.2);opacity:0;visibility:hidden}
-        .view-cart-btn.show{opacity:1;visibility:visible;transform:translateX(-50%)}
+        .view-cart-btn{position:fixed;bottom:20px;left:50%;transform:translateX(-50%);background:black;color:white;padding:16px 50px;border-radius:50px;font-size:1.2rem;font-weight:bold;text-decoration:none;transition:background 0.2s ease-in-out,opacity 0.2s ease-in-out;box-shadow:0 5px 15px rgba(0,0,0,0.2);opacity:0;visibility:hidden}
+        .view-cart-btn.show{opacity:1;visibility:visible}
         .view-cart-btn:hover{background:#333}
         .back-arrow{position:absolute;top:20px;left:20px;background:rgba(0,0,0,0.647);color:white;padding:10px;border-radius:50%;transition:background 0.2s ease}
         .back-arrow:hover{background:rgba(0,0,0,0.8)}
@@ -39,15 +39,16 @@
 </head>
 <body>
     <div class="restaurant-header">
-        <img id="restaurant-image" src="" alt="Restaurant loading..." loading="lazy">
+        <img id="restaurant-image" loading="lazy">
         <button class="back-arrow" onclick="history.back()">
             <svg width="25" height="30" viewBox="0 0 24 24" stroke="white" stroke-width="3" fill="none" stroke-linecap="round" stroke-linejoin="round">
                 <polyline points="15 18 9 12 15 6"></polyline>
             </svg>
         </button>
         <div class="restaurant-info">
-            <h1 id="restaurant-name"></h1>
-            <p id="restaurant-info"></p>
+            <!-- Static Loading Message -->
+            <h1 id="restaurant-name">Preparing Your Feast...</h1>
+            <p id="restaurant-info">Hang tight, deliciousness is on the way!</p>
         </div>
     </div>
 
@@ -170,7 +171,6 @@
             updateCartButton();
         }
 
-        // Debounced Firestore add
         let pendingCartItems = [];
         function debounceAddToCart(item) {
             pendingCartItems.push(item);
@@ -190,11 +190,11 @@
                     name: e.target.dataset.name,
                     price: parseFloat(e.target.dataset.price),
                     restaurantId: restaurantId,
-                    quantity: 1 // Add initial quantity
+                    quantity: 1
                 };
                 debounceAddToCart(item);
                 showToast(`${item.name} added to cart!`);
-                cartCount++; // Immediate local update
+                cartCount++;
                 updateCartButton();
             }
         });
