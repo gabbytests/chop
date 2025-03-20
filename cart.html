@@ -18,7 +18,7 @@
     <link href="css/style.css" rel="stylesheet">
     <!-- Sidebar CSS -->
     <link href="vendor/sidebar/demo.css" rel="stylesheet">
-    <!-- Apple-Inspired Luxurious Styles (Scaled Down) -->
+    <!-- Apple-Inspired Luxurious Styles -->
     <style>
         body {
             font-family: 'SF Pro Display', -apple-system, BlinkMacSystemFont, sans-serif;
@@ -30,7 +30,6 @@
             overflow-x: hidden;
         }
 
-        /* Header */
         .cart-header {
             background: #565656;
             padding: 15px 25px;
@@ -51,7 +50,6 @@
             justify-content: center;
             gap: 15px;
         }
-        
         .cart-header .back-btn {
             background: none;
             border: none;
@@ -81,14 +79,12 @@
             color: #ffffff;
         }
 
-        /* Container */
         .cart-container {
             padding: 30px 15px;
             max-width: 700px;
             margin: 0 auto;
         }
 
-        /* Empty Cart State */
         .empty-cart {
             text-align: center;
             padding: 80px 15px;
@@ -121,7 +117,6 @@
             transform: translateY(-2px);
         }
 
-        /* Cart Items */
         .cart-items {
             margin-bottom: 40px;
         }
@@ -187,7 +182,6 @@
             background: #ff0019;
         }
 
-        /* Order Summary */
         .order-summary {
             background: #2a2a2a;
             border-radius: 10px;
@@ -211,7 +205,6 @@
             color: #ffffff;
         }
 
-        /* Buttons */
         .action-buttons {
             margin-top: 20px;
             display: flex;
@@ -242,7 +235,6 @@
             transform: translateY(-2px);
         }
 
-        /* Notification */
         .notification {
             position: fixed;
             top: 20px;
@@ -276,12 +268,10 @@
             </svg>
         </button>
         <h4><i class="feather-shopping-cart"></i> Your Cart</h4>
-        <div style="width: 90px;"></div> <!-- Spacer for balance -->
+        <div style="width: 90px;"></div>
     </div>
 
-    <div class="cart-container" id="cart-container">
-        <!-- Cart content will be injected here -->
-    </div>
+    <div class="cart-container" id="cart-container"></div>
 
     <div id="notification" class="notification">
         <i class="feather-check-circle"></i>
@@ -304,203 +294,205 @@
 
         const app = initializeApp(firebaseConfig);
         const db = getFirestore(app);
-
-        enableIndexedDbPersistence(db).catch((err) => {
-            console.warn("Firestore persistence failed:", err);
-        });
+        enableIndexedDbPersistence(db).catch(err => console.warn("Persistence failed:", err));
 
         const cartContainer = document.getElementById("cart-container");
         const notification = document.getElementById("notification");
         const notificationMessage = document.getElementById("notification-message");
 
+        // Local cart state
+        let cart = new Map(); // name -> { name, price, quantity, ids }
+
         function showNotification(message) {
             notificationMessage.textContent = message;
             notification.classList.add("show");
-            setTimeout(() => notification.classList.remove("show"), 3000);
+            setTimeout(() => notification.classList.remove("show"), 2000);
         }
 
-        async function loadCart() {
+        function renderCart() {
+            const startTime = performance.now();
+            if (cart.size === 0) {
+                cartContainer.innerHTML = `
+                    <div class="empty-cart">
+                        <h2>Your Cart is Empty</h2>
+                        <p>Looks like you haven't added anything yet.<br>Explore our menu to find something delicious.</p>
+                        <a href="index.html" class="btn btn-primary">Start Shopping</a>
+                    </div>
+                `;
+                console.log(`Rendered empty cart in ${(performance.now() - startTime).toFixed(2)}ms`);
+                return;
+            }
+
+            let subtotal = 0;
+            const itemsHTML = Array.from(cart.values()).map(item => {
+                const itemTotal = item.price * item.quantity;
+                subtotal += itemTotal;
+                return `
+                    <div class="cart-item" data-ids='${JSON.stringify(item.ids)}' data-name="${item.name}">
+                        <div>
+                            <p class="item-name">${item.name}</p>
+                            <p class="item-price">$${item.price.toFixed(2)} each</p>
+                        </div>
+                        <div class="controls">
+                            <button class="btn-sm btn decrease"><i class="feather-minus"></i></button>
+                            <span class="quantity">${item.quantity}</span>
+                            <button class="btn-sm btn increase"><i class="feather-plus"></i></button>
+                            <p class="item-total">$${itemTotal.toFixed(2)}</p>
+                            <button class="btn-sm btn-danger remove"><i class="feather-trash-2"></i></button>
+                        </div>
+                    </div>
+                `;
+            }).join("");
+
+            cartContainer.innerHTML = `
+                <div class="cart-items">${itemsHTML}</div>
+                <div class="order-summary">
+                    <p>Subtotal <span class="float-end">$${subtotal.toFixed(2)}</span></p>
+                    <p>Processing Fee <span class="float-end">$2.00</span></p>
+                    <p>Delivery Fee <span class="float-end">$10.00</span></p>
+                    <hr>
+                    <h6>Total <span class="float-end">$${(subtotal + 12).toFixed(2)}</span></h6>
+                </div>
+                <div class="action-buttons">
+                    <button id="checkout-btn" class="btn btn-success w-100">Proceed to Checkout <i class="feather-arrow-right"></i></button>
+                    <button id="remove-all-btn" class="btn btn-danger w-100">Remove All <i class="feather-trash-2"></i></button>
+                </div>
+            `;
+
+            addEventListeners();
+            console.log(`Rendered cart in ${(performance.now() - startTime).toFixed(2)}ms`);
+        }
+
+        async function loadCartFromFirestore() {
             const startTime = performance.now();
             try {
-                console.time("Firestore Fetch");
                 const querySnapshot = await getDocs(collection(db, "cart"));
-                console.timeEnd("Firestore Fetch");
-
-                if (querySnapshot.empty) {
-                    cartContainer.innerHTML = `
-                        <div class="empty-cart">
-                            <h2>Your Cart is Empty</h2>
-                            <p>Looks like you haven't added anything yet.<br>Explore our menu to find something delicious.</p>
-                            <a href="index.html" class="btn btn-primary">Start Shopping</a>
-                        </div>
-                    `;
-                    console.log(`Cart loaded (empty) in ${(performance.now() - startTime).toFixed(2)}ms`);
-                    return;
-                }
-
-                console.time("Data Processing");
-                const cartItemsMap = new Map();
+                cart.clear();
                 querySnapshot.forEach(docSnap => {
                     const data = docSnap.data();
                     const name = data.name;
                     const price = parseFloat(data.price) || 0;
                     const quantity = Math.max(1, parseInt(data.quantity) || 1);
-
-                    if (cartItemsMap.has(name)) {
-                        const existing = cartItemsMap.get(name);
+                    if (cart.has(name)) {
+                        const existing = cart.get(name);
                         existing.quantity += quantity;
                         existing.ids.push(docSnap.id);
                     } else {
-                        cartItemsMap.set(name, {
-                            name,
-                            price,
-                            quantity,
-                            ids: [docSnap.id]
-                        });
+                        cart.set(name, { name, price, quantity, ids: [docSnap.id] });
                     }
                 });
-                console.timeEnd("Data Processing");
-
-                console.time("HTML Generation");
-                let subtotal = 0;
-                let cartHTML = '<div class="cart-items">';
-                for (const [name, item] of cartItemsMap) {
-                    const itemTotal = item.price * item.quantity;
-                    subtotal += itemTotal;
-                    cartHTML += `
-                        <div class="cart-item" data-ids='${JSON.stringify(item.ids)}'>
-                            <div>
-                                <p class="item-name">${item.name}</p>
-                                <p class="item-price">$${item.price.toFixed(2)} each</p>
-                            </div>
-                            <div class="controls">
-                                <button class="btn-sm btn decrease"><i class="feather-minus"></i></button>
-                                <span class="quantity">${item.quantity}</span>
-                                <button class="btn-sm btn increase"><i class="feather-plus"></i></button>
-                                <p class="item-total">$${itemTotal.toFixed(2)}</p>
-                                <button class="btn-sm btn-danger remove"><i class="feather-trash-2"></i></button>
-                            </div>
-                        </div>
-                    `;
-                }
-                cartHTML += `</div>
-                    <div class="order-summary">
-                        <p>Subtotal <span class="float-end">$${subtotal.toFixed(2)}</span></p>
-                        <p>Processing Fee <span class="float-end">$2.00</span></p>
-                        <p>Delivery Fee <span class="float-end">$10.00</span></p>
-                        <hr>
-                        <h6>Total <span class="float-end">$${(subtotal + 12).toFixed(2)}</span></h6>
-                    </div>
-                    <div class="action-buttons">
-                        <button id="checkout-btn" class="btn btn-success w-100">Proceed to Checkout <i class="feather-arrow-right"></i></button>
-                        <button id="remove-all-btn" class="btn btn-danger w-100">Remove All <i class="feather-trash-2"></i></button>
-                    </div>`;
-                console.timeEnd("HTML Generation");
-
-                console.time("DOM Update");
-                cartContainer.innerHTML = cartHTML;
-                console.timeEnd("DOM Update");
-
-                addEventListeners();
-                console.log(`Cart loaded in ${(performance.now() - startTime).toFixed(2)}ms`);
+                renderCart();
+                console.log(`Loaded cart from Firestore in ${(performance.now() - startTime).toFixed(2)}ms`);
             } catch (error) {
                 console.error("❌ Error loading cart:", error);
-                cartContainer.innerHTML = `<div class="empty-cart"><p class="text-danger">Failed to load cart. Please try again.</p></div>`;
+                cartContainer.innerHTML = `<div class="empty-cart"><p class="text-danger">Failed to load cart.</p></div>`;
             }
         }
 
-        async function removeAllItems() {
-            try {
-                const querySnapshot = await getDocs(collection(db, "cart"));
-                const deletePromises = querySnapshot.docs.map(docSnap => deleteDoc(doc(db, "cart", docSnap.id)));
-                await Promise.all(deletePromises);
-                showNotification("All items removed from cart");
-                loadCart();
-            } catch (error) {
-                console.error("❌ Error removing all items:", error);
-                showNotification("Failed to clear cart");
-            }
+        function updateItemQuantity(name, delta) {
+            const item = cart.get(name);
+            if (!item) return;
+            const newQuantity = Math.max(1, item.quantity + delta);
+            item.quantity = newQuantity;
+
+            // Update DOM incrementally
+            const itemElement = cartContainer.querySelector(`.cart-item[data-name="${name}"]`);
+            const quantityElement = itemElement.querySelector(".quantity");
+            const totalElement = itemElement.querySelector(".item-total");
+            quantityElement.textContent = newQuantity;
+            totalElement.textContent = `$${(item.price * newQuantity).toFixed(2)}`;
+
+            // Update subtotal and total
+            const subtotal = Array.from(cart.values()).reduce((sum, i) => sum + i.price * i.quantity, 0);
+            cartContainer.querySelector(".order-summary .float-end").textContent = `$${subtotal.toFixed(2)}`;
+            cartContainer.querySelector(".order-summary h6 .float-end").textContent = `$${(subtotal + 12).toFixed(2)}`;
+
+            // Sync to Firestore (debounced)
+            debounceFirestoreUpdate(item.ids[0], { quantity: newQuantity });
+        }
+
+        function removeItem(name) {
+            const item = cart.get(name);
+            if (!item) return;
+            const deletePromises = item.ids.map(id => deleteDoc(doc(db, "cart", id)));
+            Promise.all(deletePromises).catch(err => console.error("Error removing item:", err));
+            cart.delete(name);
+            renderCart(); // Full render since layout changes
+        }
+
+        function removeAllItems() {
+            const deletePromises = Array.from(cart.values()).flatMap(item => item.ids.map(id => deleteDoc(doc(db, "cart", id))));
+            Promise.all(deletePromises)
+                .then(() => {
+                    cart.clear();
+                    renderCart();
+                    showNotification("All items removed from cart");
+                })
+                .catch(err => {
+                    console.error("Error removing all items:", err);
+                    showNotification("Failed to clear cart");
+                });
+        }
+
+        // Debounce Firestore updates
+        let pendingUpdates = new Map();
+        function debounceFirestoreUpdate(docId, updateData) {
+            pendingUpdates.set(docId, updateData);
+            clearTimeout(window.firestoreDebounce);
+            window.firestoreDebounce = setTimeout(async () => {
+                const updates = Array.from(pendingUpdates.entries());
+                pendingUpdates.clear();
+                await Promise.all(updates.map(([id, data]) => updateDoc(doc(db, "cart", id), data)));
+            }, 300); // 300ms debounce
         }
 
         function addEventListeners() {
-            document.querySelectorAll(".cart-item").forEach(item => {
-                const ids = JSON.parse(item.dataset.ids);
-                const primaryId = ids[0]; // Use first ID as primary document
-                const quantityElement = item.querySelector(".quantity");
-
-                item.querySelector(".increase").addEventListener("click", async () => {
-                    const currentQuantity = parseInt(quantityElement.textContent);
-                    const newQuantity = currentQuantity + 1;
-                    await updateDoc(doc(db, "cart", primaryId), { quantity: newQuantity });
-                    loadCart(); // Reload to reflect consolidated changes
-                });
-
-                item.querySelector(".decrease").addEventListener("click", async () => {
-                    const currentQuantity = parseInt(quantityElement.textContent);
-                    const newQuantity = Math.max(1, currentQuantity - 1); // Don’t go below 1
-                    await updateDoc(doc(db, "cart", primaryId), { quantity: newQuantity });
-                    loadCart(); // Reload to reflect consolidated changes
-                });
-
-                item.querySelector(".remove").addEventListener("click", async () => {
-                    const deletePromises = ids.map(id => deleteDoc(doc(db, "cart", id)));
-                    await Promise.all(deletePromises);
-                    loadCart();
-                });
+            cartContainer.querySelectorAll(".cart-item").forEach(item => {
+                const name = item.dataset.name;
+                item.querySelector(".increase").addEventListener("click", () => updateItemQuantity(name, 1));
+                item.querySelector(".decrease").addEventListener("click", () => updateItemQuantity(name, -1));
+                item.querySelector(".remove").addEventListener("click", () => removeItem(name));
             });
 
-            document.getElementById("checkout-btn").addEventListener("click", async () => {
-                const querySnapshot = await getDocs(collection(db, "cart"));
-                if (querySnapshot.empty) {
-                    showNotification("Your cart is empty!");
-                    return;
-                }
+            const checkoutBtn = document.getElementById("checkout-btn");
+            const removeAllBtn = document.getElementById("remove-all-btn");
+            if (checkoutBtn) checkoutBtn.addEventListener("click", checkout);
+            if (removeAllBtn) removeAllBtn.addEventListener("click", removeAllItems);
+        }
 
-                const cartItemsMap = new Map();
-                querySnapshot.forEach(docSnap => {
-                    const data = docSnap.data();
-                    const name = data.name;
-                    const price = parseFloat(data.price) || 0;
-                    const quantity = Math.max(1, parseInt(data.quantity) || 1);
-                    if (cartItemsMap.has(name)) {
-                        cartItemsMap.get(name).quantity += quantity;
-                    } else {
-                        cartItemsMap.set(name, { name, price, quantity });
-                    }
-                });
+        async function checkout() {
+            if (cart.size === 0) {
+                showNotification("Your cart is empty!");
+                return;
+            }
 
-                let orderItems = [];
-                let totalAmount = 0;
-                cartItemsMap.forEach(item => {
-                    const itemTotal = item.price * item.quantity;
-                    orderItems.push({ name: item.name, price: item.price, quantity: item.quantity, total: itemTotal });
-                    totalAmount += itemTotal;
-                });
+            const orderItems = Array.from(cart.values()).map(item => ({
+                name: item.name,
+                price: item.price,
+                quantity: item.quantity,
+                total: item.price * item.quantity
+            }));
+            const totalAmount = orderItems.reduce((sum, item) => sum + item.total, 0) + 2.00 + 10.00;
 
-                const processingFee = 2.00;
-                const deliveryFee = 10.00;
-                totalAmount += processingFee + deliveryFee;
-
+            try {
                 await addDoc(collection(db, "orders"), {
                     items: orderItems,
                     totalAmount,
                     timestamp: new Date().toISOString()
                 });
-
-                const deletePromises = querySnapshot.docs.map(docSnap => deleteDoc(doc(db, "cart", docSnap.id)));
-                await Promise.all(deletePromises);
-
+                removeAllItems();
                 window.location.href = "successful.html";
-            });
-
-            document.getElementById("remove-all-btn").addEventListener("click", removeAllItems);
+            } catch (error) {
+                console.error("Error during checkout:", error);
+                showNotification("Checkout failed!");
+            }
         }
 
-        document.addEventListener("DOMContentLoaded", loadCart);
+        // Initial load
+        document.addEventListener("DOMContentLoaded", () => {
+            const startTime = performance.now();
+            loadCartFromFirestore().then(() => console.log(`Page fully loaded in ${(performance.now() - startTime).toFixed(2)}ms`));
+        });
     </script>
-
-    <script>(function(){function c(){var b=a.contentDocument||a.contentWindow.document;if(b){var d=b.createElement('script');d.innerHTML="window.__CF$cv$params={r:'92315f983fcd60c7',t:'MTc0MjQzMzQ4My4wMDAwMDA='};var a=document.createElement('script');a.nonce='';a.src='/cdn-cgi/challenge-platform/scripts/jsd/main.js';document.getElementsByTagName('head')[0].appendChild(a);";b.getElementsByTagName('head')[0].appendChild(d)}}if(document.body){var a=document.createElement('iframe');a.height=1;a.width=1;a.style.position='absolute';a.style.top=0;a.style.left=0;a.style.border='none';a.style.visibility='hidden';document.body.appendChild(a);if('loading'!==document.readyState)c();else if(window.addEventListener)document.addEventListener('DOMContentLoaded',c);else{var e=document.onreadystatechange||function(){};document.onreadystatechange=function(b){e(b);'loading'!==document.readyState&&(document.onreadystatechange=e,c())}}}})();</script>
-    <script>(function(){function c(){var b=a.contentDocument||a.contentWindow.document;if(b){var d=b.createElement('script');d.innerHTML="window.__CF$cv$params={r:'92317eefdc2dc430',t:'MTc0MjQzNDc2Ny4wMDAwMDA='};var a=document.createElement('script');a.nonce='';a.src='/cdn-cgi/challenge-platform/scripts/jsd/main.js';document.getElementsByTagName('head')[0].appendChild(a);";b.getElementsByTagName('head')[0].appendChild(d)}}if(document.body){var a=document.createElement('iframe');a.height=1;a.width=1;a.style.position='absolute';a.style.top=0;a.style.left=0;a.style.border='none';a.style.visibility='hidden';document.body.appendChild(a);if('loading'!==document.readyState)c();else if(window.addEventListener)document.addEventListener('DOMContentLoaded',c);else{var e=document.onreadystatechange||function(){};document.onreadystatechange=function(b){e(b);'loading'!==document.readyState&&(document.onreadystatechange=e,c())}}}})();</script>
-    <script>(function(){function c(){var b=a.contentDocument||a.contentWindow.document;if(b){var d=b.createElement('script');d.innerHTML="window.__CF$cv$params={r:'9231baeb4f6c17f7',t:'MTc0MjQzNzIyNC4wMDAwMDA='};var a=document.createElement('script');a.nonce='';a.src='/cdn-cgi/challenge-platform/scripts/jsd/main.js';document.getElementsByTagName('head')[0].appendChild(a);";b.getElementsByTagName('head')[0].appendChild(d)}}if(document.body){var a=document.createElement('iframe');a.height=1;a.width=1;a.style.position='absolute';a.style.top=0;a.style.left=0;a.style.border='none';a.style.visibility='hidden';document.body.appendChild(a);if('loading'!==document.readyState)c();else if(window.addEventListener)document.addEventListener('DOMContentLoaded',c);else{var e=document.onreadystatechange||function(){};document.onreadystatechange=function(b){e(b);'loading'!==document.readyState&&(document.onreadystatechange=e,c())}}}})();</script>
 </body>
 </html>

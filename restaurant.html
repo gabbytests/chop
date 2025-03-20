@@ -6,188 +6,40 @@
     <meta name="description" content="Restaurant Menu">
     <title>Restaurant</title>
 
-    <!-- ✅ Preload Important CSS -->
-    <link rel="preload" href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" as="style">
-    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css">
+    <!-- Preload Critical CSS -->
+    <link rel="preload" href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" as="style" onload="this.rel='stylesheet'">
+    <noscript><link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css"></noscript>
 
-    <!-- ✅ Defer Non-Essential JS -->
+    <!-- Inline Critical CSS -->
+    <style>
+        body{font-family:'SF Pro Display',-apple-system,BlinkMacSystemFont,sans-serif;background:#565656;color:white;margin:0;padding:0;min-height:100vh;overflow-x:hidden}
+        .restaurant-header{position:relative;height:300px;display:flex;align-items:center;justify-content:center;color:white;text-align:center;overflow:hidden}
+        .restaurant-header img{width:100%;height:100%;object-fit:cover;filter:brightness(0.5)}
+        .restaurant-info{position:absolute;text-align:center}
+        .restaurant-info h1{font-size:2.5rem;font-weight:bold;margin-bottom:10px}
+        .restaurant-info p{font-size:1.2rem;opacity:0.8}
+        .menu-section{padding:50px 20px;max-width:600px;margin:auto;text-align:center}
+        .menu-item{background:#3f3f3f;padding:15px;border-radius:12px;box-shadow:0 10px 20px rgba(0,0,0,0.05);margin-bottom:15px;display:flex;align-items:center;justify-content:space-between;transition:transform 0.2s ease-in-out}
+        .menu-item:hover{transform:scale(1.02)}
+        .menu-item h4{margin:0;font-size:1.2rem;font-weight:600;color:white}
+        .menu-item p{margin:0;font-size:1rem;opacity:0.7;color:#fff}
+        .add-to-cart{border:none;background:white;color:black;padding:8px 15px;border-radius:8px;font-size:1rem;transition:background 0.2s}
+        .add-to-cart:hover{background:#ddd}
+        .toast-container{position:fixed;top:20px;left:50%;transform:translateX(-50%);background:rgba(0,0,0,0.85);color:white;padding:12px 20px;border-radius:12px;font-size:1rem;font-weight:500;display:flex;align-items:center;gap:10px;opacity:0;pointer-events:none;transition:opacity 0.4s ease,transform 0.4s ease}
+        .toast-container.show{opacity:1;transform:translateX(-50%) translateY(10px);pointer-events:auto}
+        .view-cart-btn{position:fixed;bottom:20px;left:50%;transform:translateX(-50%);background:black;color:white;padding:16px 50px;border-radius:50px;font-size:1.2rem;font-weight:bold;text-decoration:none;transition:background 0.2s ease-in-out,transform 0.2s ease-in-out,opacity 0.2s ease-in-out;box-shadow:0 5px 15px rgba(0,0,0,0.2);opacity:0;visibility:hidden}
+        .view-cart-btn.show{opacity:1;visibility:visible;transform:translateX(-50%)}
+        .view-cart-btn:hover{background:#333}
+        .back-arrow{position:absolute;top:20px;left:20px;background:rgba(0,0,0,0.647);color:white;padding:10px;border-radius:50%;transition:background 0.2s ease}
+        .back-arrow:hover{background:rgba(0,0,0,0.8)}
+    </style>
+
+    <!-- Defer Non-Critical JS -->
     <script defer src="https://unpkg.com/feather-icons"></script>
-
-    
-    <style>/* 🔥 Apple-Inspired Styles */
-        body {
-    font-family: 'SF Pro Display', -apple-system, BlinkMacSystemFont, sans-serif;
-    background: #565656;
-    color: white;
-    will-change: transform, opacity;
-    min-height: 100vh; /* 🔥 Ensures body takes full viewport height */
-    margin: 0; /* 🔥 Removes default margin */
-    padding: 0; /* 🔥 Removes default padding */
-}
-        
-        /* 🔥 Restaurant Header */
-        .restaurant-header {
-            position: relative;
-            height: 300px;
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            color: white;
-            text-align: center;
-            overflow: hidden;
-        }
-        .restaurant-header img {
-            width: 100%;
-            height: 100%;
-            object-fit: cover;
-            filter: brightness(0.5);
-            will-change: opacity;
-        }
-        
-        /* 🔥 Restaurant Info */
-        .restaurant-info {
-            position: absolute;
-            text-align: center;
-        }
-        .restaurant-info h1 {
-            font-size: 2.5rem;
-            font-weight: bold;
-            margin-bottom: 10px;
-        }
-        .restaurant-info p {
-            font-size: 1.2rem;
-            opacity: 0.8;
-        }
-        
-        /* 🔥 Menu Section */
-        .menu-section {
-            padding: 50px 20px;
-            max-width: 600px;
-            margin: auto;
-            text-align: center;
-        }
-        .menu-item {
-            background: #3f3f3f;
-            padding: 15px;
-            border-radius: 12px;
-            box-shadow: 0 10px 20px rgba(0, 0, 0, 0.05);
-            margin-bottom: 15px;
-            display: flex;
-            align-items: center;
-            justify-content: space-between;
-            transition: transform 0.2s ease-in-out;
-        }
-        .menu-item:hover {
-            transform: scale(1.02);
-        }
-        .menu-item h4 {
-            margin: 0;
-            font-size: 1.2rem;
-            font-weight: 600;
-            color: white;
-        }
-        .menu-item p {
-            margin: 0;
-            font-size: 1rem;
-            opacity: 0.7;
-            color: #ffffff;
-        }
-        
-        /* 🔥 Add to Cart Button */
-        .add-to-cart {
-            border: none;
-            background: white;
-            color: black;
-            padding: 8px 15px;
-            border-radius: 8px;
-            font-size: 1rem;
-            transition: background 0.2s;
-            will-change: background-color;
-        }
-        .add-to-cart:hover {
-            background: #ddd;
-        }
-        
-        /* 🔥 Toast Notification */
-        .toast-container {
-            position: fixed;
-            top: 20px;
-            left: 50%;
-            transform: translateX(-50%);
-            background: rgba(0, 0, 0, 0.85);
-            color: white;
-            padding: 12px 20px;
-            border-radius: 12px;
-            font-size: 1rem;
-            font-weight: 500;
-            display: flex;
-            align-items: center;
-            gap: 10px;
-            opacity: 0;
-            pointer-events: none;
-            transition: opacity 0.4s ease, transform 0.4s ease;
-        }
-        .toast-container.show {
-            opacity: 1;
-            transform: translateX(-50%) translateY(10px);
-            pointer-events: auto;
-        }
-        
-      /* 🔥 View Cart Button (Fixed at Bottom & Centered) */
-.view-cart-btn {
-    position: fixed;
-    bottom: 20px; /* 🔥 Fixed at bottom */
-    left: 30%;
-    transform: translateX(-50%);
-    background: black;
-    color: white;
-    padding: 16px 50px;
-    border-radius: 50px;
-    font-size: 1.2rem;
-    font-weight: bold;
-    text-align: center;
-    text-decoration: none;
-    transition: background 0.2s ease-in-out, transform 0.2s ease-in-out;
-    box-shadow: 0 5px 15px rgba(0, 0, 0, 0.2);
-    opacity: 0; /* 🔥 Opacity back in */
-    visibility: hidden; /* 🔥 Visibility back in */
-    transform: translateY(20px); /* 🔥 Original transform back in */
-}
-
-.view-cart-btn:hover {
-    background: #333;
-}
-
-.view-cart-btn.show {
-    opacity: 1;
-    visibility: visible;
-    transform: translateY(0);
-}
-        
-        /* 🔥 Back Arrow */
-        .back-arrow {
-            position: absolute;
-            top: 20px;
-            left: 20px;
-            background: rgba(0, 0, 0, 0.647);
-            color: white;
-            padding: 10px;
-            border-radius: 50%;
-            transition: background 0.2s ease;
-        }
-        .back-arrow:hover {
-            background: rgba(0, 0, 0, 0.8);
-        }
-        
-        </style>
-
-
 </head>
 <body>
-
-    <!-- 🔥 Restaurant Header -->
     <div class="restaurant-header">
-        <img id="restaurant-image" src="" alt="Restaurant loading...">
+        <img id="restaurant-image" src="" alt="Restaurant loading..." loading="lazy">
         <button class="back-arrow" onclick="history.back()">
             <svg width="25" height="30" viewBox="0 0 24 24" stroke="white" stroke-width="3" fill="none" stroke-linecap="round" stroke-linejoin="round">
                 <polyline points="15 18 9 12 15 6"></polyline>
@@ -199,28 +51,19 @@
         </div>
     </div>
 
-    <!-- 🔥 Menu Section -->
     <div class="menu-section">
         <h2 class="fw-bold">Menu</h2>
         <div id="menu-list"></div>
     </div>
 
-    <!-- 🔥 Toast Notification -->
     <div id="toast" class="toast-container">
         <div class="toast-content">
             <i data-feather="check-circle"></i>
-            <span id="toast-message">Item added to cart</span>
+            <span id="toast-message"></span>
         </div>
     </div>
 
-
-
-
-      <!-- 🔥 Floating View Cart Button -->
-      <a href="cart.html" class="view-cart-btn" id="view-cart-btn">View Cart</a>
-
-
-
+    <a href="cart.html" class="view-cart-btn" id="view-cart-btn">View Cart</a>
 
     <script type="module">
         import { initializeApp } from "https://www.gstatic.com/firebasejs/10.9.0/firebase-app.js";
@@ -242,84 +85,126 @@
         const urlParams = new URLSearchParams(window.location.search);
         const restaurantId = urlParams.get("id");
 
+        // Local state
+        let menuCache = null;
+        let cartCount = 0;
+
         async function loadRestaurant() {
+            const start = performance.now();
             const docRef = doc(db, "restaurant", restaurantId);
             const docSnap = await getDoc(docRef);
             if (!docSnap.exists()) return;
             const data = docSnap.data();
-            document.getElementById("restaurant-name").innerText = data.name;
-            document.getElementById("restaurant-info").innerText = `⭐ ${data.rating} | ⏳ ${data.delivery_time} mins`;
-            document.getElementById("restaurant-image").src = data.image;
+            requestAnimationFrame(() => {
+                document.getElementById("restaurant-name").textContent = data.name;
+                document.getElementById("restaurant-info").textContent = `⭐ ${data.rating} | ⏳ ${data.delivery_time} mins`;
+                document.getElementById("restaurant-image").src = data.image;
+            });
+            console.log(`Restaurant loaded in ${(performance.now() - start).toFixed(2)}ms`);
         }
 
         async function loadMenu() {
-            const menuList = document.getElementById("menu-list");
+            const start = performance.now();
+            if (menuCache) {
+                renderMenu(menuCache);
+                return;
+            }
             const menuRef = collection(db, "restaurant", restaurantId, "menu");
             const querySnapshot = await getDocs(menuRef);
-            let output = "";
+            menuCache = [];
             querySnapshot.forEach(docSnapshot => {
                 const data = docSnapshot.data();
-                output += `
-                    <div class="menu-item">
-                        <div>
-                            <h4>${data.name}</h4>
-                            <p>$${data.price.toFixed(2)}</p>
-                        </div>
-                        <button class="add-to-cart" 
-                            data-id="${docSnapshot.id}" 
-                            data-name="${data.name}" 
-                            data-price="${data.price}">
-                            Add +
-                        </button>
-                    </div>
-                `;
+                menuCache.push({
+                    id: docSnapshot.id,
+                    name: data.name,
+                    price: parseFloat(data.price)
+                });
             });
-            menuList.innerHTML = output;
+            renderMenu(menuCache);
+            console.log(`Menu loaded in ${(performance.now() - start).toFixed(2)}ms`);
+        }
+
+        function renderMenu(items) {
+            const menuList = document.getElementById("menu-list");
+            const fragment = document.createDocumentFragment();
+            items.forEach(item => {
+                const div = document.createElement("div");
+                div.className = "menu-item";
+                div.innerHTML = `
+                    <div>
+                        <h4>${item.name}</h4>
+                        <p>$${item.price.toFixed(2)}</p>
+                    </div>
+                    <button class="add-to-cart" 
+                        data-id="${item.id}" 
+                        data-name="${item.name}" 
+                        data-price="${item.price}">
+                        Add +
+                    </button>
+                `;
+                fragment.appendChild(div);
+            });
+            requestAnimationFrame(() => menuList.appendChild(fragment));
         }
 
         function showToast(message) {
             const toast = document.getElementById("toast");
-            document.getElementById("toast-message").innerText = message;
-            toast.classList.add("show");
-            setTimeout(() => {
-                toast.classList.remove("show");
-            }, 3000);
+            document.getElementById("toast-message").textContent = message;
+            requestAnimationFrame(() => {
+                toast.classList.add("show");
+                setTimeout(() => toast.classList.remove("show"), 2000);
+            });
+        }
+
+        function updateCartButton() {
+            const viewCartBtn = document.getElementById("view-cart-btn");
+            requestAnimationFrame(() => {
+                viewCartBtn.classList.toggle("show", cartCount > 0);
+            });
         }
 
         async function checkCart() {
             const cartRef = collection(db, "cart");
             const cartSnapshot = await getDocs(cartRef);
-            const viewCartBtn = document.getElementById("view-cart-btn");
-
-            if (!cartSnapshot.empty) {
-                viewCartBtn.classList.add("show");
-            } else {
-                viewCartBtn.classList.remove("show");
-            }
+            cartCount = cartSnapshot.size;
+            updateCartButton();
         }
 
-        document.addEventListener("click", async (e) => {
+        // Debounced Firestore add
+        let pendingCartItems = [];
+        function debounceAddToCart(item) {
+            pendingCartItems.push(item);
+            clearTimeout(window.cartDebounce);
+            window.cartDebounce = setTimeout(async () => {
+                const items = pendingCartItems.slice();
+                pendingCartItems = [];
+                await Promise.all(items.map(item => addDoc(collection(db, "cart"), item)));
+                cartCount += items.length;
+                updateCartButton();
+            }, 200);
+        }
+
+        document.addEventListener("click", e => {
             if (e.target.classList.contains("add-to-cart")) {
                 const item = {
                     name: e.target.dataset.name,
                     price: parseFloat(e.target.dataset.price),
-                    restaurantId: restaurantId
+                    restaurantId: restaurantId,
+                    quantity: 1 // Add initial quantity
                 };
-                await addDoc(collection(db, "cart"), item);
+                debounceAddToCart(item);
                 showToast(`${item.name} added to cart!`);
-                checkCart();
+                cartCount++; // Immediate local update
+                updateCartButton();
             }
         });
 
-        document.addEventListener("DOMContentLoaded", () => {
-            loadRestaurant();
-            loadMenu();
-            checkCart();
+        document.addEventListener("DOMContentLoaded", async () => {
+            const start = performance.now();
+            await Promise.all([loadRestaurant(), loadMenu(), checkCart()]);
+            feather.replace();
+            console.log(`Page fully loaded in ${(performance.now() - start).toFixed(2)}ms`);
         });
-
-        feather.replace();
     </script>
-
-  
 </body>
 </html>
