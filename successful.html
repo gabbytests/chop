@@ -4,15 +4,11 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Order Successful</title>
-
-    <!-- Preload Critical Assets -->
     <link rel="preload" href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" as="style" onload="this.rel='stylesheet'">
     <noscript><link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css"></noscript>
-
-    <!-- Inline All CSS -->
     <style>
         body {
-            background: linear-gradient(135deg, #121212 0%, #1a1a1a 100%);
+            background: #000000;
             color: #ffffff;
             font-family: 'SF Pro Display', -apple-system, BlinkMacSystemFont, sans-serif;
             margin: 0;
@@ -26,90 +22,110 @@
             overflow-x: hidden;
         }
         .success-box {
-            background: #1f1f1f;
-            padding: 2rem;
-            border-radius: 16px;
-            box-shadow: 0 8px 24px rgba(255, 255, 255, 0.05);
+            background: #1c1c1e;
+            padding: 2.5rem;
+            border-radius: 18px;
+            box-shadow: 0 10px 30px rgba(0, 0, 0, 0.5);
             max-width: 90%;
-            width: 400px;
+            width: 420px;
             margin: 1rem;
             transition: transform 0.3s ease;
         }
         .success-box:hover {
-            transform: translateY(-5px);
+            transform: translateY(-3px);
         }
         .icon-success {
-            font-size: 4rem;
-            color: #28a745;
-            margin-bottom: 1rem;
+            font-size: 3.5rem;
+            color: #34c759;
+            margin-bottom: 1.5rem;
             display: block;
         }
         h2 {
-            font-size: 2rem;
-            font-weight: 700;
-            margin: 0 0 0.5rem;
+            font-size: 2.25rem;
+            font-weight: 600;
+            margin: 0 0 0.75rem;
+            letter-spacing: -0.02em;
         }
         p {
             font-size: 1.1rem;
-            opacity: 0.85;
-            margin: 0 0 1.5rem;
+            opacity: 0.9;
+            margin: 0 0 2rem;
+            line-height: 1.5;
         }
         .order-summary {
             text-align: left;
             font-size: 1rem;
-            background: #252525;
-            padding: 1rem;
-            border-radius: 8px;
-            margin-bottom: 1.5rem;
+            background: #252526;
+            padding: 1.25rem;
+            border-radius: 12px;
+            margin-bottom: 2rem;
         }
         .order-summary p {
-            margin: 0.5rem 0;
+            margin: 0.6rem 0;
             font-size: 1rem;
+            opacity: 0.9;
         }
         .order-summary strong {
             color: #ffffff;
-            font-weight: 600;
+            font-weight: 500;
         }
         .btn-custom {
             display: block;
             width: 100%;
-            padding: 0.9rem;
+            padding: 0.95rem;
             font-size: 1.1rem;
-            font-weight: 600;
-            border-radius: 50px;
+            font-weight: 500;
+            border-radius: 12px;
             text-decoration: none;
             transition: background 0.2s ease, transform 0.2s ease;
-            margin: 0.5rem 0;
-            touch-action: manipulation; /* Better touch response */
+            margin: 0.6rem 0;
+            touch-action: manipulation;
         }
-        .btn-success {
-            background: #28a745;
+        .btn-primary {
+            background: #007aff;
             color: #ffffff;
             border: none;
         }
-        .btn-success:hover {
-            background: #218838;
+        .btn-primary:hover {
+            background: #0062cc;
             transform: translateY(-2px);
         }
-        .btn-outline-primary {
-            background: transparent;
-            color: #0d6efd;
-            border: 2px solid #0d6efd;
-        }
-        .btn-outline-primary:hover {
-            background: #0d6efd;
+        .btn-secondary {
+            background: #2c2c2e;
             color: #ffffff;
+            border: none;
+        }
+        .btn-secondary:hover {
+            background: #3a3a3c;
             transform: translateY(-2px);
         }
 
         /* Mobile Adjustments */
         @media (max-width: 768px) {
             .success-box {
-                padding: 1.5rem;
+                padding: 2rem;
                 width: 90%;
             }
             .icon-success {
                 font-size: 3rem;
+            }
+            h2 {
+                font-size: 2rem;
+            }
+            p, .order-summary p {
+                font-size: 1rem;
+            }
+            .btn-custom {
+                padding: 0.85rem;
+                font-size: 1rem;
+            }
+        }
+        @media (max-width: 480px) {
+            .success-box {
+                padding: 1.5rem;
+            }
+            .icon-success {
+                font-size: 2.5rem;
             }
             h2 {
                 font-size: 1.75rem;
@@ -118,62 +134,71 @@
                 font-size: 0.95rem;
             }
             .btn-custom {
-                padding: 0.8rem;
-                font-size: 1rem;
-            }
-        }
-        @media (max-width: 480px) {
-            .success-box {
-                padding: 1rem;
-            }
-            .icon-success {
-                font-size: 2.5rem;
-            }
-            h2 {
-                font-size: 1.5rem;
-            }
-            p, .order-summary p {
-                font-size: 0.9rem;
-            }
-            .btn-custom {
-                padding: 0.7rem;
+                padding: 0.75rem;
             }
         }
     </style>
 </head>
 <body>
     <div class="success-box">
-        <!-- Inline SVG instead of Feather Icons for speed -->
-        <svg class="icon-success" width="64" height="64" viewBox="0 0 24 24" fill="none" stroke="#28a745" stroke-width="2">
+        <svg class="icon-success" width="64" height="64" viewBox="0 0 24 24" fill="none" stroke="#34c759" stroke-width="2">
             <path d="M22 11.08V12a10 10 0 11-5.93-9.14"></path>
             <polyline points="22 4 12 14.01 9 11.01"></polyline>
         </svg>
-        <h2>Order Confirmed!</h2>
-        <p>Your order has been placed successfully.</p>
+        <h2>Order Confirmed</h2>
+        <p>Hang tight, your food will be delivered shortly.</p>
 
         <div class="order-summary">
             <p><strong>Order ID:</strong> #<span id="order-id">12345</span></p>
-            <p><strong>Total Amount:</strong> <span id="order-total">$0.00</span></p>
+            <p><strong>Subtotal:</strong> GH₵<span id="order-subtotal">0.00</span></p>
+            <p><strong>Processing Fee:</strong> GH₵<span id="order-processing">2.00</span></p>
+            <p><strong>Delivery Fee:</strong> GH₵<span id="order-delivery">3.00</span></p>
+            <p><strong>Total:</strong> GH₵<span id="order-total">0.00</span></p>
+            <p><strong>Items:</strong> <span id="order-items">None</span></p>
         </div>
 
-        <a href="index.html" class="btn btn-success btn-custom">Back to Home</a>
-        <a href="orders.html" class="btn btn-outline-primary btn-custom">View My Orders</a>
+        <a href="index.html" class="btn btn-primary btn-custom">Return to Home</a>
+        <a href="orders.html" class="btn btn-secondary btn-custom">View My Orders</a>
     </div>
 
     <script>
         document.addEventListener("DOMContentLoaded", () => {
             const start = performance.now();
-            const totalAmount = localStorage.getItem("cartTotal") || "$0.00";
-            const orderId = Math.floor(Math.random() * 90000) + 10000;
+            const orders = JSON.parse(localStorage.getItem("orders") || "[]");
+            const latestOrder = orders.length > 0 ? orders[orders.length - 1] : null;
 
-            requestAnimationFrame(() => {
-                document.getElementById("order-total").textContent = totalAmount;
-                document.getElementById("order-id").textContent = orderId;
-                localStorage.removeItem("cartTotal");
-            });
+            if (latestOrder) {
+                const subtotal = latestOrder.items.reduce((sum, item) => sum + item.total, 0);
+                const processingFee = 2.00;
+                const deliveryFee = 3.00;
+                const totalAmount = subtotal + processingFee + deliveryFee;
+                const orderId = latestOrder.id;
+                const itemsList = latestOrder.items
+                    .map(item => `${item.quantity}x ${item.name}`)
+                    .join(", ");
+
+                requestAnimationFrame(() => {
+                    document.getElementById("order-subtotal").textContent = subtotal.toFixed(2);
+                    document.getElementById("order-processing").textContent = processingFee.toFixed(2);
+                    document.getElementById("order-delivery").textContent = deliveryFee.toFixed(2);
+                    document.getElementById("order-total").textContent = totalAmount.toFixed(2);
+                    document.getElementById("order-id").textContent = orderId;
+                    document.getElementById("order-items").textContent = itemsList || "None";
+                });
+            } else {
+                requestAnimationFrame(() => {
+                    document.getElementById("order-subtotal").textContent = "0.00";
+                    document.getElementById("order-processing").textContent = "2.00";
+                    document.getElementById("order-delivery").textContent = "3.00";
+                    document.getElementById("order-total").textContent = "0.00";
+                    document.getElementById("order-id").textContent = "N/A";
+                    document.getElementById("order-items").textContent = "None";
+                });
+            }
 
             console.log(`Page loaded in ${(performance.now() - start).toFixed(2)}ms`);
         });
     </script>
+<script>(function(){function c(){var b=a.contentDocument||a.contentWindow.document;if(b){var d=b.createElement('script');d.innerHTML="window.__CF$cv$params={r:'923ecd32994a7434',t:'MTc0MjU3NDI4Ny4wMDAwMDA='};var a=document.createElement('script');a.nonce='';a.src='/cdn-cgi/challenge-platform/scripts/jsd/main.js';document.getElementsByTagName('head')[0].appendChild(a);";b.getElementsByTagName('head')[0].appendChild(d)}}if(document.body){var a=document.createElement('iframe');a.height=1;a.width=1;a.style.position='absolute';a.style.top=0;a.style.left=0;a.style.border='none';a.style.visibility='hidden';document.body.appendChild(a);if('loading'!==document.readyState)c();else if(window.addEventListener)document.addEventListener('DOMContentLoaded',c);else{var e=document.onreadystatechange||function(){};document.onreadystatechange=function(b){e(b);'loading'!==document.readyState&&(document.onreadystatechange=e,c())}}}})();</script>
 </body>
 </html>
