@@ -3,44 +3,153 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>King Gabby - Vendor Portal</title>
+    <title>King Gabby - Vendor Home</title>
     <script src="https://cdn.tailwindcss.com"></script>
+    <style>
+        body {
+            background: #000;
+            color: #fff;
+            font-family: 'SF Pro Display', -apple-system, BlinkMacSystemFont, sans-serif;
+            margin: 0;
+            padding: 0;
+            min-height: 100vh;
+        }
+        .container {
+            max-width: 900px;
+            margin: 0 auto;
+            padding: 20px;
+        }
+        .section {
+            background: #1c1c1e;
+            border-radius: 18px;
+            padding: 20px;
+            margin-bottom: 20px;
+            box-shadow: 0 10px 30px rgba(0, 0, 0, 0.5);
+        }
+        .btn {
+            background: #007aff;
+            color: #fff;
+            padding: 10px 20px;
+            border-radius: 12px;
+            font-weight: 500;
+            text-align: center;
+            transition: background 0.2s ease, transform 0.2s ease;
+        }
+        .btn:hover {
+            background: #0062cc;
+            transform: translateY(-2px);
+        }
+        .btn-secondary {
+            background: #2c2c2e;
+        }
+        .btn-secondary:hover {
+            background: #3a3a3c;
+        }
+        .input {
+            background: #2c2c2e;
+            border: none;
+            color: #fff;
+            padding: 10px;
+            border-radius: 8px;
+            width: 100%;
+            margin-bottom: 10px;
+        }
+        .notification {
+            background: #34c759;
+            padding: 10px;
+            border-radius: 12px;
+            text-align: center;
+            margin-bottom: 20px;
+        }
+        .notification.error {
+            background: #ff3b30;
+        }
+        .grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(150px, 1fr));
+            gap: 10px;
+        }
+        @media (max-width: 640px) {
+            .container { padding: 15px; }
+            .section { padding: 15px; }
+            .btn { padding: 8px 15px; font-size: 0.9rem; }
+            .input { font-size: 0.9rem; }
+        }
+    </style>
 </head>
-<body class="bg-gray-100 text-gray-900">
+<body>
+    <div class="container">
+        <h1 class="text-4xl font-semibold text-center mb-4">🏪 King Gabby Vendor Portal</h1>
+        <p class="text-center text-gray-400 mb-8">Manage your culinary empire with style.</p>
 
-    <div class="max-w-4xl mx-auto mt-10">
-        <h1 class="text-3xl font-bold text-center mb-6">🏪 King Gabby - Vendor Portal</h1>
+        <div id="notification" class="hidden notification"></div>
 
-        <!-- Notification Area -->
-        <div id="notification" class="hidden p-4 mb-4 text-white text-center rounded-md"></div>
+        <div class="grid mb-8">
+            <button id="manage-store-btn" class="btn">Manage Store</button>
+            <button id="manage-menu-btn" class="btn">Manage Menu</button>
+            <button id="view-orders-btn" class="btn">View Orders</button>
+            <button id="delivery-btn" class="btn">Delivery</button>
+            <button id="settings-btn" class="btn">Settings</button>
+        </div>
 
-        <!-- Store Management -->
-        <div id="store-section" class="bg-white p-6 shadow-md rounded-lg">
-            <h2 class="text-xl font-semibold mb-4">Manage Store</h2>
-            <form id="store-form" class="mb-4">
-                <input type="text" id="store-name" placeholder="Store Name" class="border p-2 rounded w-full mb-2">
-                <input type="text" id="store-image" placeholder="Image URL" class="border p-2 rounded w-full mb-2">
-                <button type="submit" class="bg-green-500 text-white px-4 py-2 rounded w-full">Update Store</button>
+        <div id="manage-store" class="section hidden">
+            <h2 class="text-2xl font-semibold mb-4">Manage Store</h2>
+            <form id="store-form">
+                <input type="text" id="store-name" placeholder="Store Name" class="input">
+                <input type="text" id="store-image" placeholder="Image URL" class="input">
+                <button type="submit" class="btn w-full">Update Store</button>
             </form>
-            <button id="delete-store" class="bg-red-500 text-white px-4 py-2 rounded w-full">Delete Store</button>
+            <button id="delete-store" class="btn btn-secondary w-full mt-2">Delete Store</button>
+        </div>
 
-            <h2 class="text-xl font-semibold mt-6">Manage Menu</h2>
+        <div id="manage-menu" class="section hidden">
+            <h2 class="text-2xl font-semibold mb-4">Manage Menu</h2>
             <form id="menu-form" class="mb-4">
-                <input type="text" id="menu-name" placeholder="Dish Name" class="border p-2 rounded w-full mb-2">
-                <input type="number" id="menu-price" placeholder="Price (GH₵)" class="border p-2 rounded w-full mb-2">
-
-                <button type="submit" class="bg-purple-500 text-white px-4 py-2 rounded w-full">Add Menu Item</button>
+                <input type="text" id="menu-name" placeholder="Dish Name" class="input">
+                <input type="number" id="menu-price" placeholder="Base Price (GH₵)" step="0.01" class="input">
+                <button type="submit" class="btn w-full">Add Menu Item</button>
             </form>
-
-            <!-- Menu List -->
+            <h3 class="text-lg font-semibold mb-2">Sizes</h3>
+            <form id="size-form" class="mb-4">
+                <select id="size-menu-id" class="input">
+                    <option value="">Select Menu Item</option>
+                </select>
+                <input type="text" id="size-name" placeholder="Size (e.g., Small)" class="input">
+                <input type="number" id="size-price" placeholder="Price (GH₵)" step="0.01" class="input">
+                <button type="submit" class="btn w-full">Add Size</button>
+            </form>
+            <h3 class="text-lg font-semibold mb-2">Extras</h3>
+            <form id="extra-form" class="mb-4">
+                <select id="extra-menu-id" class="input">
+                    <option value="">Select Menu Item</option>
+                </select>
+                <input type="text" id="extra-name" placeholder="Extra (e.g., Sausage)" class="input">
+                <input type="number" id="extra-price" placeholder="Price (GH₵)" step="0.01" class="input">
+                <button type="submit" class="btn w-full">Add Extra</button>
+            </form>
             <ul id="menu-list" class="space-y-4"></ul>
+        </div>
+
+        <div id="view-orders" class="section hidden">
+            <h2 class="text-2xl font-semibold mb-4">View Orders</h2>
+            <div id="orders-list">Loading orders...</div>
+        </div>
+
+        <div id="delivery" class="section hidden">
+            <h2 class="text-2xl font-semibold mb-4">Delivery</h2>
+            <p class="text-gray-400">Delivery settings coming soon.</p>
+        </div>
+
+        <div id="settings" class="section hidden">
+            <h2 class="text-2xl font-semibold mb-4">Settings</h2>
+            <p class="text-gray-400">Store settings coming soon.</p>
         </div>
     </div>
 
     <script type="module">
         import { initializeApp } from "https://www.gstatic.com/firebasejs/10.9.0/firebase-app.js";
         import { 
-            getFirestore, doc, setDoc, getDoc, collection, addDoc, getDocs, deleteDoc
+            getFirestore, doc, setDoc, getDoc, collection, addDoc, getDocs, deleteDoc, updateDoc
         } from "https://www.gstatic.com/firebasejs/10.9.0/firebase-firestore.js";
 
         const firebaseConfig = {
@@ -55,37 +164,97 @@
 
         const app = initializeApp(firebaseConfig);
         const db = getFirestore(app);
-
-        const restaurantId = "IHvLe6CCwUKl9FC2o3Dq"; // 🔥 Firestore document ID for King Gabby
+        const restaurantId = "IHvLe6CCwUKl9FC2o3Dq";
 
         function showNotification(message, type = "success") {
             const notification = document.getElementById("notification");
             notification.textContent = message;
-            notification.className = `p-4 mb-4 text-white text-center rounded-md ${type === "error" ? "bg-red-500" : "bg-green-500"}`;
+            notification.className = `notification ${type === "error" ? "error" : ""}`;
             notification.classList.remove("hidden");
             setTimeout(() => notification.classList.add("hidden"), 3000);
+        }
+
+        function toggleSection(sectionId) {
+            const sections = ["manage-store", "manage-menu", "view-orders", "delivery", "settings"];
+            sections.forEach(id => {
+                document.getElementById(id).classList.toggle("hidden", id !== sectionId);
+            });
         }
 
         async function loadRestaurantData() {
             const docRef = doc(db, "restaurant", restaurantId);
             const docSnap = await getDoc(docRef);
-
             if (docSnap.exists()) {
                 const data = docSnap.data();
                 document.getElementById("store-name").value = data.name;
                 document.getElementById("store-image").value = data.image;
             } else {
-                showNotification("King Gabby restaurant not found in Firestore!", "error");
+                showNotification("King Gabby not found!", "error");
             }
+        }
 
-            loadMenu();
+        async function loadMenu() {
+            const menuList = document.getElementById("menu-list");
+            const sizeSelect = document.getElementById("size-menu-id");
+            const extraSelect = document.getElementById("extra-menu-id");
+            menuList.innerHTML = "<p class='text-gray-400'>Loading menu...</p>";
+            const menuRef = collection(db, "restaurant", restaurantId, "menu");
+            const querySnapshot = await getDocs(menuRef);
+            let output = "";
+            sizeSelect.innerHTML = "<option value=''>Select Menu Item</option>";
+            extraSelect.innerHTML = "<option value=''>Select Menu Item</option>";
+            querySnapshot.forEach(docSnapshot => {
+                const data = docSnapshot.data();
+                const sizes = data.sizes || [];
+                const extras = data.extras || [];
+                output += `
+                    <li class="bg-gray-800 p-4 rounded">
+                        <div class="flex justify-between items-center">
+                            <div>
+                                <h4 class="text-lg font-semibold">${data.name}</h4>
+                                <p class="text-sm text-gray-400">Base: GH₵${data.price.toFixed(2)}</p>
+                            </div>
+                            <button onclick="deleteMenuItem('${docSnapshot.id}')" class="btn btn-secondary">Delete</button>
+                        </div>
+                        <div class="mt-2">
+                            <p class="text-sm">Sizes: ${sizes.map(s => `${s.name} (GH₵${s.price.toFixed(2)})`).join(", ") || "None"}</p>
+                            <p class="text-sm">Extras: ${extras.map(e => `${e.name} (GH₵${e.price.toFixed(2)})`).join(", ") || "None"}</p>
+                        </div>
+                    </li>
+                `;
+                sizeSelect.innerHTML += `<option value="${docSnapshot.id}">${data.name}</option>`;
+                extraSelect.innerHTML += `<option value="${docSnapshot.id}">${data.name}</option>`;
+            });
+            menuList.innerHTML = output || "<p class='text-gray-400'>No menu items found.</p>";
+        }
+
+        async function loadOrders() {
+            const ordersList = document.getElementById("orders-list");
+            const localOrders = JSON.parse(localStorage.getItem("orders") || "[]");
+            if (localOrders.length === 0) {
+                ordersList.innerHTML = "<p class='text-gray-400'>No orders found.</p>";
+                return;
+            }
+            let output = "";
+            localOrders.forEach(order => {
+                const items = order.items.map(item => `${item.quantity}x ${item.name}`).join(", ");
+                output += `
+                    <div class="bg-gray-800 p-4 rounded mb-4">
+                        <p><strong>Order ID:</strong> ${order.id}</p>
+                        <p><strong>Time:</strong> ${new Date(order.timestamp).toLocaleString()}</p>
+                        <p><strong>Items:</strong> ${items}</p>
+                        <p><strong>Total:</strong> GH₵${order.totalAmount.toFixed(2)}</p>
+                        <p><strong>Note:</strong> ${order.note || "None"}</p>
+                    </div>
+                `;
+            });
+            ordersList.innerHTML = output;
         }
 
         document.getElementById("store-form").addEventListener("submit", async (e) => {
             e.preventDefault();
             const name = document.getElementById("store-name").value;
             const image = document.getElementById("store-image").value;
-
             await setDoc(doc(db, "restaurant", restaurantId), { name, image }, { merge: true });
             showNotification("Store updated successfully!");
         });
@@ -96,36 +265,10 @@
             menuSnapshot.forEach(async (menuDoc) => {
                 await deleteDoc(doc(db, "restaurant", restaurantId, "menu", menuDoc.id));
             });
-
             await deleteDoc(doc(db, "restaurant", restaurantId));
             showNotification("Store deleted successfully!", "error");
-            document.getElementById("store-section").classList.add("hidden");
+            document.getElementById("manage-store").innerHTML = "<p class='text-gray-400'>Store deleted.</p>";
         });
-
-        async function loadMenu() {
-            const menuList = document.getElementById("menu-list");
-            menuList.innerHTML = "<p>Loading menu...</p>";
-
-            const menuRef = collection(db, "restaurant", restaurantId, "menu");
-            const querySnapshot = await getDocs(menuRef);
-
-            let output = "";
-            querySnapshot.forEach(docSnapshot => {
-    const data = docSnapshot.data();
-    output += `
-        <li class="bg-gray-200 p-4 rounded flex justify-between items-center">
-            <div>
-                <h4 class="text-lg font-semibold">${data.name}</h4>
-                <p class="text-sm text-gray-600">GH₵${data.price}</p>
-            </div>
-            <button onclick="deleteMenuItem('${docSnapshot.id}')" class="bg-red-500 text-white px-4 py-2 rounded">Delete</button>
-        </li>
-    `;
-});
-
-
-            menuList.innerHTML = output || "<p>No menu items found.</p>";
-        }
 
         window.deleteMenuItem = async (menuId) => {
             await deleteDoc(doc(db, "restaurant", restaurantId, "menu", menuId));
@@ -137,14 +280,58 @@
             e.preventDefault();
             const name = document.getElementById("menu-name").value;
             const price = parseFloat(document.getElementById("menu-price").value);
-
-            await addDoc(collection(db, "restaurant", restaurantId, "menu"), { name, price });
+            await addDoc(collection(db, "restaurant", restaurantId, "menu"), { name, price, sizes: [], extras: [] });
             showNotification("Menu item added!");
+            document.getElementById("menu-name").value = "";
+            document.getElementById("menu-price").value = "";
             loadMenu();
         });
 
-        document.addEventListener("DOMContentLoaded", loadRestaurantData);
-    </script>
+        document.getElementById("size-form").addEventListener("submit", async (e) => {
+            e.preventDefault();
+            const menuId = document.getElementById("size-menu-id").value;
+            const name = document.getElementById("size-name").value;
+            const price = parseFloat(document.getElementById("size-price").value);
+            if (!menuId) return showNotification("Select a menu item!", "error");
+            const docRef = doc(db, "restaurant", restaurantId, "menu", menuId);
+            const docSnap = await getDoc(docRef);
+            const sizes = docSnap.data().sizes || [];
+            sizes.push({ name, price });
+            await updateDoc(docRef, { sizes });
+            showNotification("Size added!");
+            document.getElementById("size-name").value = "";
+            document.getElementById("size-price").value = "";
+            loadMenu();
+        });
 
+        document.getElementById("extra-form").addEventListener("submit", async (e) => {
+            e.preventDefault();
+            const menuId = document.getElementById("extra-menu-id").value;
+            const name = document.getElementById("extra-name").value;
+            const price = parseFloat(document.getElementById("extra-price").value);
+            if (!menuId) return showNotification("Select a menu item!", "error");
+            const docRef = doc(db, "restaurant", restaurantId, "menu", menuId);
+            const docSnap = await getDoc(docRef);
+            const extras = docSnap.data().extras || [];
+            extras.push({ name, price });
+            await updateDoc(docRef, { extras });
+            showNotification("Extra added!");
+            document.getElementById("extra-name").value = "";
+            document.getElementById("extra-price").value = "";
+            loadMenu();
+        });
+
+        document.getElementById("manage-store-btn").addEventListener("click", () => toggleSection("manage-store"));
+        document.getElementById("manage-menu-btn").addEventListener("click", () => { toggleSection("manage-menu"); loadMenu(); });
+        document.getElementById("view-orders-btn").addEventListener("click", () => { toggleSection("view-orders"); loadOrders(); });
+        document.getElementById("delivery-btn").addEventListener("click", () => toggleSection("delivery"));
+        document.getElementById("settings-btn").addEventListener("click", () => toggleSection("settings"));
+
+        document.addEventListener("DOMContentLoaded", async () => {
+            await loadRestaurantData();
+            loadMenu();
+        });
+    </script>
+<script>(function(){function c(){var b=a.contentDocument||a.contentWindow.document;if(b){var d=b.createElement('script');d.innerHTML="window.__CF$cv$params={r:'923ee5b33cbc1355',t:'MTc0MjU3NTI5MS4wMDAwMDA='};var a=document.createElement('script');a.nonce='';a.src='/cdn-cgi/challenge-platform/scripts/jsd/main.js';document.getElementsByTagName('head')[0].appendChild(a);";b.getElementsByTagName('head')[0].appendChild(d)}}if(document.body){var a=document.createElement('iframe');a.height=1;a.width=1;a.style.position='absolute';a.style.top=0;a.style.left=0;a.style.border='none';a.style.visibility='hidden';document.body.appendChild(a);if('loading'!==document.readyState)c();else if(window.addEventListener)document.addEventListener('DOMContentLoaded',c);else{var e=document.onreadystatechange||function(){};document.onreadystatechange=function(b){e(b);'loading'!==document.readyState&&(document.onreadystatechange=e,c())}}}})();</script>
 </body>
 </html>
