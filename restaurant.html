@@ -123,37 +123,38 @@
         }
 
         function renderMenu(items) {
-            const menuSection = document.getElementById("menu-section");
-            const fragment = document.createDocumentFragment();
-            const menuList = document.createElement("div");
-            menuList.id = "menu-list";
-            items.forEach(item => {
-                const div = document.createElement("div");
-                div.className = "menu-item";
-                div.innerHTML = `
-                    <div>
-                        <h4>${item.name}</h4>
-                        <p>$${item.price.toFixed(2)}</p>
-                    </div>
-                    <button class="add-to-cart" 
-                        data-id="${item.id}" 
-                        data-name="${item.name}" 
-                        data-price="${item.price}">
-                        Add +
-                    </button>
-                `;
-                menuList.appendChild(div);
-            });
-            const menuHeader = document.createElement("h2");
-            menuHeader.className = "fw-bold";
-            menuHeader.textContent = "Menu";
-            fragment.appendChild(menuHeader);
-            fragment.appendChild(menuList);
-            requestAnimationFrame(() => {
-                menuSection.innerHTML = "";
-                menuSection.appendChild(fragment);
-            });
-        }
+    const menuSection = document.getElementById("menu-section");
+    const fragment = document.createDocumentFragment();
+    const menuList = document.createElement("div");
+    menuList.id = "menu-list";
+    items.forEach(item => {
+        const div = document.createElement("div");
+        div.className = "menu-item";
+        div.innerHTML = `
+            <div>
+                <h4>${item.name}</h4>
+                <p>GH₵${item.price.toFixed(2)}</p>
+            </div>
+            <button class="add-to-cart" 
+                data-id="${item.id}" 
+                data-name="${item.name}" 
+                data-price="${item.price}">
+                Add +
+            </button>
+        `;
+        menuList.appendChild(div);
+    });
+    const menuHeader = document.createElement("h2");
+    menuHeader.className = "fw-bold";
+    menuHeader.textContent = "Menu";
+    fragment.appendChild(menuHeader);
+    fragment.appendChild(menuList);
+    requestAnimationFrame(() => {
+        menuSection.innerHTML = "";
+        menuSection.appendChild(fragment);
+    });
+}
+
 
         function showToast(message) {
             const toast = document.getElementById("toast");

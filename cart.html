@@ -116,51 +116,51 @@
             }
 
             let subtotal = 0;
-            const groupedCart = new Map();
-            cart.forEach(item => {
-                if (groupedCart.has(item.name)) {
-                    const existing = groupedCart.get(item.name);
-                    existing.quantity += item.quantity;
-                    existing.ids.push(item.id);
-                } else {
-                    groupedCart.set(item.name, { ...item, ids: [item.id] });
-                }
-            });
+const groupedCart = new Map();
+cart.forEach(item => {
+    if (groupedCart.has(item.name)) {
+        const existing = groupedCart.get(item.name);
+        existing.quantity += item.quantity;
+        existing.ids.push(item.id);
+    } else {
+        groupedCart.set(item.name, { ...item, ids: [item.id] });
+    }
+});
 
-            const itemsHTML = Array.from(groupedCart.values()).map(item => {
-                const itemTotal = item.price * item.quantity;
-                subtotal += itemTotal;
-                return `
-                    <div class="cart-item" data-ids='${JSON.stringify(item.ids)}' data-name="${item.name}">
-                        <div>
-                            <p class="item-name">${item.name}</p>
-                            <p class="item-price">$${item.price.toFixed(2)} each</p>
-                        </div>
-                        <div class="controls">
-                            <button class="btn-sm btn decrease"><i class="feather-minus"></i></button>
-                            <span class="quantity">${item.quantity}</span>
-                            <button class="btn-sm btn increase"><i class="feather-plus"></i></button>
-                            <p class="item-total">$${itemTotal.toFixed(2)}</p>
-                            <button class="btn-sm btn-danger remove"><i class="feather-trash-2"></i></button>
-                        </div>
-                    </div>
-                `;
-            }).join("");
+const itemsHTML = Array.from(groupedCart.values()).map(item => {
+    const itemTotal = item.price * item.quantity;
+    subtotal += itemTotal;
+    return `
+        <div class="cart-item" data-ids='${JSON.stringify(item.ids)}' data-name="${item.name}">
+            <div>
+                <p class="item-name">${item.name}</p>
+                <p class="item-price">GH₵${item.price.toFixed(2)} each</p>
+            </div>
+            <div class="controls">
+                <button class="btn-sm btn decrease"><i class="feather-minus"></i></button>
+                <span class="quantity">${item.quantity}</span>
+                <button class="btn-sm btn increase"><i class="feather-plus"></i></button>
+                <p class="item-total">GH₵${itemTotal.toFixed(2)}</p>
+                <button class="btn-sm btn-danger remove"><i class="feather-trash-2"></i></button>
+            </div>
+        </div>
+    `;
+}).join("");
 
-            cartContainer.innerHTML = `
-                <div class="cart-items">${itemsHTML}</div>
-                <div class="order-summary">
-                    <p>Subtotal <span class="float-end">$${subtotal.toFixed(2)}</span></p>
-                    <p>Processing Fee <span class="float-end">$2.00</span></p>
-                    <p>Delivery Fee <span class="float-end">$10.00</span></p>
-                    <hr>
-                    <h6>Total <span class="float-end">$${(subtotal + 12).toFixed(2)}</span></h6>
-                </div>
-                <div class="action-buttons">
-                    <button id="checkout-btn" class="btn btn-success w-100">Proceed to Checkout <i class="feather-arrow-right"></i></button>
-                    <button id="remove-all-btn" class="btn btn-danger w-100">Remove All <i class="feather-trash-2"></i></button>
-                </div>
-            `;
+cartContainer.innerHTML = `
+    <div class="cart-items">${itemsHTML}</div>
+    <div class="order-summary">
+        <p>Subtotal <span class="float-end">GH₵${subtotal.toFixed(2)}</span></p>
+        <p>Processing Fee <span class="float-end">GH₵2.00</span></p>
+        <p>Delivery Fee <span class="float-end">GH₵10.00</span></p>
+        <hr>
+        <h6>Total <span class="float-end">GH₵${(subtotal + 12).toFixed(2)}</span></h6>
+    </div>
+    <div class="action-buttons">
+        <button id="checkout-btn" class="btn btn-success w-100">Proceed to Checkout <i class="feather-arrow-right"></i></button>
+        <button id="remove-all-btn" class="btn btn-danger w-100">Remove All <i class="feather-trash-2"></i></button>
+    </div>
+`;
 
             addEventListeners();
             console.log(`Rendered cart in ${(performance.now() - startTime).toFixed(2)}ms`);

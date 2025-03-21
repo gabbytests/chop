@@ -1,0 +1,150 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>King Gabby - Vendor Portal</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+</head>
+<body class="bg-gray-100 text-gray-900">
+
+    <div class="max-w-4xl mx-auto mt-10">
+        <h1 class="text-3xl font-bold text-center mb-6">🏪 King Gabby - Vendor Portal</h1>
+
+        <!-- Notification Area -->
+        <div id="notification" class="hidden p-4 mb-4 text-white text-center rounded-md"></div>
+
+        <!-- Store Management -->
+        <div id="store-section" class="bg-white p-6 shadow-md rounded-lg">
+            <h2 class="text-xl font-semibold mb-4">Manage Store</h2>
+            <form id="store-form" class="mb-4">
+                <input type="text" id="store-name" placeholder="Store Name" class="border p-2 rounded w-full mb-2">
+                <input type="text" id="store-image" placeholder="Image URL" class="border p-2 rounded w-full mb-2">
+                <button type="submit" class="bg-green-500 text-white px-4 py-2 rounded w-full">Update Store</button>
+            </form>
+            <button id="delete-store" class="bg-red-500 text-white px-4 py-2 rounded w-full">Delete Store</button>
+
+            <h2 class="text-xl font-semibold mt-6">Manage Menu</h2>
+            <form id="menu-form" class="mb-4">
+                <input type="text" id="menu-name" placeholder="Dish Name" class="border p-2 rounded w-full mb-2">
+                <input type="number" id="menu-price" placeholder="Price (GH₵)" class="border p-2 rounded w-full mb-2">
+
+                <button type="submit" class="bg-purple-500 text-white px-4 py-2 rounded w-full">Add Menu Item</button>
+            </form>
+
+            <!-- Menu List -->
+            <ul id="menu-list" class="space-y-4"></ul>
+        </div>
+    </div>
+
+    <script type="module">
+        import { initializeApp } from "https://www.gstatic.com/firebasejs/10.9.0/firebase-app.js";
+        import { 
+            getFirestore, doc, setDoc, getDoc, collection, addDoc, getDocs, deleteDoc
+        } from "https://www.gstatic.com/firebasejs/10.9.0/firebase-firestore.js";
+
+        const firebaseConfig = {
+            apiKey: "AIzaSyADvpUQWo75ExePGoCRirD2mM-lmfM4Cmc",
+            authDomain: "von600-7982d.firebaseapp.com",
+            projectId: "von600-7982d",
+            storageBucket: "von600-7982d.appspot.com",
+            messagingSenderId: "164591218045",
+            appId: "1:164591218045:web:afe17512e16573e7903014",
+            measurementId: "G-E69DMPLXBK"
+        };
+
+        const app = initializeApp(firebaseConfig);
+        const db = getFirestore(app);
+
+        const restaurantId = "IHvLe6CCwUKl9FC2o3Dq"; // 🔥 Firestore document ID for King Gabby
+
+        function showNotification(message, type = "success") {
+            const notification = document.getElementById("notification");
+            notification.textContent = message;
+            notification.className = `p-4 mb-4 text-white text-center rounded-md ${type === "error" ? "bg-red-500" : "bg-green-500"}`;
+            notification.classList.remove("hidden");
+            setTimeout(() => notification.classList.add("hidden"), 3000);
+        }
+
+        async function loadRestaurantData() {
+            const docRef = doc(db, "restaurant", restaurantId);
+            const docSnap = await getDoc(docRef);
+
+            if (docSnap.exists()) {
+                const data = docSnap.data();
+                document.getElementById("store-name").value = data.name;
+                document.getElementById("store-image").value = data.image;
+            } else {
+                showNotification("King Gabby restaurant not found in Firestore!", "error");
+            }
+
+            loadMenu();
+        }
+
+        document.getElementById("store-form").addEventListener("submit", async (e) => {
+            e.preventDefault();
+            const name = document.getElementById("store-name").value;
+            const image = document.getElementById("store-image").value;
+
+            await setDoc(doc(db, "restaurant", restaurantId), { name, image }, { merge: true });
+            showNotification("Store updated successfully!");
+        });
+
+        document.getElementById("delete-store").addEventListener("click", async () => {
+            const menuRef = collection(db, "restaurant", restaurantId, "menu");
+            const menuSnapshot = await getDocs(menuRef);
+            menuSnapshot.forEach(async (menuDoc) => {
+                await deleteDoc(doc(db, "restaurant", restaurantId, "menu", menuDoc.id));
+            });
+
+            await deleteDoc(doc(db, "restaurant", restaurantId));
+            showNotification("Store deleted successfully!", "error");
+            document.getElementById("store-section").classList.add("hidden");
+        });
+
+        async function loadMenu() {
+            const menuList = document.getElementById("menu-list");
+            menuList.innerHTML = "<p>Loading menu...</p>";
+
+            const menuRef = collection(db, "restaurant", restaurantId, "menu");
+            const querySnapshot = await getDocs(menuRef);
+
+            let output = "";
+            querySnapshot.forEach(docSnapshot => {
+    const data = docSnapshot.data();
+    output += `
+        <li class="bg-gray-200 p-4 rounded flex justify-between items-center">
+            <div>
+                <h4 class="text-lg font-semibold">${data.name}</h4>
+                <p class="text-sm text-gray-600">GH₵${data.price}</p>
+            </div>
+            <button onclick="deleteMenuItem('${docSnapshot.id}')" class="bg-red-500 text-white px-4 py-2 rounded">Delete</button>
+        </li>
+    `;
+});
+
+
+            menuList.innerHTML = output || "<p>No menu items found.</p>";
+        }
+
+        window.deleteMenuItem = async (menuId) => {
+            await deleteDoc(doc(db, "restaurant", restaurantId, "menu", menuId));
+            showNotification("Menu item deleted!", "error");
+            loadMenu();
+        };
+
+        document.getElementById("menu-form").addEventListener("submit", async (e) => {
+            e.preventDefault();
+            const name = document.getElementById("menu-name").value;
+            const price = parseFloat(document.getElementById("menu-price").value);
+
+            await addDoc(collection(db, "restaurant", restaurantId, "menu"), { name, price });
+            showNotification("Menu item added!");
+            loadMenu();
+        });
+
+        document.addEventListener("DOMContentLoaded", loadRestaurantData);
+    </script>
+
+</body>
+</html>
