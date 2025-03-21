@@ -22,7 +22,7 @@
         .section {
             background: #1c1c1e;
             border-radius: 18px;
-            padding: 20px;
+            padding: 25px;
             margin-bottom: 20px;
             box-shadow: 0 10px 30px rgba(0, 0, 0, 0.5);
         }
@@ -40,26 +40,39 @@
             transform: translateY(-2px);
         }
         .btn-secondary {
-            background: #2c2c2e;
+            background: #ff3b30;
+            padding: 5px 15px;
         }
         .btn-secondary:hover {
-            background: #3a3a3c;
+            background: #dc2626;
+            transform: translateY(-2px);
+        }
+        .btn-edit {
+            background: #34c759;
+            padding: 5px 15px;
+        }
+        .btn-edit:hover {
+            background: #2ea44f;
+            transform: translateY(-2px);
         }
         .input {
             background: #2c2c2e;
             border: none;
             color: #fff;
-            padding: 10px;
-            border-radius: 8px;
+            padding: 12px;
+            border-radius: 10px;
             width: 100%;
-            margin-bottom: 10px;
+            margin-bottom: 12px;
+            font-size: 1rem;
+            box-shadow: inset 0 2px 4px rgba(0, 0, 0, 0.2);
         }
         .notification {
             background: #34c759;
-            padding: 10px;
+            padding: 12px;
             border-radius: 12px;
             text-align: center;
             margin-bottom: 20px;
+            box-shadow: 0 5px 15px rgba(0, 0, 0, 0.3);
         }
         .notification.error {
             background: #ff3b30;
@@ -67,11 +80,40 @@
         .grid {
             display: grid;
             grid-template-columns: repeat(auto-fit, minmax(150px, 1fr));
-            gap: 10px;
+            gap: 15px;
         }
+        .menu-list .menu-item {
+            background: #2c2c2e;
+            padding: 15px;
+            border-radius: 12px;
+            margin-bottom: 15px;
+            cursor: pointer;
+            transition: transform 0.2s ease, box-shadow 0.2s ease;
+        }
+        .menu-list .menu-item:hover {
+            transform: translateY(-3px);
+            box-shadow: 0 5px 15px rgba(0, 0, 0, 0.3);
+        }
+        .menu-item h4 {
+            margin: 0 0 10px;
+            font-size: 1.25rem;
+            font-weight: 600;
+        }
+        .menu-item p {
+            margin: 5px 0;
+            font-size: 0.9rem;
+            opacity: 0.8;
+        }
+        .menu-item .details { margin-top: 15px; }
+        .variation { display: flex; gap: 12px; margin-bottom: 12px; align-items: center; }
+        .variation input { flex: 1; }
+        .variation .input-price { width: 90px; }
+        .menu-details { background: #252527; padding: 15px; border-radius: 10px; margin-top: 15px; }
+        .menu-details p { margin: 0; font-size: 0.95rem; opacity: 0.9; }
+        .menu-details h5 { font-size: 1.1rem; font-weight: 600; margin: 10px 0 5px; }
         @media (max-width: 640px) {
             .container { padding: 15px; }
-            .section { padding: 15px; }
+            .section { padding: 20px; }
             .btn { padding: 8px 15px; font-size: 0.9rem; }
             .input { font-size: 0.9rem; }
         }
@@ -80,7 +122,7 @@
 <body>
     <div class="container">
         <h1 class="text-4xl font-semibold text-center mb-4">🏪 King Gabby Vendor Portal</h1>
-        <p class="text-center text-gray-400 mb-8">Manage your culinary empire with style.</p>
+        <p class="text-center text-gray-400 mb-8">Manage your culinary empire with elegance.</p>
 
         <div id="notification" class="hidden notification"></div>
 
@@ -104,30 +146,14 @@
 
         <div id="manage-menu" class="section hidden">
             <h2 class="text-2xl font-semibold mb-4">Manage Menu</h2>
-            <form id="menu-form" class="mb-4">
-                <input type="text" id="menu-name" placeholder="Dish Name" class="input">
-                <input type="number" id="menu-price" placeholder="Base Price (GH₵)" step="0.01" class="input">
-                <button type="submit" class="btn w-full">Add Menu Item</button>
+            <form id="menu-form" class="mb-6">
+                <label for="menu-name" class="block text-sm opacity-90 mb-1">Dish Name</label>
+                <input type="text" id="menu-name" placeholder="e.g., Chicken Burger" class="input">
+                <label for="menu-price" class="block text-sm opacity-90 mb-1">Price (GH₵)</label>
+                <input type="number" id="menu-price" placeholder="e.g., 15.00" step="0.01" class="input">
+                <button type="submit" class="btn w-full mt-2">Add New Dish</button>
             </form>
-            <h3 class="text-lg font-semibold mb-2">Sizes</h3>
-            <form id="size-form" class="mb-4">
-                <select id="size-menu-id" class="input">
-                    <option value="">Select Menu Item</option>
-                </select>
-                <input type="text" id="size-name" placeholder="Size (e.g., Small)" class="input">
-                <input type="number" id="size-price" placeholder="Price (GH₵)" step="0.01" class="input">
-                <button type="submit" class="btn w-full">Add Size</button>
-            </form>
-            <h3 class="text-lg font-semibold mb-2">Extras</h3>
-            <form id="extra-form" class="mb-4">
-                <select id="extra-menu-id" class="input">
-                    <option value="">Select Menu Item</option>
-                </select>
-                <input type="text" id="extra-name" placeholder="Extra (e.g., Sausage)" class="input">
-                <input type="number" id="extra-price" placeholder="Price (GH₵)" step="0.01" class="input">
-                <button type="submit" class="btn w-full">Add Extra</button>
-            </form>
-            <ul id="menu-list" class="space-y-4"></ul>
+            <div id="menu-list" class="menu-list"></div>
         </div>
 
         <div id="view-orders" class="section hidden">
@@ -165,6 +191,7 @@
         const app = initializeApp(firebaseConfig);
         const db = getFirestore(app);
         const restaurantId = "IHvLe6CCwUKl9FC2o3Dq";
+        let selectedMenuId = null;
 
         function showNotification(message, type = "success") {
             const notification = document.getElementById("notification");
@@ -195,37 +222,99 @@
 
         async function loadMenu() {
             const menuList = document.getElementById("menu-list");
-            const sizeSelect = document.getElementById("size-menu-id");
-            const extraSelect = document.getElementById("extra-menu-id");
             menuList.innerHTML = "<p class='text-gray-400'>Loading menu...</p>";
             const menuRef = collection(db, "restaurant", restaurantId, "menu");
             const querySnapshot = await getDocs(menuRef);
             let output = "";
-            sizeSelect.innerHTML = "<option value=''>Select Menu Item</option>";
-            extraSelect.innerHTML = "<option value=''>Select Menu Item</option>";
             querySnapshot.forEach(docSnapshot => {
                 const data = docSnapshot.data();
-                const sizes = data.sizes || [];
-                const extras = data.extras || [];
                 output += `
-                    <li class="bg-gray-800 p-4 rounded">
-                        <div class="flex justify-between items-center">
-                            <div>
-                                <h4 class="text-lg font-semibold">${data.name}</h4>
-                                <p class="text-sm text-gray-400">Base: GH₵${data.price.toFixed(2)}</p>
-                            </div>
-                            <button onclick="deleteMenuItem('${docSnapshot.id}')" class="btn btn-secondary">Delete</button>
-                        </div>
-                        <div class="mt-2">
-                            <p class="text-sm">Sizes: ${sizes.map(s => `${s.name} (GH₵${s.price.toFixed(2)})`).join(", ") || "None"}</p>
-                            <p class="text-sm">Extras: ${extras.map(e => `${e.name} (GH₵${e.price.toFixed(2)})`).join(", ") || "None"}</p>
-                        </div>
-                    </li>
+                    <div class="menu-item" data-id="${docSnapshot.id}">
+                        <h4>${data.name}</h4>
+                        <p>Price: GH₵${data.price.toFixed(2)}</p>
+                        <div id="details-${docSnapshot.id}" class="menu-details hidden"></div>
+                        <div id="edit-${docSnapshot.id}" class="details hidden"></div>
+                    </div>
                 `;
-                sizeSelect.innerHTML += `<option value="${docSnapshot.id}">${data.name}</option>`;
-                extraSelect.innerHTML += `<option value="${docSnapshot.id}">${data.name}</option>`;
             });
-            menuList.innerHTML = output || "<p class='text-gray-400'>No menu items found.</p>";
+            menuList.innerHTML = output || "<p class='text-gray-400'>No dishes added yet.</p>";
+
+            menuList.querySelectorAll(".menu-item").forEach(item => {
+                item.addEventListener("click", () => showMenuDetails(item.dataset.id));
+            });
+        }
+
+        async function showMenuDetails(menuId) {
+            if (selectedMenuId === menuId && !document.getElementById(`edit-${menuId}`).classList.contains("hidden")) return;
+            selectedMenuId = menuId;
+
+            const docRef = doc(db, "restaurant", restaurantId, "menu", menuId);
+            const docSnap = await getDoc(docRef);
+            const data = docSnap.data();
+            const sizes = data.sizes || [];
+            const extras = data.extras || [];
+
+            const detailsDiv = document.getElementById(`details-${menuId}`);
+            detailsDiv.innerHTML = `
+                <p>Sizes: ${sizes.length ? sizes.map(s => `${s.name} (GH₵${s.price.toFixed(2)})`).join(", ") : "None"}</p>
+                <p>Extras: ${extras.length ? extras.map(e => `${e.name} (GH₵${e.price.toFixed(2)})`).join(", ") : "None"}</p>
+                <div class="flex gap-4 mt-3">
+                    <button onclick="showEditMenu('${menuId}')" class="btn btn-edit">Edit</button>
+                    <button onclick="deleteMenuItem('${menuId}')" class="btn btn-secondary">Delete</button>
+                </div>
+            `;
+            detailsDiv.classList.remove("hidden");
+
+            document.querySelectorAll(".menu-item").forEach(item => {
+                if (item.dataset.id !== menuId) {
+                    document.getElementById(`details-${item.dataset.id}`).classList.add("hidden");
+                    document.getElementById(`edit-${item.dataset.id}`).classList.add("hidden");
+                }
+            });
+        }
+
+        async function showEditMenu(menuId) {
+            const docRef = doc(db, "restaurant", restaurantId, "menu", menuId);
+            const docSnap = await getDoc(docRef);
+            const data = docSnap.data();
+            const sizes = data.sizes || [];
+            const extras = data.extras || [];
+
+            const editDiv = document.getElementById(`edit-${menuId}`);
+            editDiv.innerHTML = `
+                <label class="block text-sm opacity-90 mb-1">Name</label>
+                <input type="text" id="name-${menuId}" value="${data.name}" class="input">
+                <label class="block text-sm opacity-90 mb-1">Price (GH₵)</label>
+                <input type="number" id="price-${menuId}" value="${data.price}" step="0.01" class="input">
+                <h5 class="text-sm font-semibold mt-3">Sizes</h5>
+                ${sizes.map((size, index) => `
+                    <div class="variation">
+                        <input type="text" value="${size.name}" id="size-name-${menuId}-${index}" class="input">
+                        <input type="number" value="${size.price}" step="0.01" id="size-price-${menuId}-${index}" class="input input-price">
+                        <button onclick="deleteSize('${menuId}', ${index})" class="btn btn-secondary">Delete</button>
+                    </div>
+                `).join("") || "<p class='text-gray-400'>No sizes added</p>"}
+                <div class="variation">
+                    <input type="text" placeholder="Add size" id="new-size-name-${menuId}" class="input">
+                    <input type="number" placeholder="Price" step="0.01" id="new-size-price-${menuId}" class="input input-price">
+                    <button onclick="addSize('${menuId}')" class="btn">Add</button>
+                </div>
+                <h5 class="text-sm font-semibold mt-3">Extras</h5>
+                ${extras.map((extra, index) => `
+                    <div class="variation">
+                        <input type="text" value="${extra.name}" id="extra-name-${menuId}-${index}" class="input">
+                        <input type="number" value="${extra.price}" step="0.01" id="extra-price-${menuId}-${index}" class="input input-price">
+                        <button onclick="deleteExtra('${menuId}', ${index})" class="btn btn-secondary">Delete</button>
+                    </div>
+                `).join("") || "<p class='text-gray-400'>No extras added</p>"}
+                <div class="variation">
+                    <input type="text" placeholder="Add extra" id="new-extra-name-${menuId}" class="input">
+                    <input type="number" placeholder="Price" step="0.01" id="new-extra-price-${menuId}" class="input input-price">
+                    <button onclick="addExtra('${menuId}')" class="btn">Add</button>
+                </div>
+                <button onclick="saveMenuItem('${menuId}')" class="btn w-full mt-3">Save Changes</button>
+            `;
+            editDiv.classList.remove("hidden");
         }
 
         async function loadOrders() {
@@ -272,7 +361,7 @@
 
         window.deleteMenuItem = async (menuId) => {
             await deleteDoc(doc(db, "restaurant", restaurantId, "menu", menuId));
-            showNotification("Menu item deleted!", "error");
+            showNotification("Dish deleted!", "error");
             loadMenu();
         };
 
@@ -280,46 +369,83 @@
             e.preventDefault();
             const name = document.getElementById("menu-name").value;
             const price = parseFloat(document.getElementById("menu-price").value);
+            if (!name || isNaN(price)) return showNotification("Please enter a name and price!", "error");
             await addDoc(collection(db, "restaurant", restaurantId, "menu"), { name, price, sizes: [], extras: [] });
-            showNotification("Menu item added!");
+            showNotification("Dish added!");
             document.getElementById("menu-name").value = "";
             document.getElementById("menu-price").value = "";
             loadMenu();
         });
 
-        document.getElementById("size-form").addEventListener("submit", async (e) => {
-            e.preventDefault();
-            const menuId = document.getElementById("size-menu-id").value;
-            const name = document.getElementById("size-name").value;
-            const price = parseFloat(document.getElementById("size-price").value);
-            if (!menuId) return showNotification("Select a menu item!", "error");
+        window.addSize = async (menuId) => {
+            const name = document.getElementById(`new-size-name-${menuId}`).value;
+            const price = parseFloat(document.getElementById(`new-size-price-${menuId}`).value);
+            if (!name || isNaN(price)) return showNotification("Enter size name and price!", "error");
             const docRef = doc(db, "restaurant", restaurantId, "menu", menuId);
             const docSnap = await getDoc(docRef);
             const sizes = docSnap.data().sizes || [];
             sizes.push({ name, price });
             await updateDoc(docRef, { sizes });
             showNotification("Size added!");
-            document.getElementById("size-name").value = "";
-            document.getElementById("size-price").value = "";
-            loadMenu();
-        });
+            showEditMenu(menuId);
+        };
 
-        document.getElementById("extra-form").addEventListener("submit", async (e) => {
-            e.preventDefault();
-            const menuId = document.getElementById("extra-menu-id").value;
-            const name = document.getElementById("extra-name").value;
-            const price = parseFloat(document.getElementById("extra-price").value);
-            if (!menuId) return showNotification("Select a menu item!", "error");
+        window.addExtra = async (menuId) => {
+            const name = document.getElementById(`new-extra-name-${menuId}`).value;
+            const price = parseFloat(document.getElementById(`new-extra-price-${menuId}`).value);
+            if (!name || isNaN(price)) return showNotification("Enter extra name and price!", "error");
             const docRef = doc(db, "restaurant", restaurantId, "menu", menuId);
             const docSnap = await getDoc(docRef);
             const extras = docSnap.data().extras || [];
             extras.push({ name, price });
             await updateDoc(docRef, { extras });
             showNotification("Extra added!");
-            document.getElementById("extra-name").value = "";
-            document.getElementById("extra-price").value = "";
+            showEditMenu(menuId);
+        };
+
+        window.deleteSize = async (menuId, index) => {
+            const docRef = doc(db, "restaurant", restaurantId, "menu", menuId);
+            const docSnap = await getDoc(docRef);
+            const sizes = docSnap.data().sizes || [];
+            sizes.splice(index, 1);
+            await updateDoc(docRef, { sizes });
+            showNotification("Size deleted!", "error");
+            showEditMenu(menuId);
+        };
+
+        window.deleteExtra = async (menuId, index) => {
+            const docRef = doc(db, "restaurant", restaurantId, "menu", menuId);
+            const docSnap = await getDoc(docRef);
+            const extras = docSnap.data().extras || [];
+            extras.splice(index, 1);
+            await updateDoc(docRef, { extras });
+            showNotification("Extra deleted!", "error");
+            showEditMenu(menuId);
+        };
+
+        window.saveMenuItem = async (menuId) => {
+            const docRef = doc(db, "restaurant", restaurantId, "menu", menuId);
+            const docSnap = await getDoc(docRef);
+            const data = docSnap.data();
+            const name = document.getElementById(`name-${menuId}`).value;
+            const price = parseFloat(document.getElementById(`price-${menuId}`).value);
+            const sizes = data.sizes || [];
+            const extras = data.extras || [];
+
+            const updatedSizes = sizes.map((_, index) => ({
+                name: document.getElementById(`size-name-${menuId}-${index}`).value,
+                price: parseFloat(document.getElementById(`size-price-${menuId}-${index}`).value)
+            }));
+            const updatedExtras = extras.map((_, index) => ({
+                name: document.getElementById(`extra-name-${menuId}-${index}`).value,
+                price: parseFloat(document.getElementById(`extra-price-${menuId}-${index}`).value)
+            }));
+
+            if (!name || isNaN(price)) return showNotification("Please enter a name and price!", "error");
+            await updateDoc(docRef, { name, price, sizes: updatedSizes, extras: updatedExtras });
+            showNotification("Changes saved!");
             loadMenu();
-        });
+        };
 
         document.getElementById("manage-store-btn").addEventListener("click", () => toggleSection("manage-store"));
         document.getElementById("manage-menu-btn").addEventListener("click", () => { toggleSection("manage-menu"); loadMenu(); });

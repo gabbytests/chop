@@ -15,6 +15,7 @@
         .restaurant-info h1{font-size:2.5rem;font-weight:bold;margin-bottom:10px}
         .restaurant-info p{font-size:1.2rem;opacity:0.8}
         .menu-section{padding:50px 20px;max-width:600px;margin:auto;text-align:center}
+        .menu-list{background:#4a4a4a;padding:20px;border-radius:12px;box-shadow:0 10px 20px rgba(0,0,0,0.1)}
         .menu-item{background:#3f3f3f;padding:15px;border-radius:12px;box-shadow:0 10px 20px rgba(0,0,0,0.05);margin-bottom:15px;display:flex;align-items:center;justify-content:space-between;transition:transform 0.2s ease-in-out;cursor:pointer}
         .menu-item:hover{transform:scale(1.02)}
         .menu-item h4{margin:0;font-size:1.2rem;font-weight:600;color:white}
@@ -24,6 +25,7 @@
         .options-panel{position:fixed;bottom:-100%;left:0;width:100%;background:#3f3f3f;padding:20px;border-radius:20px 20px 0 0;box-shadow:0 -5px 15px rgba(0,0,0,0.3);transition:bottom 0.3s ease;z-index:10}
         .options-panel.show{bottom:0}
         .options-panel h5{font-size:1.2rem;font-weight:600;margin-bottom:15px}
+        .close-btn{position:absolute;top:10px;right:10px;background:#2c2c2e;padding:5px 10px;border-radius:50%;cursor:pointer}
         .option-group{margin-bottom:15px}
         .option-group label{display:block;margin:5px 0;font-size:0.9rem}
         .quantity-controls{display:flex;align-items:center;gap:10px;margin:15px 0}
@@ -67,11 +69,12 @@
 
     <div id="options-panel" class="options-panel">
         <h5 id="options-title"></h5>
-        <div class="option-group">
+        <button class="close-btn" id="close-panel">×</button>
+        <div class="option-group" id="size-group">
             <h6>Size</h6>
             <div id="size-options"></div>
         </div>
-        <div class="option-group">
+        <div class="option-group" id="extra-group">
             <h6>Extras</h6>
             <div id="extra-options"></div>
         </div>
@@ -157,7 +160,7 @@
             const menuSection = document.getElementById("menu-section");
             const fragment = document.createDocumentFragment();
             const menuList = document.createElement("div");
-            menuList.id = "menu-list";
+            menuList.className = "menu-list";
             items.forEach(item => {
                 const div = document.createElement("div");
                 div.className = "menu-item";
@@ -185,14 +188,21 @@
         function showOptionsPanel(item) {
             currentItem = item;
             document.getElementById("options-title").textContent = item.name;
+            const sizeGroup = document.getElementById("size-group");
+            const extraGroup = document.getElementById("extra-group");
             const sizeOptions = document.getElementById("size-options");
             const extraOptions = document.getElementById("extra-options");
+
+            sizeGroup.style.display = item.sizes.length ? "block" : "none";
+            extraGroup.style.display = item.extras.length ? "block" : "none";
+
             sizeOptions.innerHTML = item.sizes.length ? item.sizes.map((size, index) => `
                 <label><input type="radio" name="size" value="${index}" ${index === 0 ? "checked" : ""}> ${size.name} (GH₵${size.price.toFixed(2)})</label>
-            `).join("") : "<p>No sizes available</p>";
+            `).join("") : "";
             extraOptions.innerHTML = item.extras.length ? item.extras.map(extra => `
                 <label><input type="checkbox" name="extra" value="${extra.name}" data-price="${extra.price}"> ${extra.name} (GH₵${extra.price.toFixed(2)})</label>
-            `).join("") : "<p>No extras available</p>";
+            `).join("") : "";
+
             document.getElementById("quantity").textContent = "1";
             document.getElementById("vendor-note").value = "";
             document.getElementById("options-panel").classList.add("show");
@@ -235,11 +245,37 @@
         }
 
         document.addEventListener("click", e => {
-            if (e.target.classList.contains("add-to-cart")) {
-                const item = JSON.parse(e.target.closest(".menu-item").dataset.item);
-                showOptionsPanel(item);
+            const menuItem = e.target.closest(".menu-item");
+            const addButton = e.target.closest(".add-to-cart");
+            const panel = document.getElementById("options-panel");
+
+            if (addButton) {
+                const item = JSON.parse(menuItem.dataset.item);
+                if (item.sizes.length === 0 && item.extras.length === 0) {
+                    const simpleItem = {
+                        name: item.name,
+                        price: item.price,
+                        restaurantId: restaurantId,
+                        quantity: 1,
+                        id: Date.now(),
+                        extras: [],
+                        note: ""
+                    };
+                    addToCart(simpleItem);
+                } else {
+                    showOptionsPanel(item);
+                }
+            } else if (menuItem && !panel.contains(e.target) && !addButton) {
+                const item = JSON.parse(menuItem.dataset.item);
+                if (item.sizes.length > 0 || item.extras.length > 0) {
+                    showOptionsPanel(item);
+                }
+            } else if (!panel.contains(e.target) && panel.classList.contains("show")) {
+                hideOptionsPanel();
             }
         });
+
+        document.getElementById("close-panel").addEventListener("click", hideOptionsPanel);
 
         document.getElementById("increase-qty").addEventListener("click", () => {
             const qty = document.getElementById("quantity");
