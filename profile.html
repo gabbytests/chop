@@ -32,6 +32,19 @@
     transform: scale(1.05); /* 🔥 Slight zoom effect */
 }
 
+/* Prevent zoom on input focus */
+input, textarea {
+            font-size: 16px; /* Ensures iOS doesn't zoom */
+            outline: none;
+        }
+        /* Disable layout shift or zoom */
+        *:focus {
+            zoom: 1 !important; /* Forces no zoom */
+        }
+        html, body {
+            -webkit-text-size-adjust: none; /* Prevents text size adjustment */
+            touch-action: manipulation; /* Disables double-tap zoom */
+        }
     </style>
 </head>
 

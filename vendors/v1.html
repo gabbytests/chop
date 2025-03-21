@@ -13,6 +13,10 @@
             margin: 0;
             padding: 0;
             min-height: 100vh;
+            -webkit-user-select: none;
+            -ms-user-select: none;
+            user-select: none;
+            -webkit-touch-callout: none;
         }
         .container {
             max-width: 900px;
@@ -117,12 +121,25 @@
             .btn { padding: 8px 15px; font-size: 0.9rem; }
             .input { font-size: 0.9rem; }
         }
+        /* Prevent zoom on input focus */
+        input, textarea {
+            font-size: 16px; /* Ensures iOS doesn't zoom */
+            outline: none;
+        }
+        /* Disable layout shift or zoom */
+        *:focus {
+            zoom: 1 !important; /* Forces no zoom */
+        }
+        html, body {
+            -webkit-text-size-adjust: none; /* Prevents text size adjustment */
+            touch-action: manipulation; /* Disables double-tap zoom */
+        }
     </style>
 </head>
 <body>
     <div class="container">
-        <h1 class="text-4xl font-semibold text-center mb-4">🏪 King Gabby Vendor Portal</h1>
-        <p class="text-center text-gray-400 mb-8">Manage your culinary empire with elegance.</p>
+        <h1 class="text-4xl font-semibold text-center mb-4">🏪 <span id="restaurant-name">Vendor Portal</span></h1>
+        <p id="welcome-message" class="text-center text-gray-400 mb-8">Manage your culinary empire with elegance.</p>
 
         <div id="notification" class="hidden notification"></div>
 
@@ -215,8 +232,10 @@
                 const data = docSnap.data();
                 document.getElementById("store-name").value = data.name;
                 document.getElementById("store-image").value = data.image;
+                document.getElementById("restaurant-name").textContent = `${data.name} Vendor Portal`;
+                document.getElementById("welcome-message").textContent = `Manage ${data.name} with elegance.`;
             } else {
-                showNotification("King Gabby not found!", "error");
+                showNotification("Restaurant not found!", "error");
             }
         }
 
@@ -240,12 +259,17 @@
             menuList.innerHTML = output || "<p class='text-gray-400'>No dishes added yet.</p>";
 
             menuList.querySelectorAll(".menu-item").forEach(item => {
-                item.addEventListener("click", () => showMenuDetails(item.dataset.id));
+                item.addEventListener("click", (e) => {
+                    if (!e.target.closest("button")) showMenuDetails(item.dataset.id);
+                });
             });
         }
 
         async function showMenuDetails(menuId) {
-            if (selectedMenuId === menuId && !document.getElementById(`edit-${menuId}`).classList.contains("hidden")) return;
+            if (selectedMenuId === menuId && document.getElementById(`details-${menuId}`).classList.contains("hidden")) {
+                document.getElementById(`details-${menuId}`).classList.remove("hidden");
+                return;
+            }
             selectedMenuId = menuId;
 
             const docRef = doc(db, "restaurant", restaurantId, "menu", menuId);
@@ -259,7 +283,7 @@
                 <p>Sizes: ${sizes.length ? sizes.map(s => `${s.name} (GH₵${s.price.toFixed(2)})`).join(", ") : "None"}</p>
                 <p>Extras: ${extras.length ? extras.map(e => `${e.name} (GH₵${e.price.toFixed(2)})`).join(", ") : "None"}</p>
                 <div class="flex gap-4 mt-3">
-                    <button onclick="showEditMenu('${menuId}')" class="btn btn-edit">Edit</button>
+                    <button class="btn btn-edit" data-menu-id="${menuId}">Edit</button>
                     <button onclick="deleteMenuItem('${menuId}')" class="btn btn-secondary">Delete</button>
                 </div>
             `;
@@ -271,6 +295,8 @@
                     document.getElementById(`edit-${item.dataset.id}`).classList.add("hidden");
                 }
             });
+
+            detailsDiv.querySelector(".btn-edit").addEventListener("click", () => showEditMenu(menuId));
         }
 
         async function showEditMenu(menuId) {
@@ -315,6 +341,7 @@
                 <button onclick="saveMenuItem('${menuId}')" class="btn w-full mt-3">Save Changes</button>
             `;
             editDiv.classList.remove("hidden");
+            document.getElementById(`details-${menuId}`).classList.add("hidden"); // Hide details when editing
         }
 
         async function loadOrders() {
@@ -346,6 +373,7 @@
             const image = document.getElementById("store-image").value;
             await setDoc(doc(db, "restaurant", restaurantId), { name, image }, { merge: true });
             showNotification("Store updated successfully!");
+            loadRestaurantData(); // Refresh welcome message
         });
 
         document.getElementById("delete-store").addEventListener("click", async () => {
@@ -357,6 +385,7 @@
             await deleteDoc(doc(db, "restaurant", restaurantId));
             showNotification("Store deleted successfully!", "error");
             document.getElementById("manage-store").innerHTML = "<p class='text-gray-400'>Store deleted.</p>";
+            loadRestaurantData(); // Reset welcome message
         });
 
         window.deleteMenuItem = async (menuId) => {
