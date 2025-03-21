@@ -10,6 +10,8 @@
     <link href="vendor/bootstrap/css/bootstrap.min.css" rel="stylesheet">
     <link href="vendor/icons/feather.css" rel="stylesheet" type="text/css">
     <link href="css/style.css" rel="stylesheet">
+
+    <script src="https://js.paystack.co/v1/inline.js"></script>
     <style>
         body{font-family:'SF Pro Display',-apple-system,BlinkMacSystemFont,sans-serif;background:#565656;color:#ffffff;margin:0;padding:0;min-height:100vh;overflow-x:hidden}
         .cart-header{background:#565656;padding:15px 25px;border-bottom:1px solid rgba(255,255,255,0.1);display:flex;align-items:center;justify-content:space-between;box-shadow:0 2px 8px rgba(0,0,0,0.3)}
@@ -103,6 +105,9 @@
         const notification = document.getElementById("notification");
         const notificationMessage = document.getElementById("notification-message");
 
+        // Replace with your Paystack public key
+        const PAYSTACK_PUBLIC_KEY = "pk_live_014478be275a6453efab7529d14bd938c8b9b964"; // Use your test/live key
+
         function showNotification(message) {
             notificationMessage.textContent = message;
             notification.classList.add("show");
@@ -126,7 +131,6 @@
         }
 
         function renderCart() {
-            const startTime = performance.now();
             const cart = getCart();
             const deliveryDetails = getDeliveryDetails();
 
@@ -138,14 +142,13 @@
                         <a href="index.html" class="btn btn-primary">Start Shopping</a>
                     </div>
                 `;
-                console.log(`Rendered empty cart in ${(performance.now() - startTime).toFixed(2)}ms`);
                 return;
             }
 
             let subtotal = 0;
             const groupedCart = new Map();
             cart.forEach(item => {
-                const key = `${item.name}-${item.price}`; // Unique key by name and price
+                const key = `${item.name}-${item.price}`;
                 if (groupedCart.has(key)) {
                     const existing = groupedCart.get(key);
                     existing.quantity += item.quantity;
@@ -201,14 +204,11 @@
             `;
 
             addEventListeners();
-            console.log(`Rendered cart in ${(performance.now() - startTime).toFixed(2)}ms`);
         }
 
         function updateItemQuantity(key, delta) {
             const cart = getCart();
             const items = cart.filter(item => `${item.name}-${item.price}` === key);
-            if (!items.length) return;
-
             items.forEach(item => {
                 item.quantity = Math.max(1, item.quantity + delta);
             });
@@ -243,7 +243,7 @@
             document.getElementById("delivery-notes").addEventListener("change", saveDeliveryInputs);
             document.getElementById("delivery-contact").addEventListener("change", saveDeliveryInputs);
 
-            document.getElementById("checkout-btn")?.addEventListener("click", checkout);
+            document.getElementById("checkout-btn")?.addEventListener("click", initiatePaystackPayment);
             document.getElementById("remove-all-btn")?.addEventListener("click", removeAllItems);
         }
 
@@ -256,9 +256,10 @@
             saveDeliveryDetails(deliveryDetails);
         }
 
-        function checkout() {
+        function initiatePaystackPayment() {
             const cart = getCart();
             const deliveryDetails = getDeliveryDetails();
+
             if (cart.length === 0) {
                 showNotification("Your cart is empty!");
                 return;
@@ -268,28 +269,70 @@
                 return;
             }
 
-            const orderItems = cart.map(item => ({
-                name: item.name,
-                price: item.price,
-                quantity: item.quantity,
-                total: item.price * item.quantity,
-                note: item.note
-            }));
-            const totalAmount = orderItems.reduce((sum, item) => sum + item.total, 0) + 5;
-            const orders = JSON.parse(localStorage.getItem("orders") || "[]");
-            orders.push({ items: orderItems, totalAmount, deliveryDetails, timestamp: new Date().toISOString(), id: Date.now() });
-            localStorage.setItem("orders", JSON.stringify(orders));
-            saveCart([]);
-            window.location.href = "successful.html";
+            const subtotal = cart.reduce((sum, item) => sum + item.price * item.quantity, 0);
+            const totalAmount = subtotal + 5; // Including fees
+            const email = "chawmpgh@gmail.com"; // Replace with actual user email (e.g., from profile or input)
+
+            const handler = PaystackPop.setup({
+                key: PAYSTACK_PUBLIC_KEY,
+                email: email,
+                amount: totalAmount * 100, // Paystack expects amount in kobo (cents)
+                currency: "GHS", // Adjust based on your currency
+                ref: "TXN_" + Date.now(), // Unique transaction reference
+                metadata: {
+                    cart: cart,
+                    deliveryDetails: deliveryDetails
+                },
+                callback: function(response) {
+                    // Verify payment (ideally on server-side, simplified here)
+                    verifyPayment(response.reference);
+                },
+                onClose: function() {
+                    showNotification("Payment cancelled.");
+                    window.location.href = "payment-failure.html";
+                }
+            });
+            handler.openIframe();
+        }
+
+        function verifyPayment(reference) {
+            // Simulate server-side verification (replace with actual API call)
+            // For production, use fetch to your backend to call Paystack's Verify Transaction API
+            const mockSuccess = true; // Simulate success for now
+
+            if (mockSuccess) {
+                const cart = getCart();
+                const deliveryDetails = getDeliveryDetails();
+                const orderItems = cart.map(item => ({
+                    name: item.name,
+                    price: item.price,
+                    quantity: item.quantity,
+                    total: item.price * item.quantity,
+                    note: item.note
+                }));
+                const totalAmount = orderItems.reduce((sum, item) => sum + item.total, 0) + 5;
+                const orders = JSON.parse(localStorage.getItem("orders") || "[]");
+                orders.push({
+                    items: orderItems,
+                    totalAmount,
+                    deliveryDetails,
+                    timestamp: new Date().toISOString(),
+                    id: Date.now(),
+                    paymentRef: reference
+                });
+                localStorage.setItem("orders", JSON.stringify(orders));
+                saveCart([]); // Clear cart only on success
+                window.location.href = "successful.html";
+            } else {
+                showNotification("Payment verification failed.");
+                window.location.href = "payment-failure.html";
+            }
         }
 
         document.addEventListener("DOMContentLoaded", () => {
-            const startTime = performance.now();
             renderCart();
             feather.replace();
-            console.log(`Page fully loaded in ${(performance.now() - startTime).toFixed(2)}ms`);
         });
     </script>
-<script>(function(){function c(){var b=a.contentDocument||a.contentWindow.document;if(b){var d=b.createElement('script');d.innerHTML="window.__CF$cv$params={r:'923f9d673eb2bcaa',t:'MTc0MjU4MjgxNS4wMDAwMDA='};var a=document.createElement('script');a.nonce='';a.src='/cdn-cgi/challenge-platform/scripts/jsd/main.js';document.getElementsByTagName('head')[0].appendChild(a);";b.getElementsByTagName('head')[0].appendChild(d)}}if(document.body){var a=document.createElement('iframe');a.height=1;a.width=1;a.style.position='absolute';a.style.top=0;a.style.left=0;a.style.border='none';a.style.visibility='hidden';document.body.appendChild(a);if('loading'!==document.readyState)c();else if(window.addEventListener)document.addEventListener('DOMContentLoaded',c);else{var e=document.onreadystatechange||function(){};document.onreadystatechange=function(b){e(b);'loading'!==document.readyState&&(document.onreadystatechange=e,c())}}}})();</script>
 </body>
 </html>
