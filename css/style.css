@@ -145,7 +145,7 @@ div, a {
 
 .osahan-menu-fotter .row {
     margin: 0;
-    height: 100%; /* Ensure row fills the taller footer */
+    height: 80%; /* Ensure row fills the taller footer */
     align-items: center; /* Center items vertically */
 }
 
@@ -163,13 +163,13 @@ div, a {
 }
 
 .osahan-menu-fotter .col a p {
-    font-size: 1.5rem; /* Bigger icons (previously 19px) */
+    font-size: 1.4rem; /* Bigger icons (previously 19px) */
     margin-bottom: 5px; /* Space between icon and text */
 }
 
 .osahan-menu-fotter .small, 
 .osahan-menu-fotter small {
-    font-size: 0.8rem !important; /* Bigger text (overrides global .small 11px) */
+    font-size: 0.7rem !important; /* Bigger text (overrides global .small 11px) */
     font-weight: 600; /* Keep text bold */
 }
 .osahan-menu-fotter .col.selected a {
