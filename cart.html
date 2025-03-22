@@ -5,8 +5,6 @@
     <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
     <meta name="description" content="Askbootstrap">
     <meta name="author" content="Askbootstrap">
-    <meta name="apple-mobile-web-app-capable" content="yes">
-    <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
     <link rel="icon" type="image/png" href="img/fav.png">
     <title>Chawmp - Your Cart</title>
     <link href="vendor/bootstrap/css/bootstrap.min.css" rel="stylesheet">
@@ -58,9 +56,9 @@
         .text-danger{color:#00c8ff !important;transition:color 0.3s ease,transform 0.2s ease}
         .text-danger:hover{color:#00c8ff !important;transform:scale(1.05)}
         .refund-note{font-size:0.75rem;color:#aaa;text-align:center;margin-top:20px;font-style:italic}
-        input, textarea { font-size: 16px; outline: none; touch-action: manipulation; caret-color: #ffffff; }
-        input:focus, textarea:focus { border: 1px solid #00c8ff; }
-        html, body { -webkit-text-size-adjust: none; touch-action: manipulation; }
+        input, textarea {font-size:16px;outline:none;-webkit-user-select:text !important;user-select:text !important;-webkit-touch-callout:default !important;touch-action:auto !important;}
+        html, body {-webkit-text-size-adjust:none;touch-action:manipulation;}
+   
 /* Footer */
 .osahan-menu-fotter {
     padding: calc(10px + env(safe-area-inset-bottom, 0px)) 10px !important;
@@ -147,7 +145,6 @@
             <div class="col"><a href="profile.html" class="text-white small fw-bold text-decoration-none"><p class="h4 m-0"><i class="feather-user"></i></p>Profile</a></div>
         </div>
     </div>
-    <input type="text" id="keyboard-focus-helper" style="position: absolute; opacity: 0; height: 1px; width: 1px;">
 
     <script>
         const cartContainer = document.getElementById("cart-container");
@@ -227,15 +224,15 @@
 
             cartContainer.innerHTML = `
                 <div class="cart-items">${itemsHTML}</div>
-    <div class="delivery-details">
-        <h6>Delivery Details</h6>
-        <label for="delivery-location">Location</label>
-        <input type="text" id="delivery-location" value="${deliveryDetails.location || ''}" placeholder="Enter your address" autocapitalize="sentences" autocorrect="on">
-        <label for="delivery-notes">Delivery Notes</label>
-        <textarea id="delivery-notes" placeholder="e.g., Leave at door" autocapitalize="sentences" autocorrect="on">${deliveryDetails.deliveryNotes || ''}</textarea>
-        <label for="delivery-contact">Contact Number</label>
-        <input type="tel" id="delivery-contact" value="${deliveryDetails.contactNumber || ''}" placeholder="Enter your phone number" autocapitalize="off" autocorrect="off">
-    </div>
+                <div class="delivery-details">
+                    <h6>Delivery Details</h6><br>
+                    <label for="delivery-location">Location</label>
+                    <input type="text" id="delivery-location" value="${deliveryDetails.location || ''}" placeholder="Enter your address">
+                    <label for="delivery-notes">Delivery Notes</label>
+                    <textarea id="delivery-notes" placeholder="e.g., Leave at door">${deliveryDetails.deliveryNotes || ''}</textarea>
+                    <label for="delivery-contact">Contact Number</label>
+                    <input type="tel" id="delivery-contact" value="${deliveryDetails.contactNumber || ''}" placeholder="Enter your phone number">
+                </div>
                 <div class="order-summary">
                     <p>Subtotal <span class="float-end">GH₵${subtotal.toFixed(2)}</span></p>
                     <p>Processing Fee <span class="float-end">GH₵2.00</span></p>
@@ -243,7 +240,7 @@
                     <hr>
                     <h6>Total <span class="float-end">GH₵${(subtotal + 5).toFixed(2)}</span></h6>
                 </div>
-                <p class="refund-note">By proceeding with checkout, you agree to our refund policy.</p>
+                <p class="refund-note"><i class="feather-info"></i> By proceeding with checkout, you agree to our <a href="refund.html">refund policy</a>.</p>
                 <div class="action-buttons">
                     <button id="checkout-btn" class="btn btn-success w-100">Proceed to Checkout <i class="feather-arrow-right"></i></button>
                     <button id="remove-all-btn" class="btn btn-danger w-100">Remove All <i class="feather-trash-2"></i></button>
@@ -278,42 +275,21 @@
             showNotification("All items removed from cart");
         }
 
-        function forceKeyboardFocus(input) {
-            const helper = document.getElementById("keyboard-focus-helper");
-            helper.focus();
-            setTimeout(() => input.focus(), 50);
-        }
-
         function addEventListeners() {
-    cartContainer.querySelectorAll(".cart-item").forEach(item => {
-        const key = item.dataset.key;
-        item.querySelector(".increase").addEventListener("click", () => updateItemQuantity(key, 1));
-        item.querySelector(".decrease").addEventListener("click", () => updateItemQuantity(key, -1));
-        item.querySelector(".remove").addEventListener("click", () => removeItem(key));
-    });
-
-    const deliveryInputs = {
-        location: document.getElementById("delivery-location"),
-        notes: document.getElementById("delivery-notes"),
-        contact: document.getElementById("delivery-contact")
-    };
-
-    Object.values(deliveryInputs).forEach(input => {
-        if (input) {
-            input.addEventListener("change", saveDeliveryInputs);
-            input.addEventListener("touchstart", () => {
-                input.focus();
-                setTimeout(() => input.focus(), 100); // Ensure keyboard trigger
+            cartContainer.querySelectorAll(".cart-item").forEach(item => {
+                const key = item.dataset.key;
+                item.querySelector(".increase").addEventListener("click", () => updateItemQuantity(key, 1));
+                item.querySelector(".decrease").addEventListener("click", () => updateItemQuantity(key, -1));
+                item.querySelector(".remove").addEventListener("click", () => removeItem(key));
             });
-            input.addEventListener("click", () => {
-                input.focus();
-            });
+
+            document.getElementById("delivery-location").addEventListener("change", saveDeliveryInputs);
+            document.getElementById("delivery-notes").addEventListener("change", saveDeliveryInputs);
+            document.getElementById("delivery-contact").addEventListener("change", saveDeliveryInputs);
+
+            document.getElementById("checkout-btn")?.addEventListener("click", initiatePaystackPayment);
+            document.getElementById("remove-all-btn")?.addEventListener("click", removeAllItems);
         }
-    });
-
-    document.getElementById("checkout-btn")?.addEventListener("click", initiatePaystackPayment);
-    document.getElementById("remove-all-btn")?.addEventListener("click", removeAllItems);
-}
 
         function saveDeliveryInputs() {
             const deliveryDetails = {
@@ -394,14 +370,17 @@
         }
 
         document.addEventListener("DOMContentLoaded", () => {
-            document.querySelectorAll("input, textarea").forEach(input => {
-                input.addEventListener("touchstart", () => forceKeyboardFocus(input));
-                input.addEventListener("click", () => forceKeyboardFocus(input));
+            const inputs = document.querySelectorAll("input, textarea");
+            inputs.forEach(input => {
+                input.addEventListener("touchstart", (e) => {
+                    e.preventDefault();
+                    input.focus();
+                    setTimeout(() => input.focus(), 50);
+                });
             });
+            renderCart();
+            feather.replace();
         });
-    renderCart();
-    feather.replace();
-
     </script>
 </body>
 </html>
