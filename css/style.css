@@ -140,12 +140,12 @@ div, a {
 
 .osahan-menu-fotter {
     padding: 0px 0px !important; /* Increased padding for more space */
-    height: 90px; /* Bigger footer height */
+    height: 70px; /* Bigger footer height */
 }
 
 .osahan-menu-fotter .row {
     margin: 0;
-    height: 80%; /* Ensure row fills the taller footer */
+    height: 85%; /* Ensure row fills the taller footer */
     align-items: center; /* Center items vertically */
 }
 
