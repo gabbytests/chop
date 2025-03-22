@@ -5,6 +5,8 @@
     <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
     <meta name="description" content="Askbootstrap">
     <meta name="author" content="Askbootstrap">
+    <meta name="apple-mobile-web-app-capable" content="yes">
+    <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
     <link rel="icon" type="image/png" href="img/fav.png">
     <title>Chawmp - Your Cart</title>
     <link href="vendor/bootstrap/css/bootstrap.min.css" rel="stylesheet">
@@ -56,9 +58,22 @@
         .text-danger{color:#00c8ff !important;transition:color 0.3s ease,transform 0.2s ease}
         .text-danger:hover{color:#00c8ff !important;transform:scale(1.05)}
         .refund-note{font-size:0.75rem;color:#aaa;text-align:center;margin-top:20px;font-style:italic}
-        input, textarea {font-size:16px;outline:none;-webkit-user-select:text !important;user-select:text !important;-webkit-touch-callout:default !important;touch-action:auto !important;}
-        html, body {-webkit-text-size-adjust:none;touch-action:manipulation;}
-   
+        input, textarea {
+            font-size: 16px;
+            outline: none;
+            -webkit-user-select: text !important;
+            user-select: text !important;
+            -webkit-touch-callout: default !important;
+            touch-action: auto !important;
+            caret-color: #ffffff;
+        }
+        input:focus, textarea:focus {
+            border: 1px solid #00c8ff;
+        }
+        html, body {
+            -webkit-text-size-adjust: none;
+            touch-action: auto; /* Adjusted */
+        }
 /* Footer */
 .osahan-menu-fotter {
     padding: calc(10px + env(safe-area-inset-bottom, 0px)) 10px !important;
@@ -372,10 +387,8 @@
         document.addEventListener("DOMContentLoaded", () => {
             const inputs = document.querySelectorAll("input, textarea");
             inputs.forEach(input => {
-                input.addEventListener("touchstart", (e) => {
-                    e.preventDefault();
-                    input.focus();
-                    setTimeout(() => input.focus(), 50);
+                input.addEventListener("touchstart", () => {
+                    input.focus(); // Simplified, no preventDefault
                 });
             });
             renderCart();
