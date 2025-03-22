@@ -5,13 +5,12 @@
     <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1, user-scalable=no">
     <meta name="description" content="Chawmp - Sleek Food Delivery">
     <meta name="author" content="Askbootstrap">
-    <!-- PWA-specific meta tags -->
-    <meta name="theme-color" content="#565656"> <!-- Matches your background -->
+    <meta name="theme-color" content="#565656">
     <meta name="apple-mobile-web-app-capable" content="yes">
     <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
     <meta name="mobile-web-app-capable" content="yes">
     <link rel="icon" type="image/png" href="img/fav.png">
-    <link rel="apple-touch-icon" href="img/icon-192x192.png"> <!-- Icon for iOS -->
+    <link rel="apple-touch-icon" href="img/icon-192x192.png">
     <title>Chawmp - Trending</title>
     <link href="vendor/slick/slick/slick.css" rel="stylesheet" type="text/css">
     <link href="vendor/slick/slick/slick-theme.css" rel="stylesheet" type="text/css">
@@ -36,10 +35,8 @@
         html, body {-webkit-text-size-adjust:none;touch-action:manipulation;-webkit-user-select:none;-ms-user-select:none;user-select:none;-webkit-touch-callout:none;}
         input, textarea {font-size:16px;outline:none;}
         *:focus {zoom:1 !important;}
-        /* Offline fallback */
         .offline-notice {display:none;text-align:center;padding:20px;color:#fff;background:#ff3b30;border-radius:10px;margin:20px;}
         body.offline .offline-notice {display:block;}
-        body {padding-top:20px;} /* Only retained inline style */
     </style>
 </head>
 <body class="fixed-bottom-bar">
@@ -101,6 +98,7 @@
         </div>
     </div>
 
+    <!-- JavaScript remains unchanged -->
     <script type="module">
         import { initializeApp } from "https://www.gstatic.com/firebasejs/10.9.0/firebase-app.js";
         import { getFirestore, collection, getDocs, query, orderBy, limit, enableIndexedDbPersistence } from "https://www.gstatic.com/firebasejs/10.9.0/firebase-firestore.js";
