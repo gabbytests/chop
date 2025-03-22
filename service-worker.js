@@ -1,12 +1,12 @@
-const CACHE_NAME = "chawmp-cache-v1";
+const CACHE_NAME = "chawmp-cache-v2"; // Bumped version to refresh cache
 const urlsToCache = [
     "/",
     "/index.html",
+    "/cart.html", // Added to cache
     "/vendor/bootstrap/css/bootstrap.min.css",
     "/vendor/slick/slick/slick.css",
     "/vendor/slick/slick/slick-theme.css",
     "/vendor/icons/feather.css",
-    "/css/style.css",
     "/img/fav.png",
     "/img/icon-192x192.png",
     "/img/icon-512x512.png",
@@ -51,7 +51,7 @@ self.addEventListener("fetch", event => {
                     });
             })
             .catch(() => {
-                return caches.match("/index.html"); // Fallback to cached index
+                return caches.match("/index.html");
             })
     );
 });

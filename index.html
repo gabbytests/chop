@@ -16,8 +16,8 @@
     <link href="vendor/slick/slick/slick-theme.css" rel="stylesheet" type="text/css">
     <link href="vendor/icons/feather.css" rel="stylesheet" type="text/css">
     <link href="vendor/bootstrap/css/bootstrap.min.css" rel="stylesheet">
-    <link href="css/style.css" rel="stylesheet">
     <link rel="manifest" href="manifest.json">
+    <link href="css/style.css" rel="stylesheet">
     <style>
         .trending-section {padding:50px 0;}
         .section-title {font-size:2rem;font-weight:700;margin-bottom:20px;color:#fff;text-align:center;}
@@ -32,8 +32,8 @@
         .trending-text {color:white;}
         .text-danger {color:#00c8ff;transition:color 0.3s ease,transform 0.2s ease;}
         .text-danger:hover {color:#00c8ff;transform:scale(1.05);}
-        html, body {-webkit-text-size-adjust:none;touch-action:manipulation;-webkit-user-select:none;-ms-user-select:none;user-select:none;-webkit-touch-callout:none;}
-        input, textarea {font-size:16px;outline:none;}
+        html, body {-webkit-text-size-adjust:none;touch-action:manipulation;-webkit-user-select:none;-ms-user-select:none;user-select:none;-webkit-touch-callout:none;padding-bottom:calc(70px + env(safe-area-inset-bottom));}
+        input, textarea {font-size:16px;outline:none;-webkit-user-select:text !important;user-select:text !important;-webkit-touch-callout:default !important;touch-action:auto !important;}
         *:focus {zoom:1 !important;}
         .offline-notice {display:none;text-align:center;padding:20px;color:#fff;background:#ff3b30;border-radius:10px;margin:20px;}
         body.offline .offline-notice {display:block;}
@@ -46,7 +46,7 @@
                 <div class="title d-flex align-items-center">
                     <a href="trending.html" class="text-white small fw-bold text-decoration-none">
                         <p class="h4"><i class="feather-map-pin"></i></p>
-                    </a>&nbsp;&nbsp;
+                    </a>  
                     <h4 class="fw-bold">UPSA</h4>
                 </div>
             </div>
@@ -98,7 +98,6 @@
         </div>
     </div>
 
-    <!-- JavaScript remains unchanged -->
     <script type="module">
         import { initializeApp } from "https://www.gstatic.com/firebasejs/10.9.0/firebase-app.js";
         import { getFirestore, collection, getDocs, query, orderBy, limit, enableIndexedDbPersistence } from "https://www.gstatic.com/firebasejs/10.9.0/firebase-firestore.js";
@@ -183,6 +182,14 @@
                     .then(() => console.log("PWA Ready!"))
                     .catch(error => console.error("PWA Error:", error));
             }
+            const inputs = document.querySelectorAll("input, textarea");
+            inputs.forEach(input => {
+                input.addEventListener("touchstart", (e) => {
+                    e.preventDefault();
+                    input.focus();
+                    setTimeout(() => input.focus(), 50);
+                });
+            });
         });
 
         window.addEventListener("online", loadTrendingRestaurants);

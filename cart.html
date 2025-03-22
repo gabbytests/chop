@@ -9,11 +9,9 @@
     <title>Chawmp - Your Cart</title>
     <link href="vendor/bootstrap/css/bootstrap.min.css" rel="stylesheet">
     <link href="vendor/icons/feather.css" rel="stylesheet" type="text/css">
-    <link href="css/style.css" rel="stylesheet">
-
     <script src="https://js.paystack.co/v1/inline.js"></script>
     <style>
-        body{font-family:'SF Pro Display',-apple-system,BlinkMacSystemFont,sans-serif;background:#565656;color:#ffffff;margin:0;padding:0;min-height:100vh;overflow-x:hidden}
+        body{font-family:'SF Pro Display',-apple-system,BlinkMacSystemFont,sans-serif;background:#565656;color:#ffffff;margin:0;padding:0;min-height:100vh;overflow-x:hidden;padding-bottom:calc(70px + env(safe-area-inset-bottom));}
         .cart-header{background:#565656;padding:15px 25px;border-bottom:1px solid rgba(255,255,255,0.1);display:flex;align-items:center;justify-content:space-between;box-shadow:0 2px 8px rgba(0,0,0,0.3)}
         .cart-header h4{font-size:1.5rem;font-weight:600;margin:0;flex-grow:1;text-align:center;display:flex;align-items:center;justify-content:center;gap:15px}
         .cart-header .back-btn{background:none;border:none;display:flex;align-items:center;justify-content:center;cursor:pointer;position:absolute;left:10px;top:15px;transition:transform 0.2s ease,opacity 0.2s ease}
@@ -57,26 +55,8 @@
         .text-danger{color:#00c8ff !important;transition:color 0.3s ease,transform 0.2s ease}
         .text-danger:hover{color:#00c8ff !important;transform:scale(1.05)}
         .refund-note{font-size:0.75rem;color:#aaa;text-align:center;margin-top:20px;font-style:italic}
-       /* Prevent zoom on input focus while ensuring input functionality */
-input, textarea {
-    font-size: 16px; /* Prevents iOS zoom */
-    outline: none;   /* Cosmetic, safe to keep */
-    -webkit-user-select: text !important; /* Ensures text can be selected */
-    user-select: text !important;         /* Ensures text can be selected */
-    -webkit-touch-callout: default !important; /* Allows default touch behavior */
-    touch-action: auto !important;        /* Overrides manipulation for inputs */
-}
-
-/* Disable layout shift or zoom globally, but allow inputs to work */
-html, body {
-    -webkit-text-size-adjust: none; /* Prevents text size adjustment */
-    touch-action: manipulation;     /* Disables double-tap zoom globally */
-}
-
-/* Remove overly aggressive zoom override unless needed */
-*:focus {
-    /* Removed zoom: 1 !important; unless you see zoom issues elsewhere */
-}
+        input, textarea {font-size:16px;outline:none;-webkit-user-select:text !important;user-select:text !important;-webkit-touch-callout:default !important;touch-action:auto !important;}
+        html, body {-webkit-text-size-adjust:none;touch-action:manipulation;}
     </style>
 </head>
 <body class="fixed-bottom-bar">
@@ -111,9 +91,7 @@ html, body {
         const cartContainer = document.getElementById("cart-container");
         const notification = document.getElementById("notification");
         const notificationMessage = document.getElementById("notification-message");
-
-        // Replace with your Paystack public key
-        const PAYSTACK_PUBLIC_KEY = "pk_live_014478be275a6453efab7529d14bd938c8b9b964"; // Use your test/live key
+        const PAYSTACK_PUBLIC_KEY = "pk_live_014478be275a6453efab7529d14bd938c8b9b964";
 
         function showNotification(message) {
             notificationMessage.textContent = message;
@@ -277,21 +255,20 @@ html, body {
             }
 
             const subtotal = cart.reduce((sum, item) => sum + item.price * item.quantity, 0);
-            const totalAmount = subtotal + 5; // Including fees
-            const email = "chawmpgh@gmail.com"; // Replace with actual user email (e.g., from profile or input)
+            const totalAmount = subtotal + 5;
+            const email = "chawmpgh@gmail.com";
 
             const handler = PaystackPop.setup({
                 key: PAYSTACK_PUBLIC_KEY,
                 email: email,
-                amount: totalAmount * 100, // Paystack expects amount in kobo (cents)
-                currency: "GHS", // Adjust based on your currency
-                ref: "TXN_" + Date.now(), // Unique transaction reference
+                amount: totalAmount * 100,
+                currency: "GHS",
+                ref: "TXN_" + Date.now(),
                 metadata: {
                     cart: cart,
                     deliveryDetails: deliveryDetails
                 },
                 callback: function(response) {
-                    // Verify payment (ideally on server-side, simplified here)
                     verifyPayment(response.reference);
                 },
                 onClose: function() {
@@ -303,10 +280,7 @@ html, body {
         }
 
         function verifyPayment(reference) {
-            // Simulate server-side verification (replace with actual API call)
-            // For production, use fetch to your backend to call Paystack's Verify Transaction API
-            const mockSuccess = true; // Simulate success for now
-
+            const mockSuccess = true;
             if (mockSuccess) {
                 const cart = getCart();
                 const deliveryDetails = getDeliveryDetails();
@@ -328,7 +302,7 @@ html, body {
                     paymentRef: reference
                 });
                 localStorage.setItem("orders", JSON.stringify(orders));
-                saveCart([]); // Clear cart only on success
+                saveCart([]);
                 window.location.href = "successful.html";
             } else {
                 showNotification("Payment verification failed.");
@@ -337,6 +311,14 @@ html, body {
         }
 
         document.addEventListener("DOMContentLoaded", () => {
+            const inputs = document.querySelectorAll("input, textarea");
+            inputs.forEach(input => {
+                input.addEventListener("touchstart", (e) => {
+                    e.preventDefault();
+                    input.focus();
+                    setTimeout(() => input.focus(), 50);
+                });
+            });
             renderCart();
             feather.replace();
         });
