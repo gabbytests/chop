@@ -5,19 +5,20 @@
     <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1, user-scalable=no">
     <meta name="description" content="Chawmp - Sleek Food Delivery">
     <meta name="author" content="Askbootstrap">
-    <meta name="theme-color" content="#565656">
+    <!-- PWA-specific meta tags -->
+    <meta name="theme-color" content="#565656"> <!-- Matches your background -->
     <meta name="apple-mobile-web-app-capable" content="yes">
     <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
     <meta name="mobile-web-app-capable" content="yes">
-    <link rel="icon" type="image/png" href="/img/fav.png">
-    <link rel="apple-touch-icon" href="/img/icon-192x192.png">
+    <link rel="icon" type="image/png" href="img/fav.png">
+    <link rel="apple-touch-icon" href="img/icon-192x192.png"> <!-- Icon for iOS -->
     <title>Chawmp - Trending</title>
-    <link href="/vendor/slick/slick/slick.css" rel="stylesheet" type="text/css">
-    <link href="/vendor/slick/slick/slick-theme.css" rel="stylesheet" type="text/css">
-    <link href="/vendor/icons/feather.css" rel="stylesheet" type="text/css">
-    <link href="/vendor/bootstrap/css/bootstrap.min.css" rel="stylesheet">
-    <link href="/css/style.css" rel="stylesheet">
-    <link rel="manifest" href="/manifest.json">
+    <link href="vendor/slick/slick/slick.css" rel="stylesheet" type="text/css">
+    <link href="vendor/slick/slick/slick-theme.css" rel="stylesheet" type="text/css">
+    <link href="vendor/icons/feather.css" rel="stylesheet" type="text/css">
+    <link href="vendor/bootstrap/css/bootstrap.min.css" rel="stylesheet">
+    <link href="css/style.css" rel="stylesheet">
+    <link rel="manifest" href="manifest.json">
     <style>
         .trending-section {padding:50px 0;}
         .section-title {font-size:2rem;font-weight:700;margin-bottom:20px;color:#fff;text-align:center;}
@@ -35,16 +36,11 @@
         html, body {-webkit-text-size-adjust:none;touch-action:manipulation;-webkit-user-select:none;-ms-user-select:none;user-select:none;-webkit-touch-callout:none;}
         input, textarea {font-size:16px;outline:none;}
         *:focus {zoom:1 !important;}
+        /* Offline fallback */
         .offline-notice {display:none;text-align:center;padding:20px;color:#fff;background:#ff3b30;border-radius:10px;margin:20px;}
         body.offline .offline-notice {display:block;}
-        /* Updated Styles */
-        body {padding-top:20px;}
-        .osahan-menu-fotter {padding:20px 10px;height:100px;} /* Bigger footer */
-        .osahan-menu-fotter .row {height:100%;align-items:center;}
-        .osahan-menu-fotter .col {display:flex;flex-direction:column;align-items:center;justify-content:center;}
-        .osahan-menu-fotter p.h4 {font-size:2rem;margin-bottom:5px;} /* Bigger icons */
-        .osahan-menu-fotter .small {font-size:1.5rem;font-weight:600;} /* Bigger text */
-        </style>
+        body {padding-top:20px;} /* Only retained inline style */
+    </style>
 </head>
 <body class="fixed-bottom-bar">
     <div class="osahan-home-page">
@@ -53,7 +49,7 @@
                 <div class="title d-flex align-items-center">
                     <a href="trending.html" class="text-white small fw-bold text-decoration-none">
                         <p class="h4"><i class="feather-map-pin"></i></p>
-                    </a>  
+                    </a>&nbsp;&nbsp;
                     <h4 class="fw-bold">UPSA</h4>
                 </div>
             </div>
@@ -154,13 +150,13 @@
                                 <div class="star position-absolute">
                                     <span class="badge text-bg-success"><i class="feather-star"></i> ${data.rating}</span>
                                 </div>
-                                <a href="/restaurant.html?id=${restaurantId}">
+                                <a href="restaurant.html?id=${restaurantId}">
                                     <img alt="${data.name}" src="${data.image}" class="img-fluid item-img" loading="lazy">
                                 </a>
                             </div>
                             <div class="list-card-body">
-                                <h6 class="mb-1"><a href="/restaurant.html?id=${restaurantId}" class="text-white">${data.name}</a></h6>
-                                <p class="time"><a href="/restaurant.html?id=${restaurantId}"><span><i class="feather-clock me-1"></i> ${Math.max(5, data.delivery_time - 15)}-${data.delivery_time} mins</span></a></p>
+                                <h6 class="mb-1"><a href="restaurant.html?id=${restaurantId}" class="text-white">${data.name}</a></h6>
+                                <p class="time"><a href="restaurant.html?id=${restaurantId}"><span><i class="feather-clock me-1"></i> ${Math.max(5, data.delivery_time - 15)}-${data.delivery_time} mins</span></a></p>
                             </div>
                         </div>
                     `;
@@ -185,7 +181,7 @@
         document.addEventListener("DOMContentLoaded", () => {
             loadTrendingRestaurants();
             if ("serviceWorker" in navigator) {
-                navigator.serviceWorker.register("/service-worker.js")
+                navigator.serviceWorker.register("service-worker.js")
                     .then(() => console.log("PWA Ready!"))
                     .catch(error => console.error("PWA Error:", error));
             }

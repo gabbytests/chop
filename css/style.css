@@ -5,6 +5,7 @@ body {
     font-size: 13px;
     color: #00c8ff;
     background: #565656;
+    padding-top:20px;
 }
 
 .body-color {
@@ -138,26 +139,39 @@ div, a {
 }
 
 .osahan-menu-fotter {
-    padding: 0 !important;
+    padding: 25px 10px !important; /* Increased padding for more space */
+    height: 100px; /* Bigger footer height */
 }
 
 .osahan-menu-fotter .row {
     margin: 0;
+    height: 100%; /* Ensure row fills the taller footer */
+    align-items: center; /* Center items vertically */
 }
 
 .osahan-menu-fotter .col {
     padding: 0;
+    display: flex; /* Flex for centering items */
+    flex-direction: column; /* Stack icon and text vertically */
+    align-items: center; /* Center horizontally */
+    justify-content: center; /* Center vertically */
 }
 
 .osahan-menu-fotter .col a {
-    padding: 12px;
+    padding: 5px;
     display: block;
 }
 
 .osahan-menu-fotter .col a p {
-    font-size: 19px;
+    font-size: 1.5rem; /* Bigger icons (previously 19px) */
+    margin-bottom: 5px; /* Space between icon and text */
 }
 
+.osahan-menu-fotter .small, 
+.osahan-menu-fotter small {
+    font-size: 0.8rem !important; /* Bigger text (overrides global .small 11px) */
+    font-weight: 600; /* Keep text bold */
+}
 .osahan-menu-fotter .col.selected a {
     color: #00c8ff;
     
