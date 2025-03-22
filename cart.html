@@ -57,20 +57,26 @@
         .text-danger{color:#00c8ff !important;transition:color 0.3s ease,transform 0.2s ease}
         .text-danger:hover{color:#00c8ff !important;transform:scale(1.05)}
         .refund-note{font-size:0.75rem;color:#aaa;text-align:center;margin-top:20px;font-style:italic}
-        /* Prevent zoom on input focus */
-        input, textarea {
-            font-size: 16px; /* Ensures iOS doesn't zoom */
-            outline: none;
-        }
-        /* Disable layout shift or zoom */
-        *:focus {
-            zoom: 1 !important; /* Forces no zoom */
-        }
-        
-        html, body {
-            -webkit-text-size-adjust: none; /* Prevents text size adjustment */
-            touch-action: manipulation; /* Disables double-tap zoom */
-        }
+       /* Prevent zoom on input focus while ensuring input functionality */
+input, textarea {
+    font-size: 16px; /* Prevents iOS zoom */
+    outline: none;   /* Cosmetic, safe to keep */
+    -webkit-user-select: text !important; /* Ensures text can be selected */
+    user-select: text !important;         /* Ensures text can be selected */
+    -webkit-touch-callout: default !important; /* Allows default touch behavior */
+    touch-action: auto !important;        /* Overrides manipulation for inputs */
+}
+
+/* Disable layout shift or zoom globally, but allow inputs to work */
+html, body {
+    -webkit-text-size-adjust: none; /* Prevents text size adjustment */
+    touch-action: manipulation;     /* Disables double-tap zoom globally */
+}
+
+/* Remove overly aggressive zoom override unless needed */
+*:focus {
+    /* Removed zoom: 1 !important; unless you see zoom issues elsewhere */
+}
     </style>
 </head>
 <body class="fixed-bottom-bar">
