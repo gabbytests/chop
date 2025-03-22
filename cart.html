@@ -57,7 +57,20 @@
         .text-danger{color:#00c8ff !important;transition:color 0.3s ease,transform 0.2s ease}
         .text-danger:hover{color:#00c8ff !important;transform:scale(1.05)}
         .refund-note{font-size:0.75rem;color:#aaa;text-align:center;margin-top:20px;font-style:italic}
-       
+        /* Prevent zoom on input focus */
+        input, textarea {
+            font-size: 16px; /* Ensures iOS doesn't zoom */
+            outline: none;
+        }
+        /* Disable layout shift or zoom */
+        *:focus {
+            zoom: 1 !important; /* Forces no zoom */
+        }
+        
+        html, body {
+            -webkit-text-size-adjust: none; /* Prevents text size adjustment */
+            touch-action: manipulation; /* Disables double-tap zoom */
+        }
     </style>
 </head>
 <body class="fixed-bottom-bar">
