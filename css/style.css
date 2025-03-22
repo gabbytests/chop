@@ -139,8 +139,8 @@ div, a {
 }
 
 .osahan-menu-fotter {
-    padding: 25px 10px !important; /* Increased padding for more space */
-    height: 100px; /* Bigger footer height */
+    padding: 0px 0px !important; /* Increased padding for more space */
+    height: 90px; /* Bigger footer height */
 }
 
 .osahan-menu-fotter .row {
@@ -150,7 +150,7 @@ div, a {
 }
 
 .osahan-menu-fotter .col {
-    padding: 0;
+    padding: 0px;
     display: flex; /* Flex for centering items */
     flex-direction: column; /* Stack icon and text vertically */
     align-items: center; /* Center horizontally */
