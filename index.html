@@ -2,109 +2,46 @@
 <html lang="en">
 <head>
     <meta charset="utf-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
+    <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1, user-scalable=no">
     <meta name="description" content="Chawmp - Sleek Food Delivery">
     <meta name="author" content="Askbootstrap">
+    <!-- PWA-specific meta tags -->
+    <meta name="theme-color" content="#565656"> <!-- Matches your background -->
+    <meta name="apple-mobile-web-app-capable" content="yes">
+    <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
+    <meta name="mobile-web-app-capable" content="yes">
     <link rel="icon" type="image/png" href="img/fav.png">
+    <link rel="apple-touch-icon" href="img/icon-192x192.png"> <!-- Icon for iOS -->
     <title>Chawmp - Trending</title>
     <link href="vendor/slick/slick/slick.css" rel="stylesheet" type="text/css">
     <link href="vendor/slick/slick/slick-theme.css" rel="stylesheet" type="text/css">
     <link href="vendor/icons/feather.css" rel="stylesheet" type="text/css">
     <link href="vendor/bootstrap/css/bootstrap.min.css" rel="stylesheet">
     <link href="css/style.css" rel="stylesheet">
+    <link rel="manifest" href="manifest.json">
     <style>
-        .trending-section {
-            padding: 50px 0;
-        }
-        .section-title {
-            font-size: 2rem;
-            font-weight: 700;
-            margin-bottom: 20px;
-            color: #fff;
-            text-align: center;
-        }
-        #trending-list {
-            display: grid;
-            grid-template-columns: repeat(2, 1fr);
-            gap: 15px;
-            padding: 10px;
-        }
-        .list-card {
-            background: #2c2c2c;
-            border-radius: 5px !important;
-            overflow: hidden;
-            transition: transform 0.3s ease, box-shadow 0.3s ease;
-            border: none;
-        }
-        .list-card:hover {
-            transform: translateY(-5px);
-            box-shadow: 0 8px 16px rgba(0, 0, 0, 0.2);
-        }
-        .list-card-image img {
-            height: 100px !important;
-            object-fit: cover;
-            width: 100%;
-            border-radius: 5px 5px 0 0 !important;
-        }
-        .list-card-body {
-            height: 75px !important;
-            padding: 10px;
-            text-align: left;
-        }
-        .list-card-body h6 {
-            font-size: 1.0rem;
-            font-weight: 600;
-            color: #fff;
-            white-space: normal;
-            overflow-wrap: break-word;
-            display: block;
-            line-height: 1.4;
-            margin-bottom: 5px;
-        }
-        .time {
-            font-size: 0.75rem !important;
-            color: #b0b0b0;
-            margin-top: 8px;
-        }
-        .time span {
-            background: #3a3a3a;
-            color: #fff;
-            padding: 5px 8px;
-            border-radius: 8px;
-            display: inline-block;
-        }
-        .trending-text {
-    color: white;
-}
-.text-danger {
-    color: #00c8ff !important; /* 🔴 Bootstrap Danger Red */
-    transition: color 0.3s ease, transform 0.2s ease;
-}
-
-/* 🔥 Hover Effect for a Smooth Interaction */
-.text-danger:hover {
-    color: #00c8ff !important; /* 🔴 Darker Red on Hover */
-    transform: scale(1.05); /* 🔥 Slight zoom effect */
-}
-/* Prevent zoom on input focus */
-input, textarea {
-            font-size: 16px; /* Ensures iOS doesn't zoom */
-            outline: none;
-        }
-        /* Disable layout shift or zoom */
-        *:focus {
-            zoom: 1 !important; /* Forces no zoom */
-        }
-
-        html, body {
-            -webkit-text-size-adjust: none; /* Prevents text size adjustment */
-            touch-action: manipulation; /* Disables double-tap zoom */
-        }
+        .trending-section {padding:50px 0;}
+        .section-title {font-size:2rem;font-weight:700;margin-bottom:20px;color:#fff;text-align:center;}
+        #trending-list {display:grid;grid-template-columns:repeat(2,1fr);gap:15px;padding:10px;}
+        .list-card {background:#2c2c2c;border-radius:5px;overflow:hidden;transition:transform 0.3s ease,box-shadow 0.3s ease;border:none;}
+        .list-card:hover {transform:translateY(-5px);box-shadow:0 8px 16px rgba(0,0,0,0.2);}
+        .list-card-image img {height:100px;object-fit:cover;width:100%;border-radius:5px 5px 0 0;}
+        .list-card-body {height:75px;padding:10px;text-align:left;}
+        .list-card-body h6 {font-size:1rem;font-weight:600;color:#fff;white-space:normal;overflow-wrap:break-word;display:block;line-height:1.4;margin-bottom:5px;}
+        .time {font-size:0.75rem;color:#b0b0b0;margin-top:8px;}
+        .time span {background:#3a3a3a;color:#fff;padding:5px 8px;border-radius:8px;display:inline-block;}
+        .trending-text {color:white;}
+        .text-danger {color:#00c8ff;transition:color 0.3s ease,transform 0.2s ease;}
+        .text-danger:hover {color:#00c8ff;transform:scale(1.05);}
+        html, body {-webkit-text-size-adjust:none;touch-action:manipulation;-webkit-user-select:none;-ms-user-select:none;user-select:none;-webkit-touch-callout:none;}
+        input, textarea {font-size:16px;outline:none;}
+        *:focus {zoom:1 !important;}
+        /* Offline fallback */
+        .offline-notice {display:none;text-align:center;padding:20px;color:#fff;background:#ff3b30;border-radius:10px;margin:20px;}
+        body.offline .offline-notice {display:block;}
     </style>
 </head>
-
 <body class="fixed-bottom-bar">
-
     <div class="osahan-home-page">
         <div class="bg-primary p-3">
             <div class="text-white">
@@ -113,84 +50,60 @@ input, textarea {
                         <p class="h4"><i class="feather-map-pin"></i></p>
                     </a>&nbsp;&nbsp;
                     <h4 class="fw-bold">UPSA</h4>
-                    
                 </div>
             </div>
             <div class="input-group bg-white rounded shadow-sm mt-3">
-                <span class="input-group-text bg-transparent border-0 rounded-0"><i
-                        class="feather-search"></i></span>
-                <input type="text" class="form-control bg-transparent border-0 rounded-0 px-0 shadow-none"
-                    placeholder="Food, restaurants, stores..." aria-label="Enter Your Location" >
-                    
+                <span class="input-group-text bg-transparent border-0 rounded-0"><i class="feather-search"></i></span>
+                <input type="text" class="form-control bg-transparent border-0 rounded-0 px-0 shadow-none" placeholder="Food, restaurants, stores..." aria-label="Enter Your Location">
             </div>
         </div>
-        
     </div>
-
-
 
     <div class="trending-section">
         <div class="container">
-            <!-- Most popular -->
             <div class="d-flex">
-                <h5 class="trending-text">Trending now 🔥</h5> 
-            <a class="fw-bold ms-auto" href="trending.html">All <i class="feather-chevrons-right"></i></a>
-           </div>
-                
-            <div id="trending-list">
-                <!-- Trending Restaurants Will Be Loaded Here -->
+                <h5 class="trending-text">Trending now 🔥</h5>
+                <a class="fw-bold ms-auto" href="trending.html">All <i class="feather-chevrons-right"></i></a>
             </div>
+            <div class="offline-notice">You’re offline. Showing cached content.</div>
+            <div id="trending-list"></div>
         </div>
     </div>
 
-
-
-     <!-- Footer -->
-     <div class="osahan-menu-fotter fixed-bottom bg-dark px-3 py-2 text-center">
+    <div class="osahan-menu-fotter fixed-bottom bg-dark px-3 py-2 text-center">
         <div class="row">
-            
             <div class="col selected">
                 <a href="index.html" class="text-danger small fw-bold text-decoration-none">
-                    <p class="h4 m-0"><i class="feather-map-pin"></i></p>
-                    Trending
+                    <p class="h4 m-0"><i class="feather-map-pin"></i></p>Trending
                 </a>
             </div>
             <div class="col">
                 <a href="trending.html" class="text-white small fw-bold text-decoration-none">
-                    <p class="h4 m-0"><i class="feather-home text-white"></i></p>
-                    Home
+                    <p class="h4 m-0"><i class="feather-home text-white"></i></p>Home
                 </a>
             </div>
             <div class="col">
-                    <a href="cart.html" class="text-white small fw-bold text-decoration-none">
-                       <p class="h4 m-0"> <i class="feather-shopping-cart"></i></p>
-                       Cart
-                    </a>
-               
+                <a href="cart.html" class="text-white small fw-bold text-decoration-none">
+                    <p class="h4 m-0"><i class="feather-shopping-cart"></i></p>Cart
+                </a>
             </div>
             <div class="col">
                 <a href="orders.html" class="text-white small fw-bold text-decoration-none">
-                    <p class="h4 m-0"><i class="feather-shopping-bag"></i></p>
-                    Orders
+                    <p class="h4 m-0"><i class="feather-shopping-bag"></i></p>Orders
                 </a>
             </div>
             <div class="col">
                 <a href="profile.html" class="text-white small fw-bold text-decoration-none">
-                    <p class="h4 m-0"><i class="feather-user"></i></p>
-                    Profile
+                    <p class="h4 m-0"><i class="feather-user"></i></p>Profile
                 </a>
             </div>
         </div>
     </div>
-
-
-
 
     <script type="module">
         import { initializeApp } from "https://www.gstatic.com/firebasejs/10.9.0/firebase-app.js";
         import { getFirestore, collection, getDocs, query, orderBy, limit, enableIndexedDbPersistence } from "https://www.gstatic.com/firebasejs/10.9.0/firebase-firestore.js";
 
-        // 🔥 Firebase Config
         const firebaseConfig = {
             apiKey: "AIzaSyADvpUQWo75ExePGoCRirD2mM-lmfM4Cmc",
             authDomain: "von600-7982d.firebaseapp.com",
@@ -201,11 +114,9 @@ input, textarea {
             measurementId: "G-E69DMPLXBK"
         };
 
-        // ✅ Initialize Firebase
         const app = initializeApp(firebaseConfig);
         const db = getFirestore(app);
 
-        // ✅ Enable Firestore Caching for Faster Load
         enableIndexedDbPersistence(db).catch(err => console.warn("Firestore persistence failed:", err));
 
         async function loadTrendingRestaurants() {
@@ -213,13 +124,13 @@ input, textarea {
             trendingList.innerHTML = "<p>Loading restaurants...</p>";
 
             try {
-                // ✅ Load from cache first if available (Faster)
                 const cachedData = localStorage.getItem("trendingRestaurants");
-                if (cachedData) {
+                if (cachedData && !navigator.onLine) {
                     trendingList.innerHTML = cachedData;
+                    document.body.classList.add("offline");
+                    return;
                 }
 
-                // ✅ Fetch from Firestore
                 const q = query(collection(db, "restaurant"), orderBy("rating", "desc"), limit(6));
                 const querySnapshot = await getDocs(q);
 
@@ -232,7 +143,6 @@ input, textarea {
                 querySnapshot.forEach(doc => {
                     const data = doc.data();
                     const restaurantId = doc.id;
-
                     output += `
                         <div class="list-card">
                             <div class="list-card-image">
@@ -252,17 +162,38 @@ input, textarea {
                 });
 
                 trendingList.innerHTML = output;
-                localStorage.setItem("trendingRestaurants", output); // ✅ Save for fast reloads
+                localStorage.setItem("trendingRestaurants", output);
+                document.body.classList.remove("offline");
 
             } catch (error) {
                 console.error("❌ ERROR fetching trending restaurants:", error);
-                trendingList.innerHTML = "<p>Failed to load restaurants.</p>";
+                const cachedData = localStorage.getItem("trendingRestaurants");
+                if (cachedData) {
+                    trendingList.innerHTML = cachedData;
+                    document.body.classList.add("offline");
+                } else {
+                    trendingList.innerHTML = "<p>Failed to load restaurants. Please check your connection.</p>";
+                }
             }
         }
 
-        // ✅ Load Trending Restaurants on Page Load
-        document.addEventListener("DOMContentLoaded", loadTrendingRestaurants);
-    </script>
+        document.addEventListener("DOMContentLoaded", () => {
+            loadTrendingRestaurants();
+            if ("serviceWorker" in navigator) {
+                navigator.serviceWorker.register("service-worker.js")
+                    .then(() => console.log("PWA Ready!"))
+                    .catch(error => console.error("PWA Error:", error));
+            }
+        });
 
+        window.addEventListener("online", loadTrendingRestaurants);
+        window.addEventListener("offline", () => {
+            const cachedData = localStorage.getItem("trendingRestaurants");
+            if (cachedData) {
+                document.getElementById("trending-list").innerHTML = cachedData;
+                document.body.classList.add("offline");
+            }
+        });
+    </script>
 </body>
 </html>
