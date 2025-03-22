@@ -58,22 +58,9 @@
         .text-danger{color:#00c8ff !important;transition:color 0.3s ease,transform 0.2s ease}
         .text-danger:hover{color:#00c8ff !important;transform:scale(1.05)}
         .refund-note{font-size:0.75rem;color:#aaa;text-align:center;margin-top:20px;font-style:italic}
-        input, textarea {
-            font-size: 16px;
-            outline: none;
-            -webkit-user-select: text !important;
-            user-select: text !important;
-            -webkit-touch-callout: default !important;
-            touch-action: auto !important;
-            caret-color: #ffffff;
-        }
-        input:focus, textarea:focus {
-            border: 1px solid #00c8ff;
-        }
-        html, body {
-            -webkit-text-size-adjust: none;
-            touch-action: auto; /* Adjusted */
-        }
+        input, textarea { font-size: 16px; outline: none; touch-action: manipulation; caret-color: #ffffff; }
+        input:focus, textarea:focus { border: 1px solid #00c8ff; }
+        html, body { -webkit-text-size-adjust: none; touch-action: manipulation; }
 /* Footer */
 .osahan-menu-fotter {
     padding: calc(10px + env(safe-area-inset-bottom, 0px)) 10px !important;
@@ -292,12 +279,10 @@
         }
 
         function forceKeyboardFocus(input) {
-    const helper = document.getElementById("keyboard-focus-helper");
-    helper.focus();
-    setTimeout(() => {
-        input.focus();
-    }, 50);
-}
+            const helper = document.getElementById("keyboard-focus-helper");
+            helper.focus();
+            setTimeout(() => input.focus(), 50);
+        }
 
         function addEventListeners() {
     cartContainer.querySelectorAll(".cart-item").forEach(item => {
@@ -409,20 +394,14 @@
         }
 
         document.addEventListener("DOMContentLoaded", () => {
-    const inputs = document.querySelectorAll("input, textarea");
-    inputs.forEach(input => {
-        input.addEventListener("touchstart", () => {
-            input.focus();
-            // Slight delay to ensure keyboard triggers
-            setTimeout(() => input.focus(), 100);
+            document.querySelectorAll("input, textarea").forEach(input => {
+                input.addEventListener("touchstart", () => forceKeyboardFocus(input));
+                input.addEventListener("click", () => forceKeyboardFocus(input));
+            });
         });
-        input.addEventListener("click", () => {
-            input.focus(); // Fallback for click events
-        });
-    });
     renderCart();
     feather.replace();
-});
+
     </script>
 </body>
 </html>
