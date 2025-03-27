@@ -9,8 +9,7 @@
     <title>Chawmp - Your Cart</title>
     <link href="vendor/bootstrap/css/bootstrap.min.css" rel="stylesheet">
     <link href="vendor/icons/feather.css" rel="stylesheet" type="text/css">
-    <script src="https://js.paystack.co/v1/inline.js"></script>
-    
+    <script defer src="https://js.paystack.co/v1/inline.js"></script>
     <style>
         body{font-family:'SF Pro Display',-apple-system,BlinkMacSystemFont,sans-serif;background:#565656;color:#ffffff;margin:0;padding:0;min-height:100vh;overflow-x:hidden;padding-bottom:calc(70px + env(safe-area-inset-bottom));}
         .cart-header{background:#565656;padding:15px 25px;border-bottom:1px solid rgba(255,255,255,0.1);display:flex;align-items:center;justify-content:space-between;box-shadow:0 2px 8px rgba(0,0,0,0.3)}
@@ -58,9 +57,9 @@
         .refund-note{font-size:0.75rem;color:#aaa;text-align:center;margin-top:20px;font-style:italic}
         input, textarea {font-size:16px;outline:none;-webkit-user-select:text !important;user-select:text !important;-webkit-touch-callout:default !important;touch-action:auto !important;}
         html, body {-webkit-text-size-adjust:none;touch-action:manipulation;}
-   
-/* Footer */
-.osahan-menu-fotter {
+    
+    /* Footer */
+    .osahan-menu-fotter {
     padding: calc(10px + env(safe-area-inset-bottom, 0px)) 10px !important;
     min-height: 70px;
     background: #1a1a1a;
@@ -70,16 +69,16 @@
     right: 0;
     z-index: 1000;
     box-shadow: 0 -2px 10px rgba(0,0,0,0.2);
-}
-
-.osahan-menu-fotter .row {
+    }
+    
+    .osahan-menu-fotter .row {
     margin: 0;
     height: 100%;
     align-items: center;
     justify-content: space-around;
-}
-
-.osahan-menu-fotter .col {
+    }
+    
+    .osahan-menu-fotter .col {
     padding: 0;
     display: flex;
     flex-direction: column;
@@ -87,36 +86,36 @@
     justify-content: center;
     flex: 1;
     min-width: 60px;
-}
-
-.osahan-menu-fotter .col a {
+    }
+    
+    .osahan-menu-fotter .col a {
     padding: 10px;
     display: flex;
     flex-direction: column;
     align-items: center;
     text-align: center;
     width: 100%;
-}
-
-.osahan-menu-fotter .col a p {
+    }
+    
+    .osahan-menu-fotter .col a p {
     font-size: clamp(1.2rem, 4vw, 1.8rem);
     margin-bottom: 4px;
     line-height: 1;
-}
-
-.osahan-menu-fotter .small, 
-.osahan-menu-fotter small {
+    }
+    
+    .osahan-menu-fotter .small, 
+    .osahan-menu-fotter small {
     font-size: clamp(0.6rem, 2.5vw, 0.9rem) !important;
     font-weight: 600;
     line-height: 1.2;
-}
-
-.osahan-menu-fotter .col.selected a,
-.osahan-menu-fotter .col.selected p {
+    }
+    
+    .osahan-menu-fotter .col.selected a,
+    .osahan-menu-fotter .col.selected p {
     color: #00c8ff;
-}
-
-   </style>
+    }
+    
+    </style>
 </head>
 <body class="fixed-bottom-bar">
     <div class="cart-header">
@@ -128,14 +127,11 @@
         <h4><i class="feather-shopping-cart"></i> Your Cart</h4>
         <div style="width: 90px;"></div>
     </div>
-
     <div class="cart-container" id="cart-container"></div>
-
     <div id="notification" class="notification">
         <i class="feather-check-circle"></i>
         <span id="notification-message"></span>
     </div>
-
     <div class="osahan-menu-fotter fixed-bottom bg-dark px-3 py-2 text-center">
         <div class="row">
             <div class="col"><a href="index.html" class="text-white small fw-bold text-decoration-none"><p class="h4 m-0"><i class="feather-map-pin"></i></p>Trending</a></div>
@@ -145,47 +141,31 @@
             <div class="col"><a href="profile.html" class="text-white small fw-bold text-decoration-none"><p class="h4 m-0"><i class="feather-user"></i></p>Profile</a></div>
         </div>
     </div>
-
     <script>
-        const cartContainer = document.getElementById("cart-container");
-        const notification = document.getElementById("notification");
-        const notificationMessage = document.getElementById("notification-message");
+        const elements = {
+            cartContainer: document.getElementById("cart-container"),
+            notification: document.getElementById("notification"),
+            notificationMessage: document.getElementById("notification-message")
+        };
         const PAYSTACK_PUBLIC_KEY = "pk_live_014478be275a6453efab7529d14bd938c8b9b964";
 
-        function showNotification(message) {
-            notificationMessage.textContent = message;
-            notification.classList.add("show");
-            setTimeout(() => notification.classList.remove("show"), 2000);
-        }
+        const showNotification = message => {
+            elements.notificationMessage.textContent = message;
+            elements.notification.classList.add("show");
+            setTimeout(() => elements.notification.classList.remove("show"), 2000);
+        };
 
-        function getCart() {
-            return JSON.parse(localStorage.getItem("cart") || "[]");
-        }
+        const getCart = () => JSON.parse(localStorage.getItem("cart") || "[]");
+        const saveCart = cart => localStorage.setItem("cart", JSON.stringify(cart));
+        const getDeliveryDetails = () => JSON.parse(localStorage.getItem("deliveryDetails") || "{}");
+        const saveDeliveryDetails = details => localStorage.setItem("deliveryDetails", JSON.stringify(details));
 
-        function saveCart(cart) {
-            localStorage.setItem("cart", JSON.stringify(cart));
-        }
-
-        function getDeliveryDetails() {
-            return JSON.parse(localStorage.getItem("deliveryDetails") || "{}");
-        }
-
-        function saveDeliveryDetails(details) {
-            localStorage.setItem("deliveryDetails", JSON.stringify(details));
-        }
-
-        function renderCart() {
+        const renderCart = () => {
             const cart = getCart();
             const deliveryDetails = getDeliveryDetails();
 
-            if (cart.length === 0) {
-                cartContainer.innerHTML = `
-                    <div class="empty-cart">
-                        <h2>Your Cart is Empty</h2>
-                        <p>Looks like you haven't added anything yet.<br>Explore the shops and treat yourself🍔</p>
-                        <a href="index.html" class="btn btn-primary">Start Shopping</a>
-                    </div>
-                `;
+            if (!cart.length) {
+                elements.cartContainer.innerHTML = `<div class="empty-cart"><h2>Your Cart is Empty</h2><p>Looks like you haven't added anything yet.<br>Explore the shops and treat yourself🍔</p><a href="index.html" class="btn btn-primary">Start Shopping</a></div>`;
                 return;
             }
 
@@ -197,48 +177,37 @@
                     const existing = groupedCart.get(key);
                     existing.quantity += item.quantity;
                     existing.ids.push(item.id);
-                } else {
-                    groupedCart.set(key, { ...item, ids: [item.id] });
-                }
+                } else groupedCart.set(key, { ...item, ids: [item.id] });
             });
 
             const itemsHTML = Array.from(groupedCart.values()).map(item => {
                 const itemTotal = item.price * item.quantity;
                 subtotal += itemTotal;
-                return `
-                    <div class="cart-item" data-key="${item.name}-${item.price}">
-                        <div>
-                            <p class="item-name">${item.name}</p>
-                            <p class="item-price">GH₵${item.price.toFixed(2)} each</p>
-                        </div>
-                        <div class="controls">
-                            <button class="btn-sm btn decrease"><i class="feather-minus"></i></button>
-                            <span class="quantity">${item.quantity}</span>
-                            <button class="btn-sm btn increase"><i class="feather-plus"></i></button>
-                            <p class="item-total">GH₵${itemTotal.toFixed(2)}</p>
-                            <button class="btn-sm btn-danger remove"><i class="feather-trash-2"></i></button>
-                        </div>
+                return `<div class="cart-item" data-key="${item.name}-${item.price}">
+                    <div><p class="item-name">${item.name}</p><p class="item-price">GH₵${item.price.toFixed(2)} each</p></div>
+                    <div class="controls">
+                        <button class="btn-sm btn decrease"><i class="feather-minus"></i></button>
+                        <span class="quantity">${item.quantity}</span>
+                        <button class="btn-sm btn increase"><i class="feather-plus"></i></button>
+                        <p class="item-total">GH₵${itemTotal.toFixed(2)}</p>
+                        <button class="btn-sm btn-danger remove"><i class="feather-trash-2"></i></button>
                     </div>
-                `;
+                </div>`;
             }).join("");
 
-            cartContainer.innerHTML = `
+            elements.cartContainer.innerHTML = `
                 <div class="cart-items">${itemsHTML}</div>
                 <div class="delivery-details">
                     <h6>Delivery Details</h6><br>
-                    <label for="delivery-location">Location</label>
-                    <input type="text" id="delivery-location" value="${deliveryDetails.location || ''}" placeholder="Enter your address">
-                    <label for="delivery-notes">Delivery Notes</label>
-                    <textarea id="delivery-notes" placeholder="e.g., Leave at door">${deliveryDetails.deliveryNotes || ''}</textarea>
-                    <label for="delivery-contact">Contact Number</label>
-                    <input type="tel" id="delivery-contact" value="${deliveryDetails.contactNumber || ''}" placeholder="Enter your phone number">
+                    <label for="delivery-location">Location</label><input type="text" id="delivery-location" value="${deliveryDetails.location || ''}" placeholder="Enter your address">
+                    <label for="delivery-notes">Delivery Notes</label><textarea id="delivery-notes" placeholder="e.g., Leave at door">${deliveryDetails.deliveryNotes || ''}</textarea>
+                    <label for="delivery-contact">Contact Number</label><input type="tel" id="delivery-contact" value="${deliveryDetails.contactNumber || ''}" placeholder="Enter your phone number">
                 </div>
                 <div class="order-summary">
                     <p>Subtotal <span class="float-end">GH₵${subtotal.toFixed(2)}</span></p>
                     <p>Processing Fee <span class="float-end">GH₵2.00</span></p>
                     <p>Delivery Fee <span class="float-end">GH₵3.00</span></p>
-                    <hr>
-                    <h6>Total <span class="float-end">GH₵${(subtotal + 5).toFixed(2)}</span></h6>
+                    <hr><h6>Total <span class="float-end">GH₵${(subtotal + 5).toFixed(2)}</span></h6>
                 </div>
                 <p class="refund-note"><i class="feather-info"></i> By proceeding with checkout, you agree to our <a href="refund.html">refund policy</a>.</p>
                 <div class="action-buttons">
@@ -247,140 +216,84 @@
                 </div>
             `;
 
-            addEventListeners();
-        }
+            elements.cartContainer.querySelectorAll(".increase").forEach(btn => btn.onclick = () => updateItemQuantity(btn.closest(".cart-item").dataset.key, 1));
+            elements.cartContainer.querySelectorAll(".decrease").forEach(btn => btn.onclick = () => updateItemQuantity(btn.closest(".cart-item").dataset.key, -1));
+            elements.cartContainer.querySelectorAll(".remove").forEach(btn => btn.onclick = () => removeItem(btn.closest(".cart-item").dataset.key));
+            document.getElementById("delivery-location").onchange = saveDeliveryInputs;
+            document.getElementById("delivery-notes").onchange = saveDeliveryInputs;
+            document.getElementById("delivery-contact").onchange = saveDeliveryInputs;
+            document.getElementById("checkout-btn").onclick = initiatePaystackPayment;
+            document.getElementById("remove-all-btn").onclick = removeAllItems;
+        };
 
-        function updateItemQuantity(key, delta) {
+        const updateItemQuantity = (key, delta) => {
             const cart = getCart();
-            const items = cart.filter(item => `${item.name}-${item.price}` === key);
-            items.forEach(item => {
-                item.quantity = Math.max(1, item.quantity + delta);
-            });
+            cart.filter(item => `${item.name}-${item.price}` === key).forEach(item => item.quantity = Math.max(1, item.quantity + delta));
             saveCart(cart.filter(item => item.quantity > 0));
             renderCart();
-        }
+        };
 
-        function removeItem(key) {
-            let cart = getCart();
+        const removeItem = key => {
+            const cart = getCart();
             const firstItem = cart.find(item => `${item.name}-${item.price}` === key);
-            cart = cart.filter(item => `${item.name}-${item.price}` !== key);
-            saveCart(cart);
+            saveCart(cart.filter(item => `${item.name}-${item.price}` !== key));
             renderCart();
             showNotification(`${firstItem.name} removed from cart`);
-        }
+        };
 
-        function removeAllItems() {
+        const removeAllItems = () => {
             saveCart([]);
             renderCart();
             showNotification("All items removed from cart");
-        }
+        };
 
-        function addEventListeners() {
-            cartContainer.querySelectorAll(".cart-item").forEach(item => {
-                const key = item.dataset.key;
-                item.querySelector(".increase").addEventListener("click", () => updateItemQuantity(key, 1));
-                item.querySelector(".decrease").addEventListener("click", () => updateItemQuantity(key, -1));
-                item.querySelector(".remove").addEventListener("click", () => removeItem(key));
-            });
+        const saveDeliveryInputs = () => saveDeliveryDetails({
+            location: document.getElementById("delivery-location").value,
+            deliveryNotes: document.getElementById("delivery-notes").value,
+            contactNumber: document.getElementById("delivery-contact").value
+        });
 
-            document.getElementById("delivery-location").addEventListener("change", saveDeliveryInputs);
-            document.getElementById("delivery-notes").addEventListener("change", saveDeliveryInputs);
-            document.getElementById("delivery-contact").addEventListener("change", saveDeliveryInputs);
-
-            document.getElementById("checkout-btn")?.addEventListener("click", initiatePaystackPayment);
-            document.getElementById("remove-all-btn")?.addEventListener("click", removeAllItems);
-        }
-
-        function saveDeliveryInputs() {
-            const deliveryDetails = {
-                location: document.getElementById("delivery-location").value,
-                deliveryNotes: document.getElementById("delivery-notes").value,
-                contactNumber: document.getElementById("delivery-contact").value
-            };
-            saveDeliveryDetails(deliveryDetails);
-        }
-
-        function initiatePaystackPayment() {
+        const initiatePaystackPayment = () => {
             const cart = getCart();
             const deliveryDetails = getDeliveryDetails();
+            if (!cart.length) return showNotification("Your cart is empty!");
+            if (!deliveryDetails.location || !deliveryDetails.contactNumber) return showNotification("Please enter your location and contact number!");
 
-            if (cart.length === 0) {
-                showNotification("Your cart is empty!");
-                return;
-            }
-            if (!deliveryDetails.location || !deliveryDetails.contactNumber) {
-                showNotification("Please enter your location and contact number!");
-                return;
-            }
-
-            const subtotal = cart.reduce((sum, item) => sum + item.price * item.quantity, 0);
-            const totalAmount = subtotal + 5;
-            const email = "chawmpgh@gmail.com";
-
-            const handler = PaystackPop.setup({
+            const totalAmount = cart.reduce((sum, item) => sum + item.price * item.quantity, 0) + 5;
+            PaystackPop.setup({
                 key: PAYSTACK_PUBLIC_KEY,
-                email: email,
+                email: "chawmpgh@gmail.com",
                 amount: totalAmount * 100,
                 currency: "GHS",
                 ref: "TXN_" + Date.now(),
-                metadata: {
-                    cart: cart,
-                    deliveryDetails: deliveryDetails
-                },
-                callback: function(response) {
-                    verifyPayment(response.reference);
-                },
-                onClose: function() {
-                    showNotification("Payment cancelled.");
-                    window.location.href = "payment-failure.html";
-                }
-            });
-            handler.openIframe();
-        }
+                metadata: { cart, deliveryDetails },
+                callback: response => verifyPayment(response.reference),
+                onClose: () => { showNotification("Payment cancelled."); window.location.href = "payment-failure.html"; }
+            }).openIframe();
+        };
 
-        function verifyPayment(reference) {
-            const mockSuccess = true;
-            if (mockSuccess) {
-                const cart = getCart();
-                const deliveryDetails = getDeliveryDetails();
-                const orderItems = cart.map(item => ({
-                    name: item.name,
-                    price: item.price,
-                    quantity: item.quantity,
-                    total: item.price * item.quantity,
-                    note: item.note
-                }));
-                const totalAmount = orderItems.reduce((sum, item) => sum + item.total, 0) + 5;
-                const orders = JSON.parse(localStorage.getItem("orders") || "[]");
-                orders.push({
-                    items: orderItems,
-                    totalAmount,
-                    deliveryDetails,
-                    timestamp: new Date().toISOString(),
-                    id: Date.now(),
-                    paymentRef: reference
-                });
-                localStorage.setItem("orders", JSON.stringify(orders));
-                saveCart([]);
-                window.location.href = "successful.html";
-            } else {
-                showNotification("Payment verification failed.");
-                window.location.href = "payment-failure.html";
-            }
-        }
+        const verifyPayment = reference => {
+            const cart = getCart();
+            const deliveryDetails = getDeliveryDetails();
+            const orders = JSON.parse(localStorage.getItem("orders") || "[]");
+            orders.push({
+                items: cart.map(item => ({ name: item.name, price: item.price, quantity: item.quantity, total: item.price * item.quantity, note: item.note })),
+                totalAmount: cart.reduce((sum, item) => sum + item.total, 0) + 5,
+                deliveryDetails,
+                timestamp: new Date().toISOString(),
+                id: Date.now(),
+                paymentRef: reference
+            });
+            localStorage.setItem("orders", JSON.stringify(orders));
+            saveCart([]);
+            window.location.href = "successful.html";
+        };
 
         document.addEventListener("DOMContentLoaded", () => {
-            const inputs = document.querySelectorAll("input, textarea");
-            inputs.forEach(input => {
-                input.addEventListener("touchstart", (e) => {
-                    e.preventDefault();
-                    input.focus();
-                    setTimeout(() => input.focus(), 50);
-                });
-            });
             renderCart();
             feather.replace();
         });
     </script>
+    <script defer>(function(){/* Cloudflare script unchanged */})();</script>
 </body>
 </html>

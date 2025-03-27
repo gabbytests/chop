@@ -75,11 +75,9 @@
             <p id="restaurant-info"></p>
         </div>
     </div>
-
     <div class="menu-section" id="menu-section">
         <p class="menu-loading">Heating up the menu... 🍲</p>
     </div>
-
     <div id="options-panel" class="options-panel">
         <h5 id="options-title"></h5>
         <button class="close-btn" id="close-panel">×</button>
@@ -99,16 +97,13 @@
         <textarea id="vendor-note" class="note-input" placeholder="Add a note to the vendor..."></textarea>
         <button id="confirm-add" class="confirm-btn">Add to Cart</button>
     </div>
-
     <div id="toast" class="toast-container">
         <div class="toast-content">
             <i data-feather="check-circle"></i>
             <span id="toast-message"></span>
         </div>
     </div>
-
     <a href="cart.html" class="view-cart-btn" id="view-cart-btn">View Cart</a>
-
     <script type="module">
         import { initializeApp } from "https://www.gstatic.com/firebasejs/10.9.0/firebase-app.js";
         import { getFirestore, collection, getDocs, doc, getDoc, enableIndexedDbPersistence } from "https://www.gstatic.com/firebasejs/10.9.0/firebase-firestore.js";
@@ -122,55 +117,56 @@
             appId: "1:164591218045:web:afe17512e16573e7903014",
             measurementId: "G-E69DMPLXBK"
         };
-
         const app = initializeApp(firebaseConfig);
         const db = getFirestore(app);
         enableIndexedDbPersistence(db).catch(err => console.warn("Firestore persistence failed:", err));
 
         const urlParams = new URLSearchParams(window.location.search);
         const restaurantId = urlParams.get("id");
-        let cartCount = 0;
-        let currentItem = null;
+        let cartCount = 0, currentItem = null;
+        const elements = {
+            restaurantName: document.getElementById("restaurant-name"),
+            restaurantInfo: document.getElementById("restaurant-info"),
+            restaurantImage: document.getElementById("restaurant-image"),
+            menuSection: document.getElementById("menu-section"),
+            optionsPanel: document.getElementById("options-panel"),
+            optionsTitle: document.getElementById("options-title"),
+            sizeGroup: document.getElementById("size-group"),
+            extraGroup: document.getElementById("extra-group"),
+            sizeOptions: document.getElementById("size-options"),
+            extraOptions: document.getElementById("extra-options"),
+            quantity: document.getElementById("quantity"),
+            vendorNote: document.getElementById("vendor-note"),
+            toast: document.getElementById("toast"),
+            toastMessage: document.getElementById("toast-message"),
+            viewCartBtn: document.getElementById("view-cart-btn")
+        };
 
-        async function loadRestaurant() {
-            const start = performance.now();
+        const loadRestaurant = async () => {
             const docRef = doc(db, "restaurant", restaurantId);
             const docSnap = await getDoc(docRef);
             if (!docSnap.exists()) {
-                document.getElementById("restaurant-name").textContent = "Restaurant Not Found";
-                document.getElementById("restaurant-info").textContent = "";
+                elements.restaurantName.textContent = "Restaurant Not Found";
+                elements.restaurantInfo.textContent = "";
                 return;
             }
             const data = docSnap.data();
             requestAnimationFrame(() => {
-                document.getElementById("restaurant-name").textContent = data.name;
-                document.getElementById("restaurant-info").textContent = `⭐ ${data.rating} | ⏳ ${data.delivery_time} mins`;
-                document.getElementById("restaurant-image").src = data.image;
+                elements.restaurantName.textContent = data.name;
+                elements.restaurantInfo.textContent = `⭐ ${data.rating} | ⏳ ${data.delivery_time} mins`;
+                elements.restaurantImage.src = data.image;
             });
-            console.log(`Restaurant loaded in ${(performance.now() - start).toFixed(2)}ms`);
-        }
+        };
 
-        async function loadMenu() {
-            const start = performance.now();
+        const loadMenu = async () => {
             const menuRef = collection(db, "restaurant", restaurantId, "menu");
             const querySnapshot = await getDocs(menuRef);
             const menuItems = [];
-            querySnapshot.forEach(docSnapshot => {
-                const data = docSnapshot.data();
-                menuItems.push({
-                    id: docSnapshot.id,
-                    name: data.name,
-                    price: parseFloat(data.price) || 0,
-                    sizes: data.sizes || [],
-                    extras: data.extras || []
-                });
-            });
+            querySnapshot.forEach(doc => menuItems.push({ id: doc.id, ...doc.data(), price: parseFloat(doc.data().price) || 0, sizes: doc.data().sizes || [], extras: doc.data().extras || [] }));
             renderMenu(menuItems);
-            console.log(`Menu loaded in ${(performance.now() - start).toFixed(2)}ms`);
-        }
+        };
 
-        function renderMenu(items) {
-            const menuSection = document.getElementById("menu-section");
+        const renderMenu = items => {
             const fragment = document.createDocumentFragment();
             const menuList = document.createElement("div");
             menuList.className = "menu-list";
@@ -178,13 +174,7 @@
                 const div = document.createElement("div");
                 div.className = "menu-item";
                 div.dataset.item = JSON.stringify(item);
-                div.innerHTML = `
-                    <div>
-                        <h4>${item.name}</h4>
-                        <p>GH₵${item.price.toFixed(2)}</p>
-                    </div>
-                    <button class="add-to-cart">Add +</button>
-                `;
+                div.innerHTML = `<div><h4>${item.name}</h4><p>GH₵${item.price.toFixed(2)}</p></div><button class="add-to-cart">Add +</button>`;
                 menuList.appendChild(div);
             });
             const menuHeader = document.createElement("h2");
@@ -192,150 +182,90 @@
             menuHeader.textContent = "Menu";
             fragment.appendChild(menuHeader);
             fragment.appendChild(menuList);
-            requestAnimationFrame(() => {
-                menuSection.innerHTML = "";
-                menuSection.appendChild(fragment);
-            });
-        }
+            requestAnimationFrame(() => elements.menuSection.replaceChildren(fragment));
+        };
 
-        function showOptionsPanel(item) {
+        const showOptionsPanel = item => {
             currentItem = item;
-            document.getElementById("options-title").textContent = item.name;
-            const sizeGroup = document.getElementById("size-group");
-            const extraGroup = document.getElementById("extra-group");
-            const sizeOptions = document.getElementById("size-options");
-            const extraOptions = document.getElementById("extra-options");
+            elements.optionsTitle.textContent = item.name;
+            elements.sizeGroup.style.display = item.sizes.length ? "block" : "none";
+            elements.extraGroup.style.display = item.extras.length ? "block" : "none";
+            elements.sizeOptions.innerHTML = item.sizes.length ? item.sizes.map((size, i) => `<label><input type="radio" name="size" value="${i}" ${i === 0 ? "checked" : ""}> ${size.name} (GH₵${size.price.toFixed(2)})</label>`).join("") : "";
+            elements.extraOptions.innerHTML = item.extras.length ? item.extras.map(extra => `<label><input type="checkbox" name="extra" value="${extra.name}" data-price="${extra.price}"> ${extra.name} (GH₵${extra.price.toFixed(2)})</label>`).join("") : "";
+            elements.quantity.textContent = "1";
+            elements.vendorNote.value = "";
+            elements.optionsPanel.classList.add("show");
+        };
 
-            sizeGroup.style.display = item.sizes.length ? "block" : "none";
-            extraGroup.style.display = item.extras.length ? "block" : "none";
-
-            sizeOptions.innerHTML = item.sizes.length ? item.sizes.map((size, index) => `
-                <label><input type="radio" name="size" value="${index}" ${index === 0 ? "checked" : ""}> ${size.name} (GH₵${size.price.toFixed(2)})</label>
-            `).join("") : "";
-            extraOptions.innerHTML = item.extras.length ? item.extras.map(extra => `
-                <label><input type="checkbox" name="extra" value="${extra.name}" data-price="${extra.price}"> ${extra.name} (GH₵${extra.price.toFixed(2)})</label>
-            `).join("") : "";
-
-            document.getElementById("quantity").textContent = "1";
-            document.getElementById("vendor-note").value = "";
-            document.getElementById("options-panel").classList.add("show");
-        }
-
-        function hideOptionsPanel() {
-            document.getElementById("options-panel").classList.remove("show");
+        const hideOptionsPanel = () => {
+            elements.optionsPanel.classList.remove("show");
             currentItem = null;
-        }
+        };
 
-        function showToast(message) {
-            const toast = document.getElementById("toast");
-            document.getElementById("toast-message").textContent = message;
+        const showToast = message => {
+            elements.toastMessage.textContent = message;
             requestAnimationFrame(() => {
-                toast.classList.add("show");
-                setTimeout(() => toast.classList.remove("show"), 2000);
+                elements.toast.classList.add("show");
+                setTimeout(() => elements.toast.classList.remove("show"), 2000);
             });
-        }
+        };
 
-        function updateCartButton() {
-            const viewCartBtn = document.getElementById("view-cart-btn");
-            requestAnimationFrame(() => {
-                viewCartBtn.classList.toggle("show", cartCount > 0);
-            });
-        }
-
-        function loadCartCount() {
-            const cart = JSON.parse(localStorage.getItem("cart") || "[]");
-            cartCount = cart.length;
+        const updateCartButton = () => requestAnimationFrame(() => elements.viewCartBtn.classList.toggle("show", cartCount > 0));
+        const loadCartCount = () => {
+            cartCount = JSON.parse(localStorage.getItem("cart") || "[]").length;
             updateCartButton();
-        }
+        };
 
-        function addToCart(item) {
+        const addToCart = item => {
             const cart = JSON.parse(localStorage.getItem("cart") || "[]");
             cart.push(item);
             localStorage.setItem("cart", JSON.stringify(cart));
             cartCount++;
             updateCartButton();
             showToast(`${item.name} added to cart!`);
-        }
+        };
 
-        document.addEventListener("click", e => {
+        document.onclick = e => {
             const menuItem = e.target.closest(".menu-item");
             const addButton = e.target.closest(".add-to-cart");
-            const panel = document.getElementById("options-panel");
-
             if (addButton) {
                 const item = JSON.parse(menuItem.dataset.item);
-                if (item.sizes.length === 0 && item.extras.length === 0) {
-                    const simpleItem = {
-                        name: item.name,
-                        price: item.price,
-                        restaurantId: restaurantId,
-                        quantity: 1,
-                        id: Date.now(),
-                        extras: [],
-                        note: ""
-                    };
-                    addToCart(simpleItem);
-                } else {
-                    showOptionsPanel(item);
-                }
-            } else if (menuItem && !panel.contains(e.target) && !addButton) {
+                if (!item.sizes.length && !item.extras.length) addToCart({ name: item.name, price: item.price, restaurantId, quantity: 1, id: Date.now(), extras: [], note: "" });
+                else showOptionsPanel(item);
+            } else if (menuItem && !elements.optionsPanel.contains(e.target)) {
                 const item = JSON.parse(menuItem.dataset.item);
-                if (item.sizes.length > 0 || item.extras.length > 0) {
-                    showOptionsPanel(item);
-                }
-            } else if (!panel.contains(e.target) && panel.classList.contains("show")) {
-                hideOptionsPanel();
-            }
-        });
+                if (item.sizes.length || item.extras.length) showOptionsPanel(item);
+            } else if (!elements.optionsPanel.contains(e.target) && elements.optionsPanel.classList.contains("show")) hideOptionsPanel();
+        };
 
-        document.getElementById("close-panel").addEventListener("click", hideOptionsPanel);
-
-        document.getElementById("increase-qty").addEventListener("click", () => {
-            const qty = document.getElementById("quantity");
-            qty.textContent = parseInt(qty.textContent) + 1;
-        });
-
-        document.getElementById("decrease-qty").addEventListener("click", () => {
-            const qty = document.getElementById("quantity");
-            if (parseInt(qty.textContent) > 1) qty.textContent = parseInt(qty.textContent) - 1;
-        });
-
-        document.getElementById("confirm-add").addEventListener("click", () => {
+        document.getElementById("close-panel").onclick = hideOptionsPanel;
+        document.getElementById("increase-qty").onclick = () => elements.quantity.textContent = parseInt(elements.quantity.textContent) + 1;
+        document.getElementById("decrease-qty").onclick = () => elements.quantity.textContent = Math.max(1, parseInt(elements.quantity.textContent) - 1);
+        document.getElementById("confirm-add").onclick = () => {
             if (!currentItem) return;
             const sizeIndex = document.querySelector('input[name="size"]:checked')?.value;
             const selectedSize = sizeIndex ? currentItem.sizes[sizeIndex] : null;
-            const extras = Array.from(document.querySelectorAll('input[name="extra"]:checked')).map(input => ({
-                name: input.value,
-                price: parseFloat(input.dataset.price)
-            }));
-            const quantity = parseInt(document.getElementById("quantity").textContent);
-            const note = document.getElementById("vendor-note").value;
-
+            const extras = Array.from(document.querySelectorAll('input[name="extra"]:checked')).map(input => ({ name: input.value, price: parseFloat(input.dataset.price) }));
             const item = {
                 name: selectedSize ? `${currentItem.name} (${selectedSize.name})` : currentItem.name,
                 price: selectedSize ? selectedSize.price : currentItem.price,
-                restaurantId: restaurantId,
-                quantity: quantity,
+                restaurantId,
+                quantity: parseInt(elements.quantity.textContent),
                 id: Date.now(),
-                extras: extras,
-                note: note
+                extras,
+                note: elements.vendorNote.value
             };
-            extras.forEach(extra => {
-                item.name += ` + ${extra.name}`;
-                item.price += extra.price;
-            });
+            extras.forEach(extra => { item.name += ` + ${extra.name}`; item.price += extra.price; });
             addToCart(item);
             hideOptionsPanel();
-        });
+        };
 
         document.addEventListener("DOMContentLoaded", async () => {
-            const start = performance.now();
             await Promise.all([loadRestaurant(), loadMenu()]);
             loadCartCount();
             feather.replace();
-            console.log(`Page fully loaded in ${(performance.now() - start).toFixed(2)}ms`);
         });
     </script>
-<script>(function(){function c(){var b=a.contentDocument||a.contentWindow.document;if(b){var d=b.createElement('script');d.innerHTML="window.__CF$cv$params={r:'923f6a091cb54509',t:'MTc0MjU4MDcxMS4wMDAwMDA='};var a=document.createElement('script');a.nonce='';a.src='/cdn-cgi/challenge-platform/scripts/jsd/main.js';document.getElementsByTagName('head')[0].appendChild(a);";b.getElementsByTagName('head')[0].appendChild(d)}}if(document.body){var a=document.createElement('iframe');a.height=1;a.width=1;a.style.position='absolute';a.style.top=0;a.style.left=0;a.style.border='none';a.style.visibility='hidden';document.body.appendChild(a);if('loading'!==document.readyState)c();else if(window.addEventListener)document.addEventListener('DOMContentLoaded',c);else{var e=document.onreadystatechange||function(){};document.onreadystatechange=function(b){e(b);'loading'!==document.readyState&&(document.onreadystatechange=e,c())}}}})();</script>
+   <script>(function(){function c(){var b=a.contentDocument||a.contentWindow.document;if(b){var d=b.createElement('script');d.innerHTML="window.__CF$cv$params={r:'923f6a091cb54509',t:'MTc0MjU4MDcxMS4wMDAwMDA='};var a=document.createElement('script');a.nonce='';a.src='/cdn-cgi/challenge-platform/scripts/jsd/main.js';document.getElementsByTagName('head')[0].appendChild(a);";b.getElementsByTagName('head')[0].appendChild(d)}}if(document.body){var a=document.createElement('iframe');a.height=1;a.width=1;a.style.position='absolute';a.style.top=0;a.style.left=0;a.style.border='none';a.style.visibility='hidden';document.body.appendChild(a);if('loading'!==document.readyState)c();else if(window.addEventListener)document.addEventListener('DOMContentLoaded',c);else{var e=document.onreadystatechange||function(){};document.onreadystatechange=function(b){e(b);'loading'!==document.readyState&&(document.onreadystatechange=e,c())}}}})();</script>
 </body>
 </html>
