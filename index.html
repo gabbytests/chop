@@ -63,7 +63,7 @@
                 <h5 class="trending-text">Trending now 🔥</h5>
                 <a class="fw-bold ms-auto" href="trending.html">All <i class="feather-chevrons-right"></i></a>
             </div>
-            <div class="offline-notice">You’re offline. Showing cached content.</div>
+            <div class="offline-notice">You’re offline. Check your internet connection.</div>
             <div id="trending-list"></div>
         </div>
     </div>
@@ -101,6 +101,7 @@
     <script type="module">
         import { initializeApp } from "https://www.gstatic.com/firebasejs/10.9.0/firebase-app.js";
         import { getFirestore, collection, getDocs, query, orderBy, limit, enableIndexedDbPersistence } from "https://www.gstatic.com/firebasejs/10.9.0/firebase-firestore.js";
+        import { getAuth, onAuthStateChanged } from "https://www.gstatic.com/firebasejs/10.9.0/firebase-auth.js";
 
         const firebaseConfig = {
             apiKey: "AIzaSyADvpUQWo75ExePGoCRirD2mM-lmfM4Cmc",
@@ -114,6 +115,7 @@
 
         const app = initializeApp(firebaseConfig);
         const db = getFirestore(app);
+        const auth = getAuth(app);
 
         enableIndexedDbPersistence(db).catch(err => console.warn("Firestore persistence failed:", err));
 

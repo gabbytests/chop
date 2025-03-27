@@ -1,85 +1,54 @@
 <!DOCTYPE html>
 <html lang="en">
-
 <head>
     <meta charset="utf-8">
     <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
-    <meta name="description" content="Askbootstrap">
+    <meta name="description" content="Chawmp - Sleek Food Delivery">
     <meta name="author" content="Askbootstrap">
+    <meta name="theme-color" content="#565656">
+    <meta name="apple-mobile-web-app-capable" content="yes">
+    <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
+    <meta name="mobile-web-app-capable" content="yes">
     <link rel="icon" type="image/png" href="img/fav.png">
-    <title>Chawmp</title>
-    <!-- Slick Slider -->
-    <link href="vendor/slick/slick/slick.css" rel="stylesheet" type="text/css">
-    <link href="vendor/slick/slick/slick-theme.css" rel="stylesheet" type="text/css">
-    <!-- Feather Icon-->
-    <link href="vendor/icons/feather.css" rel="stylesheet" type="text/css">
-    <!-- Bootstrap core CSS -->
+    <link rel="apple-touch-icon" href="img/icon-192x192.png">
+    <title>Chawmp - Profile</title>
     <link href="vendor/bootstrap/css/bootstrap.min.css" rel="stylesheet">
-    <!-- Custom styles for this template -->
+    <link href="vendor/icons/feather.css" rel="stylesheet" type="text/css">
     <link href="css/style.css" rel="stylesheet">
-    <!-- Sidebar CSS -->
     <link href="vendor/sidebar/demo.css" rel="stylesheet">
-
+    <link rel="manifest" href="manifest.json">
     <style>
-        .text-danger {
-    color: #00c8ff !important; /* 🔴 Bootstrap Danger Red */
-    transition: color 0.3s ease, transform 0.2s ease;
-}
-
-/* 🔥 Hover Effect for a Smooth Interaction */
-.text-danger:hover {
-    color: #00c8ff !important; /* 🔴 Darker Red on Hover */
-    transform: scale(1.05); /* 🔥 Slight zoom effect */
-}
-
-/* Prevent zoom on input focus */
-input, textarea {
-            font-size: 16px; /* Ensures iOS doesn't zoom */
-            outline: none;
-        }
-        /* Disable layout shift or zoom */
-        *:focus {
-            zoom: 1 !important; /* Forces no zoom */
-        }
-        html, body {
-            -webkit-text-size-adjust: none; /* Prevents text size adjustment */
-            touch-action: manipulation; /* Disables double-tap zoom */
-        }
+        .profile-details .user-info { padding: 20px; text-align: center; }
+        .profile-details .btn-danger { background: #dc3545; border: none; padding: 10px 20px; border-radius: 50px; font-size: 1rem; font-weight: 600; transition: background 0.3s ease; }
+        .profile-details .btn-danger:hover { background: #c82333; }
+        .text-danger { color: #00c8ff !important; transition: color 0.3s ease, transform 0.2s ease; }
+        .text-danger:hover { color: #00c8ff !important; transform: scale(1.05); }
+        .osahan-profile { padding-bottom: 100px; } /* Ensure content clears footer */
+        html, body { -webkit-text-size-adjust: none; touch-action: manipulation; }
     </style>
 </head>
-
 <body class="fixed-bottom-bar">
-   
     <div class="osahan-profile">
-        <div class=" ">
-            <div class="bg-primary border-bottom p-3 d-flex align-items-center">
-                <a class="toggle togglew toggle-2" href="profile.html#"><span></span></a>
-                <h4 class="fw-bold m-0 text-white">Profile</h4>
-            </div>
+        <div class="bg-primary border-bottom p-3 d-flex align-items-center">
+            <a class="toggle togglew toggle-2" href="#"><span></span></a>
+            <h4 class="fw-bold m-0 text-white">Profile</h4>
         </div>
-        <!-- profile -->
         <div class="container position-relative">
             <div class="py-5 osahan-profile row">
                 <div class="col-md-4 mb-3">
                     <div class="bg-dark rounded shadow-sm sticky_sidebar overflow-hidden">
-                        
-                        
-                        <!-- profile-details -->
-                         
                         <div class="bg-dark profile-details">
-                           
-                           
+                            <!-- User Info Section --><br>
+                            <div class="user-info border-bottom">
+                                <i class="feather-user bg-danger text-white p-3 rounded-circle" style="font-size: 2rem;"></i><br><br>
+                                <h5 id="user-name" class="fw-bold mt-2 text-white">Loading...</h5>
+                                <p id="user-email" class="text-white-50 small">Loading...</p>
+                            </div>
+
+                            <!-- Navigation Links -->
                             <a href="account.html" class="d-flex w-100 align-items-center border-bottom px-3 py-4">
                                 <div class="left me-3">
                                     <h6 class="fw-bold m-0 text-white"><i class="feather-user bg-danger text-white p-2 rounded-circle me-2"></i> My Account</h6>
-                                </div>
-                                <div class="right ms-auto">
-                                    <span class="fw-bold m-0"><i class="feather-chevron-right h6 m-0"></i></span>
-                                </div>
-                            </a>
-                            <a href="cms.html" class="d-flex w-100 align-items-center border-bottom px-3 py-4">
-                                <div class="left me-3">
-                                    <h6 class="fw-bold m-0 text-white"><i class="feather-chevrons-right bg-danger text-white p-2 rounded-circle me-2"></i> CMS</h6>
                                 </div>
                                 <div class="right ms-auto">
                                     <span class="fw-bold m-0"><i class="feather-chevron-right h6 m-0"></i></span>
@@ -95,7 +64,7 @@ input, textarea {
                             </a>
                             <a href="terms.html" class="d-flex w-100 align-items-center border-bottom px-3 py-4">
                                 <div class="left me-3">
-                                    <h6 class="fw-bold m-0 text-white"><i class="feather-info bg-success text-white p-2 rounded-circle me-2"></i> Term of use</h6>
+                                    <h6 class="fw-bold m-0 text-white"><i class="feather-info bg-success text-white p-2 rounded-circle me-2"></i> Terms of Use</h6>
                                 </div>
                                 <div class="right ms-auto">
                                     <span class="fw-bold m-0"><i class="feather-chevron-right h6 m-0"></i></span>
@@ -103,68 +72,81 @@ input, textarea {
                             </a>
                             <a href="privacy.html" class="d-flex w-100 align-items-center px-3 py-4">
                                 <div class="left me-3">
-                                    <h6 class="fw-bold m-0 text-white"><i class="feather-lock bg-warning text-white p-2 rounded-circle me-2"></i> Privacy policy</h6>
+                                    <h6 class="fw-bold m-0 text-white"><i class="feather-lock bg-warning text-white p-2 rounded-circle me-2"></i> Privacy Policy</h6>
                                 </div>
                                 <div class="right ms-auto">
                                     <span class="fw-bold m-0"><i class="feather-chevron-right h6 m-0"></i></span>
                                 </div>
                             </a>
+
+                            <!-- Logout Button -->
+                            <div class="text-center px-3 py-4">
+                                <button id="logout-btn" class="btn btn-danger w-100">Logout <i class="feather-log-out"></i></button>
+                            </div>
                         </div>
                     </div>
                 </div>
-                
             </div>
         </div>
+
         <!-- Footer -->
-        <div class="osahan-menu-fotter fixed-bottom bg-dark px-3 py-2 text-center  ">
+        <div class="osahan-menu-fotter fixed-bottom bg-dark px-3 py-2 text-center">
             <div class="row">
-                <div class="col">
-                    <a href="index.html" class="text-white small fw-bold text-decoration-none">
-                        <p class="h4 m-0"><i class="feather-map-pin"></i></p>
-                        Trending
-                    </a>
-                </div>
-                <div class="col selected">
-                    <a href="trending.html" class="text-white small fw-bold text-decoration-none">
-                        <p class="h4 m-0"><i class="feather-home text-white"></i></p>
-                        Home
-                    </a>
-                </div>
-                <div class="col">
-                        <a href="cart.html" class="text-white small fw-bold text-decoration-none">
-                           <p class="h4 m-0"> <i class="feather-shopping-cart"></i></p>
-                           Cart
-                        </a>
-                   
-                </div>
-                <div class="col">
-                    <a href="orders.html" class="text-white small fw-bold text-decoration-none">
-                        <p class="h4 m-0"><i class="feather-shopping-bag"></i></p>
-                        Orders
-                    </a>
-                </div>
-                <div class="col">
-                    <a href="profile.html" class="text-danger small fw-bold text-decoration-none">
-                        <p class="h4 m-0"><i class="feather-user"></i></p>
-                        Profile
-                    </a>
-                </div>
+                <div class="col"><a href="index.html" class="text-white small fw-bold text-decoration-none"><p class="h4 m-0"><i class="feather-map-pin"></i></p>Trending</a></div>
+                <div class="col"><a href="trending.html" class="text-white small fw-bold text-decoration-none"><p class="h4 m-0"><i class="feather-home text-white"></i></p>Home</a></div>
+                <div class="col"><a href="cart.html" class="text-white small fw-bold text-decoration-none"><p class="h4 m-0"><i class="feather-shopping-cart"></i></p>Cart</a></div>
+                <div class="col"><a href="orders.html" class="text-white small fw-bold text-decoration-none"><p class="h4 m-0"><i class="feather-shopping-bag"></i></p>Orders</a></div>
+                <div class="col selected"><a href="profile.html" class="text-danger small fw-bold text-decoration-none"><p class="h4 m-0"><i class="feather-user"></i></p>Profile</a></div>
             </div>
         </div>
     </div>
-    <!-- footer -->
-    
-    
-    
-    <!-- Bootstrap core JavaScript -->
-    <script data-cfasync="false" src="cdn-cgi/scripts/5c5dd728/cloudflare-static/email-decode.min.js"></script><script type="9fc14a9d4371a2d524557445-text/javascript" src="vendor/jquery/jquery.min.js"></script>
-    <script type="9fc14a9d4371a2d524557445-text/javascript" src="vendor/bootstrap/js/bootstrap.bundle.min.js"></script>
-    <!-- slick Slider JS-->
-    <script type="9fc14a9d4371a2d524557445-text/javascript" src="vendor/slick/slick/slick.min.js"></script>
-    <!-- Sidebar JS-->
-    <script type="9fc14a9d4371a2d524557445-text/javascript" src="vendor/sidebar/hc-offcanvas-nav.js"></script>
-    <!-- Custom scripts for all pages-->
-    <script type="9fc14a9d4371a2d524557445-text/javascript" src="js/osahan.js"></script>
-<script src="cdn-cgi/scripts/7d0fa10a/cloudflare-static/rocket-loader.min.js" data-cf-settings="9fc14a9d4371a2d524557445-|49" defer></script></body>
 
+    <!-- Scripts -->
+    <script type="module">
+        import { initializeApp } from "https://www.gstatic.com/firebasejs/10.9.0/firebase-app.js";
+        import { getAuth, signOut, onAuthStateChanged } from "https://www.gstatic.com/firebasejs/10.9.0/firebase-auth.js";
+        import { getFirestore, doc, getDoc } from "https://www.gstatic.com/firebasejs/10.9.0/firebase-firestore.js";
+
+        const firebaseConfig = {
+            apiKey: "AIzaSyADvpUQWo75ExePGoCRirD2mM-lmfM4Cmc",
+            authDomain: "von600-7982d.firebaseapp.com",
+            projectId: "von600-7982d",
+            storageBucket: "von600-7982d.appspot.com",
+            messagingSenderId: "164591218045",
+            appId: "1:164591218045:web:afe17512e16573e7903014",
+            measurementId: "G-E69DMPLXBK"
+        };
+
+        const app = initializeApp(firebaseConfig);
+        const auth = getAuth(app);
+        const db = getFirestore(app);
+
+        const userName = document.getElementById("user-name");
+        const userEmail = document.getElementById("user-email");
+        const logoutBtn = document.getElementById("logout-btn");
+
+        async function loadUserProfile(user) {
+            const userDocRef = doc(db, "users", user.uid);
+            const userDoc = await getDoc(userDocRef);
+            const userData = userDoc.exists() ? userDoc.data() : { name: user.email.split("@")[0] };
+
+            userName.textContent = userData.name;
+            userEmail.textContent = user.email;
+        }
+
+        logoutBtn.addEventListener("click", () => signOut(auth).then(() => window.location.href = "login.html").catch(console.error));
+
+        document.addEventListener("DOMContentLoaded", () => {
+            onAuthStateChanged(auth, (user) => {
+                if (!user) window.location.href = "login.html";
+                else loadUserProfile(user);
+            });
+        });
+    </script>
+    <script defer src="vendor/jquery/jquery.min.js"></script>
+    <script defer src="vendor/bootstrap/js/bootstrap.bundle.min.js"></script>
+    <script defer src="vendor/slick/slick/slick.min.js"></script>
+    <script defer src="vendor/sidebar/hc-offcanvas-nav.js"></script>
+    <script defer src="js/osahan.js"></script>
+</body>
 </html>
