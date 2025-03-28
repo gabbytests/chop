@@ -107,7 +107,7 @@
     
         const CACHE_KEY = "user-profile-cache";
     
-        // Load profile data quickly, prioritizing cache
+        // Load profile data quickly, prioritizing cache but checking for updates
         const loadUserProfileFast = (user) => {
             const cachedData = localStorage.getItem(`${CACHE_KEY}-${user.uid}`);
             if (cachedData) {
@@ -123,23 +123,33 @@
                     elements.userName.textContent = user.email.split("@")[0]; // Quick placeholder
                     elements.userEmail.textContent = user.email;
                 });
-                // Fetch from Firestore only if no cache
-                updateProfileFromFirestore(user);
             }
+            // Always check Firestore for updates
+            updateProfileFromFirestore(user);
         };
     
-        // Fetch and update profile from Firestore, then cache it
+        // Fetch and update profile from Firestore, then cache it with smooth transition
         const updateProfileFromFirestore = async (user) => {
             try {
                 const userDocRef = doc(db, "users", user.uid);
                 const userDoc = await getDoc(userDocRef);
                 const userData = userDoc.exists() ? userDoc.data() : { name: user.email.split("@")[0] };
                 const profileData = { name: userData.name, email: user.email };
-                // Update UI
-                requestAnimationFrame(() => {
-                    elements.userName.textContent = profileData.name;
+                
+                // Smoothly update UI if name has changed
+                if (elements.userName.textContent !== profileData.name) {
+                    elements.userName.style.transition = "opacity 0.3s ease";
+                    elements.userName.style.opacity = "0";
+                    setTimeout(() => {
+                        elements.userName.textContent = profileData.name;
+                        elements.userName.style.opacity = "1";
+                    }, 300); // Match transition duration
+                }
+                // Update email (no transition needed)
+                if (elements.userEmail.textContent !== profileData.email) {
                     elements.userEmail.textContent = profileData.email;
-                });
+                }
+                
                 // Cache the result
                 localStorage.setItem(`${CACHE_KEY}-${user.uid}`, JSON.stringify(profileData));
             } catch (e) {
