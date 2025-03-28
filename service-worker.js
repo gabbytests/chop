@@ -1,8 +1,8 @@
-const CACHE_NAME = "chawmp-cache-v2"; // Bumped version to refresh cache
+const CACHE_NAME = "chawmp-cache-v2";
 const urlsToCache = [
     "/",
     "/index.html",
-    "/cart.html", // Added to cache
+    "/cart.html",
     "/vendor/bootstrap/css/bootstrap.min.css",
     "/vendor/slick/slick/slick.css",
     "/vendor/slick/slick/slick-theme.css",
@@ -52,6 +52,38 @@ self.addEventListener("fetch", event => {
             })
             .catch(() => {
                 return caches.match("/index.html");
+            })
+    );
+});
+
+// Handle push notifications
+self.addEventListener("push", event => {
+    const data = event.data.json();
+    const title = data.notification.title;
+    const options = {
+        body: data.notification.body,
+        icon: "/img/icon-192x192.png",
+        data: { url: "/index.html" } // Default URL to open on click
+    };
+    event.waitUntil(self.registration.showNotification(title, options));
+});
+
+// Handle notification clicks
+self.addEventListener("notificationclick", event => {
+    event.notification.close();
+    const url = event.notification.data.url || "/index.html";
+
+    event.waitUntil(
+        clients.matchAll({ type: "window", includeUncontrolled: true })
+            .then(clientList => {
+                for (const client of clientList) {
+                    if (client.url.includes(url) && "focus" in client) {
+                        return client.focus();
+                    }
+                }
+                if (clients.openWindow) {
+                    return clients.openWindow(url);
+                }
             })
     );
 });

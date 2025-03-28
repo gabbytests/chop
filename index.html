@@ -128,6 +128,7 @@
         import { initializeApp } from "https://www.gstatic.com/firebasejs/10.9.0/firebase-app.js";
         import { getAuth, onAuthStateChanged } from "https://www.gstatic.com/firebasejs/10.9.0/firebase-auth.js";
         import { getFirestore, collection, getDocs, query, orderBy, limit, enableIndexedDbPersistence } from "https://www.gstatic.com/firebasejs/10.9.0/firebase-firestore.js";
+        import { getMessaging, getToken } from "https://www.gstatic.com/firebasejs/10.9.0/firebase-messaging.js";
 
         const firebaseConfig = {
             apiKey: "AIzaSyADvpUQWo75ExePGoCRirD2mM-lmfM4Cmc",
@@ -142,21 +143,36 @@
         const app = initializeApp(firebaseConfig);
         const db = getFirestore(app);
         const auth = getAuth(app);
+        const messaging = getMessaging(app);
 
         enableIndexedDbPersistence(db).catch(err => console.warn("Firestore persistence failed:", err));
+
+        async function registerForPush() {
+            if (Notification.permission === "granted") {
+                const registration = await navigator.serviceWorker.ready;
+                const token = await getToken(messaging, { 
+                    vapidKey: "dkjg-RfDMkh_JWj4wqy-sELjU_6qp3rqroUNDWVmxII", // Replace with your Firebase VAPID key
+                    serviceWorkerRegistration: registration 
+                });
+                console.log("FCM Token:", token);
+            } else if (Notification.permission !== "denied") {
+                Notification.requestPermission().then(permission => {
+                    if (permission === "granted") registerForPush();
+                });
+            }
+        }
 
         async function loadTrendingRestaurants() {
             const trendingList = document.getElementById("trending-list");
             const trendingSection = document.querySelector(".trending-section");
 
-            // Check cache first for instant load
             const cachedData = localStorage.getItem("trendingRestaurants");
             if (cachedData) {
                 trendingList.innerHTML = cachedData;
                 setTimeout(() => {
                     trendingSection.classList.add("loaded");
                     document.querySelectorAll(".list-card").forEach(card => card.classList.add("loaded"));
-                }, 50); // Faster fade-in
+                }, 50);
                 if (!navigator.onLine) {
                     document.body.classList.add("offline");
                     return;
@@ -201,7 +217,6 @@
                     trendingSection.classList.add("loaded");
                     document.querySelectorAll(".list-card").forEach(card => card.classList.add("loaded"));
                 }, 50);
-
             } catch (error) {
                 console.error("❌ ERROR fetching trending restaurants:", error);
                 if (!cachedData) {
@@ -235,6 +250,7 @@
         document.addEventListener("DOMContentLoaded", () => {
             loadTrendingRestaurants();
             updateWelcomeMessage();
+            registerForPush(); // Add this to prompt for notifications
 
             setTimeout(() => {
                 document.querySelector(".welcome-header").classList.add("loaded");
