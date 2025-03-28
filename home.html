@@ -184,16 +184,20 @@
             <div class="message"><h4>Eat, Get Energy and Study.</h4></div>
             <div class="message"><h4>Don't overstress yourself though...</h4></div>
             <!--Duplicate for seamless cycle-->
-            <div class="message"><h4>Order and relax, we go deliver am to your door soft!</h4></div>
-            <div class="message"><h4>Remember to Pray Before Eating!</h4></div>
-            <div class="message"><h4>Eat, Get Energy and Study.</h4></div>
-            <div class="message"><h4>Don't overstress yourself though...</h4></div>
-        <!--Duplicate for seamless cycle-->
-        <div class="message"><h4>Order and relax, we go deliver am to your door soft!</h4></div>
-        <div class="message"><h4>Remember to Pray Before Eating!</h4></div>
-        <div class="message"><h4>Eat, Get Energy and Study.</h4></div>
-        <div class="message"><h4>Don't overstress yourself though...</h4></div>
-    
+    <div class="message"><h4>Order and relax, we go deliver am to your door soft!</h4></div><div class="message"><h4>Remember to Pray Before Eating!</h4></div><div class="message"><h4>Eat, Get Energy and Study.</h4></div><div class="message"><h4>Don't overstress yourself though...</h4>
+    </div><!--Duplicate for seamless cycle-->
+    <div class="message"><h4>Order and relax, we go deliver am to your door soft!</h4></div><div class="message"><h4>Remember to Pray Before Eating!</h4></div><div class="message"><h4>Eat, Get Energy and Study.</h4></div><div class="message"><h4>Don't overstress yourself though...</h4>
+    </div><!--Duplicate for seamless cycle-->
+    <div class="message"><h4>Order and relax, we go deliver am to your door soft!</h4></div><div class="message"><h4>Remember to Pray Before Eating!</h4></div><div class="message"><h4>Eat, Get Energy and Study.</h4></div><div class="message"><h4>Don't overstress yourself though...</h4>
+    </div><!--Duplicate for seamless cycle-->
+    <div class="message"><h4>Order and relax, we go deliver am to your door soft!</h4></div><div class="message"><h4>Remember to Pray Before Eating!</h4></div><div class="message"><h4>Eat, Get Energy and Study.</h4></div><div class="message"><h4>Don't overstress yourself though...</h4>
+    </div><!--Duplicate for seamless cycle-->
+    <div class="message"><h4>Order and relax, we go deliver am to your door soft!</h4></div><div class="message"><h4>Remember to Pray Before Eating!</h4></div><div class="message"><h4>Eat, Get Energy and Study.</h4></div><div class="message"><h4>Don't overstress yourself though...</h4>
+    </div><!--Duplicate for seamless cycle-->
+    <div class="message"><h4>Order and relax, we go deliver am to your door soft!</h4></div><div class="message"><h4>Remember to Pray Before Eating!</h4></div><div class="message"><h4>Eat, Get Energy and Study.</h4></div><div class="message"><h4>Don't overstress yourself though...</h4>
+    </div><!--Duplicate for seamless cycle-->
+    <div class="message"><h4>Order and relax, we go deliver am to your door soft!</h4></div><div class="message"><h4>Remember to Pray Before Eating!</h4></div><div class="message"><h4>Eat, Get Energy and Study.</h4></div><div class="message"><h4>Don't overstress yourself though...</h4>
+    </div><!--Duplicate for seamless cycle-->
         </div><br>
         <div class="offline-notice">You’re offline. Check your internet connection.</div>
         <div class="container">
@@ -280,15 +284,13 @@
             <div class="list-card-body">
                 <h6 class="mb-1 text-white">${data.name}</h6>
                 <p class="mb-0">
-                    <span class="fee"><i class="feather-truck me-1"></i> ₵${deliveryFee}</span>
-                    <span class="time"><i class="feather-clock me-1"></i> ${Math.max(5, deliveryTime - 15)}-${deliveryTime} mins</span>
+                    <span class="fee"><i class="feather-truck me-1"></i> ₵${deliveryFee}</span>&nbsp;&nbsp;&nbsp;&nbsp;<span class="time"><i class="feather-clock me-1"></i> ${Math.max(5, deliveryTime - 15)}-${deliveryTime} mins</span>
                 </p>
             </div>
             <div class="list-card-badge"><span>Open</span></div>
         </div>
     </a>
-</div>
-`;
+</div>`;
                 });
 
                 requestAnimationFrame(() => {
@@ -308,7 +310,7 @@
             }
         };
 
-        const filterRestaurants = searchTerm => {
+                const filterRestaurants = searchTerm => {
             const filtered = allRestaurants.filter(r => r.name.toLowerCase().includes(searchTerm.toLowerCase()));
             let output = filtered.length ? filtered.map(data => {
                 const deliveryTime = data.delivery_time || "N/A";
@@ -322,8 +324,7 @@
             <div class="list-card-body">
                 <h6 class="mb-1 text-white">${data.name}</h6>
                 <p class="mb-0">
-                    <span class="fee"><i class="feather-truck me-1"></i> ₵${deliveryFee}</span>
-                    <span class="time"><i class="feather-clock me-1"></i> ${Math.max(5, deliveryTime - 15)}-${deliveryTime} mins</span>
+                    <span class="fee"><i class="feather-truck me-1"></i> ₵${deliveryFee}</span>&nbsp;&nbsp;&nbsp;&nbsp;<span class="time"><i class="feather-clock me-1"></i> ${Math.max(5, deliveryTime - 15)}-${deliveryTime} mins</span>
                 </p>
             </div>
             <div class="list-card-badge"><span>Open</span></div>
