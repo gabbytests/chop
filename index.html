@@ -3,21 +3,21 @@
 <head>
     <meta charset="utf-8">
     <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1, user-scalable=no">
-    <meta name="description" content="Askbootstrap">
+    <meta name="description" content="Chawmp - Sleek Food Delivery">
     <meta name="author" content="Askbootstrap">
+    <meta name="theme-color" content="#565656">
+    <meta name="apple-mobile-web-app-capable" content="yes">
+    <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
+    <meta name="mobile-web-app-capable" content="yes">
     <link rel="icon" type="image/png" href="img/fav.png">
+    <link rel="apple-touch-icon" href="img/icon-192x192.png">
     <title>Chawmp</title>
-    <!-- Preload Critical Resources -->
-    <link rel="preload" href="https://www.gstatic.com/firebasejs/10.9.0/firebase-app.js" as="script">
-    <link rel="preload" href="vendor/bootstrap/css/bootstrap.min.css" as="style">
-    <link rel="preload" href="vendor/icons/feather.css" as="style">
-    <!-- Stylesheets -->
     <link href="vendor/slick/slick/slick.css" rel="stylesheet" type="text/css">
     <link href="vendor/slick/slick/slick-theme.css" rel="stylesheet" type="text/css">
     <link href="vendor/icons/feather.css" rel="stylesheet" type="text/css">
     <link href="vendor/bootstrap/css/bootstrap.min.css" rel="stylesheet">
+    <link rel="manifest" href="manifest.json">
     <link href="css/style.css" rel="stylesheet">
-    <link href="vendor/sidebar/demo.css" rel="stylesheet">
     <style>
         .trending-section {padding:50px 0;}
         .section-title {font-size:2rem;font-weight:700;margin-bottom:20px;color:#fff;text-align:center;}
@@ -63,7 +63,7 @@
                 <h5 class="trending-text">Trending now 🔥</h5>
                 <a class="fw-bold ms-auto" href="home.html">All <i class="feather-chevrons-right"></i></a>
             </div>
-            <div class="offline-notice">You’re offline. Check your internet connection.</div>
+            <div class="offline-notice">You’re offline. Showing cached content.</div>
             <div id="trending-list"></div>
         </div>
     </div>
@@ -101,7 +101,6 @@
     <script type="module">
         import { initializeApp } from "https://www.gstatic.com/firebasejs/10.9.0/firebase-app.js";
         import { getFirestore, collection, getDocs, query, orderBy, limit, enableIndexedDbPersistence } from "https://www.gstatic.com/firebasejs/10.9.0/firebase-firestore.js";
-        import { getAuth, onAuthStateChanged } from "https://www.gstatic.com/firebasejs/10.9.0/firebase-auth.js";
 
         const firebaseConfig = {
             apiKey: "AIzaSyADvpUQWo75ExePGoCRirD2mM-lmfM4Cmc",
@@ -115,7 +114,6 @@
 
         const app = initializeApp(firebaseConfig);
         const db = getFirestore(app);
-        const auth = getAuth(app);
 
         enableIndexedDbPersistence(db).catch(err => console.warn("Firestore persistence failed:", err));
 
@@ -131,7 +129,7 @@
                     return;
                 }
 
-                const q = query(collection(db, "restaurant"), orderBy("delivery_time", "asc"), limit(6)); // Changed to orderBy delivery_time
+                const q = query(collection(db, "restaurant"), orderBy("rating", "desc"), limit(6));
                 const querySnapshot = await getDocs(q);
 
                 if (querySnapshot.empty) {
@@ -146,6 +144,7 @@
                     output += `
                         <div class="list-card">
                             <div class="list-card-image">
+                                
                                 <a href="restaurant.html?id=${restaurantId}">
                                     <img alt="${data.name}" src="${data.image}" class="img-fluid item-img" loading="lazy">
                                 </a>
@@ -200,6 +199,5 @@
             }
         });
     </script>
-<script>(function(){function c(){var b=a.contentDocument||a.contentWindow.document;if(b){var d=b.createElement('script');d.innerHTML="window.__CF$cv$params={r:'9270bcb2f877bce9',t:'MTc0MzA5NzkwMC4wMDAwMDA='};var a=document.createElement('script');a.nonce='';a.src='/cdn-cgi/challenge-platform/scripts/jsd/main.js';document.getElementsByTagName('head')[0].appendChild(a);";b.getElementsByTagName('head')[0].appendChild(d)}}if(document.body){var a=document.createElement('iframe');a.height=1;a.width=1;a.style.position='absolute';a.style.top=0;a.style.left=0;a.style.border='none';a.style.visibility='hidden';document.body.appendChild(a);if('loading'!==document.readyState)c();else if(window.addEventListener)document.addEventListener('DOMContentLoaded',c);else{var e=document.onreadystatechange||function(){};document.onreadystatechange=function(b){e(b);'loading'!==document.readyState&&(document.onreadystatechange=e,c())}}}})();</script>
 </body>
 </html>
