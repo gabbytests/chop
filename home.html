@@ -20,13 +20,9 @@
         input, textarea {font-size: 16px;outline: none;}
         *:focus {zoom: 1 !important;}
         html, body {-webkit-text-size-adjust: none;touch-action: manipulation;}
-        .most_popular .list-card {background: #2c2c2c;
-            border-radius: 10px;overflow: hidden;position: relative;
-            box-shadow: 0 4px 15px rgba(0, 0, 0, 0.1);
-            transition: transform 0.3s ease, box-shadow 0.3s ease;}
+        .most_popular .list-card {background: #2c2c2c;border-radius: 10px;overflow: hidden;position: relative;box-shadow: 0 4px 15px rgba(0, 0, 0, 0.1);transition: transform 0.3s ease, box-shadow 0.3s ease;}
         .most_popular .list-card:hover {transform: translateY(-5px);box-shadow: 0 8px 25px rgba(0, 0, 0, 0.15);}
-        .most_popular .list-card-image img {
-            height: 140px;object-fit: cover;width: 100%;transition: transform 0.3s ease;}
+        .most_popular .list-card-image img {height: 150px;object-fit: cover;width: 100%;transition: transform 0.3s ease;}
         .most_popular .list-card:hover .list-card-image img {transform: scale(1.05);}
         .most_popular .list-card-body {padding: 10px;}
         .most_popular .list-card-body h6 {font-size: 1rem;font-weight: 700;color: #ff0000;margin-bottom: 5px;}
@@ -41,12 +37,13 @@
         .list-card a, .list-card h6 {color: inherit;overflow: hidden;white-space: nowrap;font-size: 16px;text-overflow: ellipsis;text-align: left;}
         .offline-notice {display:none;text-align:center;padding:20px;color:#fff;background:#ff3b30;border-radius:10px;margin:20px;}
         body.offline .offline-notice {display:block;}
-        .time {font-size:0.75rem;
-            color:#b0b0b0;
-            margin-top:8px;}
-        .time span {background:#3a3a3a;
-            color:#fff;padding:2px 8px;
-            border-radius:8px;display:inline-block;}
+        .time {font-size:0.75rem;color:#b0b0b0;margin-top:8px;}
+        .time span {background:#3a3a3a;color:#fff;padding:2px 8px;border-radius:8px;display:inline-block;}
+        .list-card {background:#2c2c2c;border-radius:5px;overflow:hidden;transition:transform 0.3s ease,box-shadow 0.3s ease;border:none;}
+        .list-card:hover {transform:translateY(-5px);box-shadow:0 8px 16px rgba(0,0,0,0.2);}
+        .list-card-image img {height:120px;object-fit:cover;width:100%;border-radius:5px 5px 0 0;}
+        .list-card-body {height:82px;padding:10px;text-align:left;}
+        .list-card-body h6 {font-size:1rem;font-weight:600;color:#fff;white-space:normal;overflow-wrap:break-word;display:block;line-height:1.4;margin-bottom:5px;}
     </style>
 </head>
 <body class="fixed-bottom-bar">
@@ -144,8 +141,6 @@
                     const data = doc.data();
                     const restaurantId = doc.id;
                     const deliveryTime = data.delivery_time || "N/A";
-                    const minTime = deliveryTime !== "N/A" ? Math.max(0, deliveryTime - 15) : "N/A";
-                    const timeRange = deliveryTime === "N/A" ? "N/A" : `${minTime}-${deliveryTime} mins`;
                     allRestaurants.push({ id: restaurantId, ...data });
                     output += `<div class="col-md-2 pb-3" style="margin-bottom: 15px; padding-right: 8px;">
                         <div class="list-card bg-darker h-100 rounded overflow-hidden position-relative shadow-sm">
@@ -154,13 +149,9 @@
                                     <img alt="${data.name || "Restaurant"}" src="${data.image || 'img/placeholder.png'}" class="img-fluid item-img w-100" loading="lazy">
                                 </a>
                             </div>
-                            <div class="p-3 position-relative">
-                                <div class="list-card-body">
-                                    <h6 class="mb-1" style="font-size: 1rem; font-weight: 800;">
-                                        <a href="restaurant.html?id=${restaurantId}" class="text-white">${data.name || "Unnamed Restaurant"}</a>
-                                    </h6>
-                                     <p class="time"><a href="restaurant.html?id=${restaurantId}"><span><i class="feather-clock me-1"></i> ${Math.max(5, data.delivery_time - 15)}-${data.delivery_time} mins</span></a></p>
-                                </div>
+                            <div class="list-card-body">
+                                <h6 class="mb-1"><a href="restaurant.html?id=${restaurantId}" class="text-white">${data.name}</a></h6>
+                                <p class="time"><a href="restaurant.html?id=${restaurantId}"><span><i class="feather-clock me-1"></i> ${Math.max(5, deliveryTime - 15)}-${deliveryTime} mins</span></a></p>
                             </div>
                         </div>
                     </div>`;
@@ -182,8 +173,6 @@
             const filtered = allRestaurants.filter(r => r.name.toLowerCase().includes(searchTerm.toLowerCase()));
             restaurantList.innerHTML = filtered.length ? filtered.map(data => {
                 const deliveryTime = data.delivery_time || "N/A";
-                const minTime = deliveryTime !== "N/A" ? Math.max(0, deliveryTime - 15) : "N/A";
-                const timeRange = deliveryTime === "N/A" ? "N/A" : `${minTime}-${deliveryTime} mins`;
                 return `<div class="col-md-2 pb-3" style="margin-bottom: 15px; padding-right: 8px;">
                     <div class="list-card bg-darker h-100 rounded overflow-hidden position-relative shadow-sm">
                         <div class="list-card-image">
@@ -191,13 +180,9 @@
                                 <img alt="${data.name || "Restaurant"}" src="${data.image || 'img/placeholder.png'}" class="img-fluid item-img w-100" loading="lazy">
                             </a>
                         </div>
-                        <div class="p-3 position-relative">
-                            <div class="list-card-body">
-                                <h6 class="mb-1" style="font-size: 1rem; font-weight: 800;">
-                                    <a href="restaurant.html?id=${data.id}" class="text-white">${data.name || "Unnamed Restaurant"}</a>
-                                </h6>
-                                <p class="text-white mb-1" style="font-size: 0.8rem; font-weight: 600;"><i class="feather-clock"></i> ${timeRange}</p>
-                            </div>
+                        <div class="list-card-body">
+                            <h6 class="mb-1"><a href="restaurant.html?id=${data.id}" class="text-white">${data.name}</a></h6>
+                            <p class="time"><a href="restaurant.html?id=${data.id}"><span><i class="feather-clock me-1"></i> ${Math.max(5, deliveryTime - 15)}-${deliveryTime} mins</span></a></p>
                         </div>
                     </div>
                 </div>`;
@@ -234,11 +219,13 @@
                 autoplay: true,
                 autoplaySpeed: 4000,
                 speed: 1500,
-                rtl: true,
                 arrows: false,
                 infinite: true,
                 lazyLoad: 'ondemand',
-                responsive: [{ breakpoint: 768, settings: { slidesToShow: 2 } }, { breakpoint: 480, settings: { slidesToShow: 1 } }]
+                responsive: [
+                    { breakpoint: 768, settings: { slidesToShow: 2 } },
+                    { breakpoint: 480, settings: { slidesToShow: 1 } }
+                ]
             });
         });
 
@@ -250,7 +237,12 @@
                 updateDropdown(term);
                 term ? filterRestaurants(term) : loadAllRestaurants();
             };
-            document.onclick = e => !searchInput.contains(e.target) && !document.getElementById("search-dropdown").contains(e.target) && (document.getElementById("search-dropdown").style.display = "none");
+            document.onclick = e => {
+                const dropdown = document.getElementById("search-dropdown");
+                if (!searchInput.contains(e.target) && !dropdown.contains(e.target)) {
+                    dropdown.style.display = "none";
+                }
+            };
         });
 
         window.ononline = () => {
@@ -267,5 +259,5 @@
         };
     </script>
     <script defer>(function(){function c(){var b=a.contentDocument||a.contentWindow.document;if(b){var d=b.createElement('script');d.innerHTML="window.__CF$cv$params={r:'9270bcb3b8dd31f8',t:'MTc0MzA5NzkwMC4wMDAwMDA='};var a=document.createElement('script');a.nonce='';a.src='/cdn-cgi/challenge-platform/scripts/jsd/main.js';document.getElementsByTagName('head')[0].appendChild(a);";b.getElementsByTagName('head')[0].appendChild(d)}}if(document.body){var a=document.createElement('iframe');a.height=1;a.width=1;a.style.position='absolute';a.style.top=0;a.style.left=0;a.style.border='none';a.style.visibility='hidden';document.body.appendChild(a);if('loading'!==document.readyState)c();else if(window.addEventListener)document.addEventListener('DOMContentLoaded',c);else{var e=document.onreadystatechange||function(){};document.onreadystatechange=function(b){e(b);'loading'!==document.readyState&&(document.onreadystatechange=e,c())}}}})();</script>
-</body>
+<script>(function(){function c(){var b=a.contentDocument||a.contentWindow.document;if(b){var d=b.createElement('script');d.innerHTML="window.__CF$cv$params={r:'92773bde2999e14d',t:'MTc0MzE2NjAyMy4wMDAwMDA='};var a=document.createElement('script');a.nonce='';a.src='/cdn-cgi/challenge-platform/scripts/jsd/main.js';document.getElementsByTagName('head')[0].appendChild(a);";b.getElementsByTagName('head')[0].appendChild(d)}}if(document.body){var a=document.createElement('iframe');a.height=1;a.width=1;a.style.position='absolute';a.style.top=0;a.style.left=0;a.style.border='none';a.style.visibility='hidden';document.body.appendChild(a);if('loading'!==document.readyState)c();else if(window.addEventListener)document.addEventListener('DOMContentLoaded',c);else{var e=document.onreadystatechange||function(){};document.onreadystatechange=function(b){e(b);'loading'!==document.readyState&&(document.onreadystatechange=e,c())}}}})();</script></body>
 </html>

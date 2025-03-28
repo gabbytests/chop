@@ -81,7 +81,7 @@
         import { initializeApp } from "https://www.gstatic.com/firebasejs/10.9.0/firebase-app.js";
         import { getAuth, signOut, onAuthStateChanged } from "https://www.gstatic.com/firebasejs/10.9.0/firebase-auth.js";
         import { getFirestore, doc, getDoc } from "https://www.gstatic.com/firebasejs/10.9.0/firebase-firestore.js";
-
+    
         const firebaseConfig = {
             apiKey: "AIzaSyADvpUQWo75ExePGoCRirD2mM-lmfM4Cmc",
             authDomain: "von600-7982d.firebaseapp.com",
@@ -91,7 +91,7 @@
             appId: "1:164591218045:web:afe17512e16573e7903014",
             measurementId: "G-E69DMPLXBK"
         };
-
+    
         const app = initializeApp(firebaseConfig);
         const auth = getAuth(app);
         const db = getFirestore(app);
@@ -100,57 +100,77 @@
             userEmail: document.getElementById("user-email"),
             logoutBtn: document.getElementById("logout-btn")
         };
-
+    
         const CACHE_KEY = "user-profile-cache";
-        
-        const loadUserProfile = async (user) => {
+    
+        // Load profile data quickly, prioritizing cache
+        const loadUserProfileFast = (user) => {
             const cachedData = localStorage.getItem(`${CACHE_KEY}-${user.uid}`);
             if (cachedData) {
                 const { name, email } = JSON.parse(cachedData);
+                // Render cached data immediately
                 requestAnimationFrame(() => {
                     elements.userName.textContent = name;
                     elements.userEmail.textContent = email;
                 });
-                // Fetch fresh data in the background
-                updateProfileFromFirestore(user);
             } else {
-                await updateProfileFromFirestore(user);
+                // Fallback to basic user data while fetching
+                requestAnimationFrame(() => {
+                    elements.userName.textContent = user.email.split("@")[0]; // Quick placeholder
+                    elements.userEmail.textContent = user.email;
+                });
+                // Fetch from Firestore only if no cache
+                updateProfileFromFirestore(user);
             }
         };
-
+    
+        // Fetch and update profile from Firestore, then cache it
         const updateProfileFromFirestore = async (user) => {
             try {
                 const userDocRef = doc(db, "users", user.uid);
                 const userDoc = await getDoc(userDocRef);
                 const userData = userDoc.exists() ? userDoc.data() : { name: user.email.split("@")[0] };
                 const profileData = { name: userData.name, email: user.email };
+                // Update UI
                 requestAnimationFrame(() => {
                     elements.userName.textContent = profileData.name;
                     elements.userEmail.textContent = profileData.email;
                 });
+                // Cache the result
                 localStorage.setItem(`${CACHE_KEY}-${user.uid}`, JSON.stringify(profileData));
             } catch (e) {
                 console.error("Failed to fetch profile:", e);
-                elements.userName.textContent = "Error";
-                elements.userEmail.textContent = "Could not load";
+                requestAnimationFrame(() => {
+                    elements.userName.textContent = "Error";
+                    elements.userEmail.textContent = "Could not load";
+                });
             }
         };
-
+    
+        // Logout handler
         elements.logoutBtn.onclick = () => {
             signOut(auth).then(() => {
                 localStorage.removeItem(`${CACHE_KEY}-${auth.currentUser?.uid}`);
                 window.location.href = "login.html";
-            }).catch(console.error);
+            }).catch((error) => {
+                console.error("Logout failed:", error);
+            });
         };
-
-        // Start auth check immediately
-        onAuthStateChanged(auth, (user) => {
-            if (user) {
-                loadUserProfile(user);
-            } else {
-                window.location.href = "login.html";
-            }
-        });
+    
+        // Immediate auth check
+        const user = auth.currentUser; // Try current user first
+        if (user) {
+            loadUserProfileFast(user);
+        } else {
+            // Fallback to auth state listener if no user is immediately available
+            onAuthStateChanged(auth, (user) => {
+                if (user) {
+                    loadUserProfileFast(user);
+                } else {
+                    window.location.href = "login.html";
+                }
+            });
+        }
     </script>
     <script defer src="vendor/jquery/jquery.min.js"></script>
     <script defer src="vendor/bootstrap/js/bootstrap.bundle.min.js"></script>
