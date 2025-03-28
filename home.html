@@ -198,6 +198,20 @@
     </div><!--Duplicate for seamless cycle-->
     <div class="message"><h4>Order and relax, we go deliver am to your door soft!</h4></div><div class="message"><h4>Remember to Pray Before Eating!</h4></div><div class="message"><h4>Eat, Get Energy and Study.</h4></div><div class="message"><h4>Don't overstress yourself though...</h4>
     </div><!--Duplicate for seamless cycle-->
+    <div class="message"><h4>Order and relax, we go deliver am to your door soft!</h4></div><div class="message"><h4>Remember to Pray Before Eating!</h4></div><div class="message"><h4>Eat, Get Energy and Study.</h4></div><div class="message"><h4>Don't overstress yourself though...</h4>
+    </div><!--Duplicate for seamless cycle-->
+    <div class="message"><h4>Order and relax, we go deliver am to your door soft!</h4></div><div class="message"><h4>Remember to Pray Before Eating!</h4></div><div class="message"><h4>Eat, Get Energy and Study.</h4></div><div class="message"><h4>Don't overstress yourself though...</h4>
+    </div><!--Duplicate for seamless cycle-->
+    <div class="message"><h4>Order and relax, we go deliver am to your door soft!</h4></div><div class="message"><h4>Remember to Pray Before Eating!</h4></div><div class="message"><h4>Eat, Get Energy and Study.</h4></div><div class="message"><h4>Don't overstress yourself though...</h4>
+    </div><!--Duplicate for seamless cycle-->
+    <div class="message"><h4>Order and relax, we go deliver am to your door soft!</h4></div><div class="message"><h4>Remember to Pray Before Eating!</h4></div><div class="message"><h4>Eat, Get Energy and Study.</h4></div><div class="message"><h4>Don't overstress yourself though...</h4>
+    </div><!--Duplicate for seamless cycle-->
+    <div class="message"><h4>Order and relax, we go deliver am to your door soft!</h4></div><div class="message"><h4>Remember to Pray Before Eating!</h4></div><div class="message"><h4>Eat, Get Energy and Study.</h4></div><div class="message"><h4>Don't overstress yourself though...</h4>
+    </div><!--Duplicate for seamless cycle-->
+    <div class="message"><h4>Order and relax, we go deliver am to your door soft!</h4></div><div class="message"><h4>Remember to Pray Before Eating!</h4></div><div class="message"><h4>Eat, Get Energy and Study.</h4></div><div class="message"><h4>Don't overstress yourself though...</h4>
+    </div><!--Duplicate for seamless cycle-->
+    <div class="message"><h4>Order and relax, we go deliver am to your door soft!</h4></div><div class="message"><h4>Remember to Pray Before Eating!</h4></div><div class="message"><h4>Eat, Get Energy and Study.</h4></div><div class="message"><h4>Don't overstress yourself though...</h4>
+    </div><!--Duplicate for seamless cycle-->
         </div><br>
         <div class="offline-notice">You’re offline. Check your internet connection.</div>
         <div class="container">
@@ -284,7 +298,7 @@
             <div class="list-card-body">
                 <h6 class="mb-1 text-white">${data.name}</h6>
                 <p class="mb-0">
-                    <span class="fee"><i class="feather-truck me-1"></i> ₵${deliveryFee}</span>&nbsp;&nbsp;&nbsp;&nbsp;<span class="time"><i class="feather-clock me-1"></i> ${Math.max(5, deliveryTime - 15)}-${deliveryTime} mins</span>
+                    <span class="fee"><i class="feather-truck me-1"></i>₵${deliveryFee}</span>&nbsp;&nbsp;&nbsp;&nbsp;<span class="time"><i class="feather-clock me-1"></i>${Math.max(5, deliveryTime - 15)}-${deliveryTime} mins</span>
                 </p>
             </div>
             <div class="list-card-badge"><span>Open</span></div>
@@ -314,7 +328,7 @@
             const filtered = allRestaurants.filter(r => r.name.toLowerCase().includes(searchTerm.toLowerCase()));
             let output = filtered.length ? filtered.map(data => {
                 const deliveryTime = data.delivery_time || "N/A";
-                const deliveryFee = data.delivery_fee || "25.00"; // Default to ₵25.00 if not in Firestore
+                const deliveryFee = data.delivery_fee || "3.00"; // Default to ₵3.00 if not in Firestore
                 return `<div class="col-md-2 pb-3" style="margin-bottom: 15px; padding-right: 8px;">
     <a href="restaurant.html?id=${data.id}" class="d-block text-decoration-none">
         <div class="list-card bg-darker h-100 rounded overflow-hidden position-relative shadow-sm">
@@ -324,7 +338,7 @@
             <div class="list-card-body">
                 <h6 class="mb-1 text-white">${data.name}</h6>
                 <p class="mb-0">
-                    <span class="fee"><i class="feather-truck me-1"></i> ₵${deliveryFee}</span>&nbsp;&nbsp;&nbsp;&nbsp;<span class="time"><i class="feather-clock me-1"></i> ${Math.max(5, deliveryTime - 15)}-${deliveryTime} mins</span>
+                    <span class="fee"><i class="feather-truck me-1"></i>₵${deliveryFee}</span>&nbsp;&nbsp;&nbsp;&nbsp;<span class="time"><i class="feather-clock me-1"></i>${Math.max(5, deliveryTime - 15)}-${deliveryTime} mins</span>
                 </p>
             </div>
             <div class="list-card-badge"><span>Open</span></div>
