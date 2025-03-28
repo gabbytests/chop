@@ -16,7 +16,7 @@
             transition: background 0.2s ease;
         }
         .order-box:hover {
-            background: #333 !important;
+            background: #1e1e1e !important;
         }
         .order-details {
             display: none;
@@ -50,7 +50,7 @@
             <div id="orders-list"></div>
         </div>
     </div>
-    <div class="osahan-menu-fotter fixed-bottom bg-dark px-3 py-2 text-center">
+    <div class="osahan-menu-fotter fixed-bottom bg-darker px-3 py-2 text-center">
         <div class="row">
             <div class="col"><a href="index.html" class="text-white small fw-bold text-decoration-none"><p class="h4 m-0"><i class="feather-map-pin"></i></p>Trending</a></div>
             <div class="col"><a href="home.html" class="text-white small fw-bold text-decoration-none"><p class="h4 m-0"><i class="feather-home text-white"></i></p>Home</a></div>
@@ -72,7 +72,7 @@
                 const itemsListFull = order.items.map(item => `<li class="text-white small">${item.quantity}x ${item.name} - GH₵${item.total.toFixed(2)}</li>`).join("");
                 const subtotal = order.items.reduce((sum, item) => sum + item.total, 0);
                 const total = subtotal + 5;
-                return `<div class="order-box bg-dark p-3 mb-3 rounded" onclick="this.classList.toggle('expanded')">
+                return `<div class="order-box bg-darkish p-3 mb-3 rounded" onclick="this.classList.toggle('expanded')">
                     <div class="order-summary">
                         <div>
                             <h5 class="fw-bold text-white">Order on ${orderTime}</h5>

@@ -11,8 +11,8 @@
     <link href="vendor/icons/feather.css" rel="stylesheet" type="text/css">
     <script defer src="https://js.paystack.co/v1/inline.js"></script>
     <style>
-        body{font-family:'SF Pro Display',-apple-system,BlinkMacSystemFont,sans-serif;background:#565656;color:#ffffff;margin:0;padding:0;min-height:100vh;overflow-x:hidden;padding-bottom:calc(70px + env(safe-area-inset-bottom));}
-        .cart-header{background:#565656;padding:15px 25px;border-bottom:1px solid rgba(255,255,255,0.1);display:flex;align-items:center;justify-content:space-between;box-shadow:0 2px 8px rgba(0,0,0,0.3)}
+        body{font-family:'SF Pro Display',-apple-system,BlinkMacSystemFont,sans-serif;background:#2c2c2c;color:#ffffff;margin:0;padding:0;min-height:100vh;overflow-x:hidden;padding-bottom:calc(70px + env(safe-area-inset-bottom));}
+        .cart-header{background:#2c2c2c;padding:15px 25px;border-bottom:1px solid rgba(255,255,255,0.1);display:flex;align-items:center;justify-content:space-between;box-shadow:0 2px 8px rgba(0,0,0,0.3)}
         .cart-header h4{font-size:1.5rem;font-weight:600;margin:0;flex-grow:1;text-align:center;display:flex;align-items:center;justify-content:center;gap:15px}
         .cart-header .back-btn{background:none;border:none;display:flex;align-items:center;justify-content:center;cursor:pointer;position:absolute;left:10px;top:15px;transition:transform 0.2s ease,opacity 0.2s ease}
         .cart-header .back-btn i{width:40px;height:40px;stroke-width:3;color:white;transition:transform 0.2s ease}
@@ -25,23 +25,23 @@
         .empty-cart .btn-primary{background:#007bff;border:none;padding:10px 30px;border-radius:50px;font-size:0.95rem;font-weight:600;transition:background 0.3s ease,transform 0.2s ease}
         .empty-cart .btn-primary:hover{background:#0056b3;transform:translateY(-2px)}
         .cart-items{margin-bottom:40px}
-        .cart-item{background:#2a2a2a;border-radius:10px;padding:15px;margin-bottom:10px;display:flex;justify-content:space-between;align-items:center;transition:transform 0.2s ease,box-shadow 0.2s ease;box-shadow:0 3px 12px rgba(0,0,0,0.2)}
+        .cart-item{background:#1e1e1e;border-radius:10px;padding:15px;margin-bottom:10px;display:flex;justify-content:space-between;align-items:center;transition:transform 0.2s ease,box-shadow 0.2s ease;box-shadow:0 3px 12px rgba(0,0,0,0.2)}
         .cart-item:hover{transform:translateY(-2px);box-shadow:0 5px 15px rgba(0,0,0,0.25)}
         .cart-item p{margin:0;color:#ffffff}
         .cart-item .item-name{font-size:1.1rem;font-weight:600}
         .cart-item .item-price{font-size:0.85rem;opacity:0.7}
         .cart-item .controls{display:flex;align-items:center;gap:10px}
-        .cart-item .btn-sm{padding:4px 8px;border-radius:6px;background:#3a3a3a;border:none;color:#ffffff;transition:background 0.2s ease}
+        .cart-item .btn-sm{padding:4px 8px;border-radius:6px;background:#2c2c2c;border:none;color:#ffffff;transition:background 0.2s ease}
         .cart-item .btn-sm:hover{background:#4a4a4a}
         .cart-item .quantity{font-size:0.95rem;font-weight:500}
         .cart-item .item-total{font-size:1rem;font-weight:600}
         .cart-item .btn-danger{background:#ba2837;border:none;padding:4px 8px;border-radius:6px;transition:background 0.2s ease}
         .cart-item .btn-danger:hover{background:#ff0019}
-        .order-summary{background:#2a2a2a;border-radius:10px;padding:20px;box-shadow:0 3px 12px rgba(0,0,0,0.2);margin-bottom:20px}
-        .delivery-details{background:#2a2a2a;border-radius:10px;padding:20px;box-shadow:0 3px 12px rgba(0,0,0,0.2);margin-bottom:40px}
+        .order-summary{background:#1e1e1e;border-radius:10px;padding:20px;box-shadow:0 3px 12px rgba(0,0,0,0.2);margin-bottom:20px}
+        .delivery-details{background:#1e1e1e;border-radius:10px;padding:20px;box-shadow:0 3px 12px rgba(0,0,0,0.2);margin-bottom:40px}
         .order-summary p{font-size:0.95rem;margin-bottom:8px;color:#ffffff;opacity:0.9}
         .delivery-details label{font-size:0.95rem;color:#ffffff;opacity:0.9;display:block;margin-bottom:5px}
-        .delivery-details input,.delivery-details textarea{background:#3a3a3a;border:none;color:#fff;padding:10px;border-radius:8px;width:100%;margin-bottom:10px}
+        .delivery-details input,.delivery-details textarea{background:#2c2c2c;border:none;color:#fff;padding:10px;border-radius:8px;width:100%;margin-bottom:10px}
         .order-summary hr,.delivery-details hr{border-color:rgba(255,255,255,0.2);margin:10px 0}
         .order-summary h6,.delivery-details h6{font-size:1.2rem;font-weight:700;margin:0;color:#ffffff}
         .action-buttons{margin-top:20px;display:flex;flex-direction:column;gap:10px}
@@ -132,7 +132,7 @@
         <i class="feather-check-circle"></i>
         <span id="notification-message"></span>
     </div>
-    <div class="osahan-menu-fotter fixed-bottom bg-dark px-3 py-2 text-center">
+    <div class="osahan-menu-fotter fixed-bottom bg-darkerer px-3 py-2 text-center">
         <div class="row">
             <div class="col"><a href="index.html" class="text-white small fw-bold text-decoration-none"><p class="h4 m-0"><i class="feather-map-pin"></i></p>Trending</a></div>
             <div class="col"><a href="home.html" class="text-white small fw-bold text-decoration-none"><p class="h4 m-0"><i class="feather-home text-white"></i></p>Home</a></div>

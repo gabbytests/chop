@@ -15,18 +15,19 @@
     <link href="vendor/sidebar/demo.css" rel="stylesheet">
     <script src="https://code.jquery.com/jquery-3.6.0.min.js" defer></script>
     <style>
+        body {background:#2c2c2c;} /* Swapped to #2c2c2c */
         .text-danger {color: #00c8ff !important;transition: color 0.3s ease, transform 0.2s ease;}
         .text-danger:hover {color: #00c8ff !important;transform: scale(1.05);}
         input, textarea {font-size: 16px;outline: none;}
         *:focus {zoom: 1 !important;}
         html, body {-webkit-text-size-adjust: none;touch-action: manipulation;}
-        .most_popular .list-card {background: #2c2c2c;border-radius: 10px;overflow: hidden;position: relative;box-shadow: 0 4px 15px rgba(0, 0, 0, 0.1);transition: transform 0.3s ease, box-shadow 0.3s ease;}
-        .most_popular .list-card:hover {transform: translateY(-5px);box-shadow: 0 8px 25px rgba(0, 0, 0, 0.15);}
+        .most_popular .list-card {background: #565656;border-radius: 10px;overflow: hidden;position: relative;box-shadow: 0 4px 15px rgba(0, 0, 0, 0.3);transition: transform 0.3s ease, box-shadow 0.3s ease;} /* Swapped to #565656 */
+        .most_popular .list-card:hover {transform: translateY(-5px);box-shadow: 0 8px 25px rgba(0, 0, 0, 0.35);}
         .most_popular .list-card-image img {height: 150px;object-fit: cover;width: 100%;transition: transform 0.3s ease;}
         .most_popular .list-card:hover .list-card-image img {transform: scale(1.05);}
-        .most_popular .list-card-body {padding: 10px;}
-        .most_popular .list-card-body h6 {font-size: 1rem;font-weight: 700;color: #ff0000;margin-bottom: 5px;}
-        .most_popular .list-card-body p {font-size: 0.8rem;color: #666;margin-bottom: 0;}
+        .most_popular .list-card-body {padding: 10px;height: 70px;} /* Shortened height */
+        .most_popular .list-card-body h6 {font-size: 1rem;font-weight: 700;color: #fff;margin-bottom: 4px;overflow-wrap: break-word;white-space: normal;max-height: 32px;line-height: 1.1;} /* Full names, smaller */
+        .most_popular .list-card-body p {font-size: 0.75rem;color: #b0b0b0;margin-bottom: 0;margin-top: 2px;} /* Adjusted time */
         .most_popular .member-plan .badge {background: #343a40;padding: 5px 8px;border-radius: 10px;font-size: 0.8rem;}
         .most_popular .list-card-badge span {background: #dc3545;padding: 4px 8px;border-radius: 5px;font-size: 0.8rem;}
         .most_popular .list-card-badge small {color: #555;font-weight: 500;}
@@ -34,21 +35,21 @@
         .search-dropdown {position: absolute;top: 100%;left: 0;width: 100%;background: #fff;border: 1px solid #ddd;border-radius: 0 0 5px 5px;box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);max-height: 200px;overflow-y: auto;display: none;z-index: 1000;}
         .search-dropdown div {padding: 10px;cursor: pointer;transition: background 0.2s ease;}
         .search-dropdown div:hover {background: #f0f0f0;}
-        .list-card a, .list-card h6 {color: inherit;overflow: hidden;white-space: nowrap;font-size: 16px;text-overflow: ellipsis;text-align: left;}
+        .list-card a, .list-card h6 {color: inherit;overflow: hidden;font-size: 16px;text-align: left;}
         .offline-notice {display:none;text-align:center;padding:20px;color:#fff;background:#ff3b30;border-radius:10px;margin:20px;}
         body.offline .offline-notice {display:block;}
-        .time {font-size:0.75rem;color:#b0b0b0;margin-top:8px;}
-        .time span {background:#3a3a3a;color:#fff;padding:2px 8px;border-radius:8px;display:inline-block;}
-        .list-card {background:#2c2c2c;border-radius:5px;overflow:hidden;transition:transform 0.3s ease,box-shadow 0.3s ease;border:none;}
-        .list-card:hover {transform:translateY(-5px);box-shadow:0 8px 16px rgba(0,0,0,0.2);}
+        .time {font-size:0.75rem;color:#b0b0b0;margin-top:2px;}
+        .time span {background:#4a4a4a;color:#fff;padding:3px 8px;border-radius:8px;display:inline-block;} /* Adjusted padding */
+        .list-card {background:#565656;border-radius:5px;overflow:hidden;transition:transform 0.3s ease,box-shadow 0.3s ease;border:none;} /* Swapped to #565656 */
+        .list-card:hover {transform:translateY(-5px);box-shadow:0 8px 16px rgba(0,0,0,0.35);}
         .list-card-image img {height:120px;object-fit:cover;width:100%;border-radius:5px 5px 0 0;}
-        .list-card-body {height:82px;padding:10px;text-align:left;}
-        .list-card-body h6 {font-size:1rem;font-weight:600;color:#fff;white-space:normal;overflow-wrap:break-word;display:block;line-height:1.4;margin-bottom:5px;}
+        .list-card-body {height:100px;padding:8px;text-align:left;} /* Shortened height */
+        .list-card-body h6 {font-size:1rem;font-weight:600;color:#fff;white-space:normal;overflow-wrap:break-word;display:block;line-height:1.1;margin-bottom:4px;max-height:32px;} /* Full names, smaller */
     </style>
 </head>
 <body class="fixed-bottom-bar">
     <div class="osahan-home-page">
-        <div class="bg-primary p-3">
+        <div class="bg-transparent p-3">
             <div class="text-white title d-flex align-items-center">
                 <a href="home.html" class="text-white small fw-bold text-decoration-none"><p class="h4"><i class="feather-map-pin"></i></p></a>  
                 <h4 class="fw-bold">UPSA</h4>
@@ -80,7 +81,7 @@
             </div>
         </div>
     </div>
-    <div class="osahan-menu-fotter fixed-bottom bg-dark px-3 py-2 text-center">
+    <div class="osahan-menu-fotter fixed-bottom bg-darker px-3 py-2 text-center">
         <div class="row">
             <div class="col"><a href="index.html" class="text-white small fw-bold text-decoration-none"><p class="h4 m-0"><i class="feather-map-pin"></i></p>Trending</a></div>
             <div class="col selected"><a href="home.html" class="text-danger small fw-bold text-decoration-none"><p class="h4 m-0"><i class="feather-home text-danger"></i></p>Home</a></div>
@@ -116,14 +117,16 @@
         const restaurantList = document.getElementById("all-restaurants");
 
         const loadAllRestaurants = async () => {
-            restaurantList.innerHTML = "<div class='col-12 text-center'><p>Loading...</p></div>";
             const cachedData = localStorage.getItem("allRestaurantsIndex");
-
-            if (cachedData && !navigator.onLine) {
+            if (cachedData) {
                 restaurantList.innerHTML = cachedData;
                 allRestaurants = JSON.parse(localStorage.getItem("allRestaurantsData") || "[]");
-                document.body.classList.add("offline");
-                return;
+                if (!navigator.onLine) {
+                    document.body.classList.add("offline");
+                    return;
+                }
+            } else {
+                restaurantList.innerHTML = "<div class='col-12 text-center'><p>Loading...</p></div>";
             }
 
             try {
@@ -163,8 +166,9 @@
                 document.body.classList.remove("offline");
             } catch (error) {
                 console.error("Error:", error);
-                restaurantList.innerHTML = cachedData || "<div class='col-12 text-center'><p>Failed to load. Check connection.</p></div>";
-                allRestaurants = JSON.parse(localStorage.getItem("allRestaurantsData") || "[]");
+                if (!cachedData) {
+                    restaurantList.innerHTML = "<div class='col-12 text-center'><p>Failed to load. Check connection.</p></div>";
+                }
                 document.body.classList.add("offline");
             }
         };
@@ -259,5 +263,5 @@
         };
     </script>
     <script defer>(function(){function c(){var b=a.contentDocument||a.contentWindow.document;if(b){var d=b.createElement('script');d.innerHTML="window.__CF$cv$params={r:'9270bcb3b8dd31f8',t:'MTc0MzA5NzkwMC4wMDAwMDA='};var a=document.createElement('script');a.nonce='';a.src='/cdn-cgi/challenge-platform/scripts/jsd/main.js';document.getElementsByTagName('head')[0].appendChild(a);";b.getElementsByTagName('head')[0].appendChild(d)}}if(document.body){var a=document.createElement('iframe');a.height=1;a.width=1;a.style.position='absolute';a.style.top=0;a.style.left=0;a.style.border='none';a.style.visibility='hidden';document.body.appendChild(a);if('loading'!==document.readyState)c();else if(window.addEventListener)document.addEventListener('DOMContentLoaded',c);else{var e=document.onreadystatechange||function(){};document.onreadystatechange=function(b){e(b);'loading'!==document.readyState&&(document.onreadystatechange=e,c())}}}})();</script>
-<script>(function(){function c(){var b=a.contentDocument||a.contentWindow.document;if(b){var d=b.createElement('script');d.innerHTML="window.__CF$cv$params={r:'92773bde2999e14d',t:'MTc0MzE2NjAyMy4wMDAwMDA='};var a=document.createElement('script');a.nonce='';a.src='/cdn-cgi/challenge-platform/scripts/jsd/main.js';document.getElementsByTagName('head')[0].appendChild(a);";b.getElementsByTagName('head')[0].appendChild(d)}}if(document.body){var a=document.createElement('iframe');a.height=1;a.width=1;a.style.position='absolute';a.style.top=0;a.style.left=0;a.style.border='none';a.style.visibility='hidden';document.body.appendChild(a);if('loading'!==document.readyState)c();else if(window.addEventListener)document.addEventListener('DOMContentLoaded',c);else{var e=document.onreadystatechange||function(){};document.onreadystatechange=function(b){e(b);'loading'!==document.readyState&&(document.onreadystatechange=e,c())}}}})();</script></body>
+<script>(function(){function c(){var b=a.contentDocument||a.contentWindow.document;if(b){var d=b.createElement('script');d.innerHTML="window.__CF$cv$params={r:'92773bde2999e14d',t:'MTc0MzE2NjAyMy4wMDAwMDA='};var a=document.createElement('script');a.nonce='';a.src='/cdn-cgi/challenge-platform/scripts/jsd/main.js';document.getElementsByTagName('head')[0].appendChild(a);";b.getElementsByTagName('head')[0].appendChild(d)}}if(document.body){var a=document.createElement('iframe');a.height=1;a.width=1;a.style.position='absolute';a.style.top=0;a.style.left=0;a.style.border='none';a.style.visibility='hidden';document.body.appendChild(a);if('loading'!==document.readyState)c();else if(window.addEventListener)document.addEventListener('DOMContentLoaded',c);else{var e=document.onreadystatechange||function(){};document.onreadystatechange=function(b){e(b);'loading'!==document.readyState&&(document.onreadystatechange=e,c())}}}})();</script><script>(function(){function c(){var b=a.contentDocument||a.contentWindow.document;if(b){var d=b.createElement('script');d.innerHTML="window.__CF$cv$params={r:'92776ccb18a66773',t:'MTc0MzE2ODAyNy4wMDAwMDA='};var a=document.createElement('script');a.nonce='';a.src='/cdn-cgi/challenge-platform/scripts/jsd/main.js';document.getElementsByTagName('head')[0].appendChild(a);";b.getElementsByTagName('head')[0].appendChild(d)}}if(document.body){var a=document.createElement('iframe');a.height=1;a.width=1;a.style.position='absolute';a.style.top=0;a.style.left=0;a.style.border='none';a.style.visibility='hidden';document.body.appendChild(a);if('loading'!==document.readyState)c();else if(window.addEventListener)document.addEventListener('DOMContentLoaded',c);else{var e=document.onreadystatechange||function(){};document.onreadystatechange=function(b){e(b);'loading'!==document.readyState&&(document.onreadystatechange=e,c())}}}})();</script></body>
 </html>
