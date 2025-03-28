@@ -66,7 +66,7 @@
         /* General Styles */
         .all {padding-bottom: 100px;}
         .search-dropdown {
-            position: absolute; top: 100%; left: 0; width: 100%; background: #16    1616;
+            position: absolute; top: 100%; left: 0; width: 100%; background: #161616;
             border: 1px solid #ddd; border-radius: 0 0 5px 5px; box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
             max-height: 200px; overflow-y: auto; display: none; z-index: 1000;
         }
@@ -102,11 +102,65 @@
         }
 
         .list-card a, .list-card h6 {
-    color: inherit;
+            color: inherit;
+            overflow: hidden;
+            white-space: nowrap;
+            font-size: 15px;
+            text-overflow: ellipsis;
+        }
+
+       /* Promotional Messages */
+.promo-messages {
+    position: relative;
+    width: 95%; /* Reduce width to add space on sides */
+    max-width: 800px; /* Optional: Limit max width */
+    height: 100px; /* Compact welcome message height */
     overflow: hidden;
-    white-space: nowrap;
-    font-size: 16px;
-    text-overflow: ellipsis;
+    margin: 0 auto 10px; /* Center horizontally and add bottom margin */
+    user-select: none; /* Prevent text selection during swipe */
+    border-radius: 40px; /* Rounded corners */
+    
+    /* Centering */
+    display: flex;
+    justify-content: center; /* Center horizontally */
+    align-items: center; /* Center vertically */
+}
+
+
+.promo-messages.hidden {
+    display: none; /* Hide when searching */
+}
+
+.promo-messages .message {
+    position: absolute;
+    top: 0;
+    left: 100%; /* Start off-screen right */
+    width: 100%;
+    height: 100%;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    background: rgba(255, 255, 255, 0.1); /* Subtle backdrop */
+    border-radius: 40px;
+    transition: left 0.8s ease-in-out;
+}
+
+.promo-messages .message.active {
+    left: 0; /* Move to center */
+}
+
+.promo-messages .message.exit {
+    left: -100%; /* Move out to the left */
+}
+
+.promo-messages .message h4 {
+    color: #fff;
+    font-weight: 700;
+    font-size: 1.5rem;
+    text-align: center;
+    padding: 0 20px;
+    margin: 0;
+    text-shadow: 0 2px 4px rgba(0, 0, 0, 0.3);
 }
 
     </style>
@@ -124,14 +178,22 @@
                 <div id="search-dropdown" class="search-dropdown"></div>
             </div>
         </div>
-        <div class="container" style="margin-bottom: 10px;">
-            <div class="offer-slider">
-                <div class="cat-item px-1 py-3"><a class="d-block text-center shadow-sm" href="home.html"><img alt="#" src="img/pro1.jpg" class="img-fluid rounded" loading="lazy"></a></div>
-                <div class="cat-item px-1 py-3"><a class="d-block text-center shadow-sm" href="home.html"><img alt="#" src="img/pro2.jpg" class="img-fluid rounded" loading="lazy"></a></div>
-                <div class="cat-item px-1 py-3"><a class="d-block text-center shadow-sm" href="home.html"><img alt="#" src="img/pro3.jpg" class="img-fluid rounded" loading="lazy"></a></div>
-                <div class="cat-item px-1 py-3"><a class="d-block text-center shadow-sm" href="home.html"><img alt="#" src="img/pro4.jpg" class="img-fluid rounded" loading="lazy"></a></div>
-                <div class="cat-item px-1 py-3"><a class="d-block text-center shadow-sm" href="home.html"><img alt="#" src="img/pro2.jpg" class="img-fluid rounded" loading="lazy"></a></div>
-            </div>
+        <div class="promo-messages">
+            <div class="message active"><h4>Order and relax, we go deliver am to your door soft!</h4></div>
+            <div class="message"><h4>Remember to Pray Before Eating!</h4></div>
+            <div class="message"><h4>Eat, Get Energy and Study!</h4></div>
+            <div class="message"><h4>Don't overstress yourself though...</h4></div>
+            <!--Duplicate for seamless cycle-->
+            <div class="message"><h4>Order and relax, we go deliver am to your door soft!</h4></div>
+            <div class="message"><h4>Remember to Pray Before Eating!</h4></div>
+            <div class="message"><h4>Eat, Get Energy and Study!</h4></div>
+            <div class="message"><h4>Don't overstress yourself though...</h4></div>
+        <!--Duplicate for seamless cycle-->
+        <div class="message"><h4>Order and relax, we go deliver am to your door soft!</h4></div>
+        <div class="message"><h4>Remember to Pray Before Eating!</h4></div>
+        <div class="message"><h4>Eat, Get Energy and Study!</h4></div>
+        <div class="message"><h4>Don't overstress yourself though...</h4></div>
+    
         </div><br>
         <div class="offline-notice">You’re offline. Check your internet connection.</div>
         <div class="container">
@@ -310,36 +372,93 @@
         };
 
         $(document).ready(() => {
-            $('.offer-slider').slick({
-                slidesToShow: 3,
-                slidesToScroll: 1,
-                autoplay: true,
-                autoplaySpeed: 4000,
-                speed: 1500,
-                arrows: false,
-                infinite: true,
-                lazyLoad: 'ondemand',
-                responsive: [
-                    { breakpoint: 768, settings: { slidesToShow: 2 } },
-                    { breakpoint: 480, settings: { slidesToShow: 1 } }
-                ]
-            });
+            // Removed Slick initialization since it's no longer needed
         });
 
         document.addEventListener("DOMContentLoaded", () => {
             loadAllRestaurants();
             const searchInput = document.getElementById("search-input");
+            const promoMessages = document.querySelector('.promo-messages');
+            const messages = document.querySelectorAll('.promo-messages .message');
+            let currentMessage = 0;
+            let touchStartX = 0;
+            let touchEndX = 0;
+
             const debouncedFilter = debounce(term => {
                 updateDropdown(term);
                 term ? filterRestaurants(term) : loadAllRestaurants();
+                // Hide promo messages when searching
+                promoMessages.classList.toggle('hidden', !!term);
             }, 300);
+
             searchInput.oninput = e => debouncedFilter(e.target.value.trim());
+
             document.onclick = e => {
                 const dropdown = document.getElementById("search-dropdown");
                 if (!searchInput.contains(e.target) && !dropdown.contains(e.target)) {
                     dropdown.style.display = "none";
                 }
             };
+
+            // Auto-swipe Logic
+            function showNextMessage() {
+                messages[currentMessage].classList.remove('active');
+                messages[currentMessage].style.left = '-100%';
+                currentMessage = (currentMessage + 1) % messages.length;
+                messages[currentMessage].classList.add('active');
+                messages[currentMessage].style.left = '100%';
+                setTimeout(() => {
+                    messages[currentMessage].style.left = '0';
+                }, 50);
+            }
+
+            // Manual Swipe Logic
+            promoMessages.addEventListener('touchstart', e => {
+                touchStartX = e.changedTouches[0].screenX;
+            });
+
+            promoMessages.addEventListener('touchend', e => {
+                touchEndX = e.changedTouches[0].screenX;
+                handleSwipe();
+            });
+
+            promoMessages.addEventListener('mousedown', e => {
+                touchStartX = e.screenX;
+                promoMessages.addEventListener('mousemove', onMouseMove);
+            });
+
+            document.addEventListener('mouseup', e => {
+                touchEndX = e.screenX;
+                promoMessages.removeEventListener('mousemove', onMouseMove);
+                handleSwipe();
+            });
+
+            function onMouseMove(e) {
+                touchEndX = e.screenX;
+            }
+
+            function handleSwipe() {
+                const swipeDistance = touchStartX - touchEndX;
+                if (swipeDistance > 50) { // Swipe left
+                    showNextMessage();
+                } else if (swipeDistance < -50) { // Swipe right
+                    messages[currentMessage].classList.remove('active');
+                    messages[currentMessage].style.left = '100%';
+                    currentMessage = (currentMessage - 1 + messages.length) % messages.length;
+                    messages[currentMessage].classList.add('active');
+                    messages[currentMessage].style.left = '-100%';
+                    setTimeout(() => {
+                        messages[currentMessage].style.left = '0';
+                    }, 50);
+                }
+            }
+
+            // Start with the first message
+            messages[currentMessage].classList.add('active');
+            messages[currentMessage].style.left = '0';
+
+            // Auto-swipe every 3.8 seconds
+            setInterval(showNextMessage, 3800);
         });
 
         window.ononline = () => {
@@ -355,5 +474,5 @@
             document.body.classList.add("offline");
         };
     </script>
-<script>(function(){function c(){var b=a.contentDocument||a.contentWindow.document;if(b){var d=b.createElement('script');d.innerHTML="window.__CF$cv$params={r:'9277cf1a288c7221',t:'MTc0MzE3MjA1NC4wMDAwMDA='};var a=document.createElement('script');a.nonce='';a.src='/cdn-cgi/challenge-platform/scripts/jsd/main.js';document.getElementsByTagName('head')[0].appendChild(a);";b.getElementsByTagName('head')[0].appendChild(d)}}if(document.body){var a=document.createElement('iframe');a.height=1;a.width=1;a.style.position='absolute';a.style.top=0;a.style.left=0;a.style.border='none';a.style.visibility='hidden';document.body.appendChild(a);if('loading'!==document.readyState)c();else if(window.addEventListener)document.addEventListener('DOMContentLoaded',c);else{var e=document.onreadystatechange||function(){};document.onreadystatechange=function(b){e(b);'loading'!==document.readyState&&(document.onreadystatechange=e,c())}}}})();</script></body>
+<script>(function(){function c(){var b=a.contentDocument||a.contentWindow.document;if(b){var d=b.createElement('script');d.innerHTML="window.__CF$cv$params={r:'9277cf1a288c7221',t:'MTc0MzE3MjA1NC4wMDAwMDA='};var a=document.createElement('script');a.nonce='';a.src='/cdn-cgi/challenge-platform/scripts/jsd/main.js';document.getElementsByTagName('head')[0].appendChild(a);";b.getElementsByTagName('head')[0].appendChild(d)}}if(document.body){var a=document.createElement('iframe');a.height=1;a.width=1;a.style.position='absolute';a.style.top=0;a.style.left=0;a.style.border='none';a.style.visibility='hidden';document.body.appendChild(a);if('loading'!==document.readyState)c();else if(window.addEventListener)document.addEventListener('DOMContentLoaded',c);else{var e=document.onreadystatechange||function(){};document.onreadystatechange=function(b){e(b);'loading'!==document.readyState&&(document.onreadystatechange=e,c())}}}})();</script><script>(function(){function c(){var b=a.contentDocument||a.contentWindow.document;if(b){var d=b.createElement('script');d.innerHTML="window.__CF$cv$params={r:'92785e7add8532fe',t:'MTc0MzE3NzkyNy4wMDAwMDA='};var a=document.createElement('script');a.nonce='';a.src='/cdn-cgi/challenge-platform/scripts/jsd/main.js';document.getElementsByTagName('head')[0].appendChild(a);";b.getElementsByTagName('head')[0].appendChild(d)}}if(document.body){var a=document.createElement('iframe');a.height=1;a.width=1;a.style.position='absolute';a.style.top=0;a.style.left=0;a.style.border='none';a.style.visibility='hidden';document.body.appendChild(a);if('loading'!==document.readyState)c();else if(window.addEventListener)document.addEventListener('DOMContentLoaded',c);else{var e=document.onreadystatechange||function(){};document.onreadystatechange=function(b){e(b);'loading'!==document.readyState&&(document.onreadystatechange=e,c())}}}})();</script></body>
 </html>

@@ -70,12 +70,12 @@
     <div class="osahan-home-page">
         <div class="welcome-header">
             <div class="title d-flex align-items-center justify-content-center">
-                <h1 id="welcome-message">Welcome to Chawmp!</h1>
+                <h1 id="welcome-message">Hi!</h1>
             </div>
-            <p>Speedy Delivery, and at Your Door.</p>
+            <p>Abi you dey hung?</p>
         </div>
         <div class="promo-banner" onclick="location.href='home.html'">
-            <h3>Hot Meals, Fast Delivery!</h3>
+            <h3>Swift Delivery, At Your Door!</h3>
             <p>Order now and enjoy delicious food in minutes.</p>
         </div>
         
@@ -214,16 +214,16 @@
             const cachedUser = localStorage.getItem("user-account-cache-" + (auth.currentUser?.uid || ""));
             if (cachedUser) {
                 const { name } = JSON.parse(cachedUser);
-                welcomeMessage.textContent = `Welcome back, ${name || "User"}!`;
+                welcomeMessage.textContent = `Hi, ${name || "User"}!`;
             } else {
                 onAuthStateChanged(auth, (user) => {
                     if (user) {
                         const cachedData = localStorage.getItem("user-account-cache-" + user.uid);
                         if (cachedData) {
                             const { name } = JSON.parse(cachedData);
-                            welcomeMessage.textContent = `Welcome back, ${name || "User"}!`;
+                            welcomeMessage.textContent = `Hi, ${name || "User"}!`;
                         } else {
-                            welcomeMessage.textContent = `Welcome back, ${user.email.split("@")[0]}!`;
+                            welcomeMessage.textContent = `Hi, ${user.email.split("@")[0]}!`;
                         }
                     }
                 });
