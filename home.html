@@ -41,6 +41,12 @@
         .list-card a, .list-card h6 {color: inherit;overflow: hidden;white-space: nowrap;font-size: 16px;text-overflow: ellipsis;text-align: left;}
         .offline-notice {display:none;text-align:center;padding:20px;color:#fff;background:#ff3b30;border-radius:10px;margin:20px;}
         body.offline .offline-notice {display:block;}
+        .time {font-size:0.75rem;
+            color:#b0b0b0;
+            margin-top:8px;}
+        .time span {background:#3a3a3a;
+            color:#fff;padding:2px 8px;
+            border-radius:8px;display:inline-block;}
     </style>
 </head>
 <body class="fixed-bottom-bar">
@@ -153,7 +159,7 @@
                                     <h6 class="mb-1" style="font-size: 1rem; font-weight: 800;">
                                         <a href="restaurant.html?id=${restaurantId}" class="text-white">${data.name || "Unnamed Restaurant"}</a>
                                     </h6>
-                                    <p class="text-white mb-1" style="font-size: 0.8rem; font-weight: 600;"><i class="feather-clock"></i> ${timeRange}</p>
+                                     <p class="time"><a href="restaurant.html?id=${restaurantId}"><span><i class="feather-clock me-1"></i> ${Math.max(5, data.delivery_time - 15)}-${data.delivery_time} mins</span></a></p>
                                 </div>
                             </div>
                         </div>
