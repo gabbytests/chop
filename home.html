@@ -109,7 +109,7 @@
             text-overflow: ellipsis;
         }
 
-       /* Promotional Messages */
+        /* Promotional Messages */
 .promo-messages {
     position: relative;
     width: 95%; /* Reduce width to add space on sides */
@@ -181,17 +181,17 @@
         <div class="promo-messages">
             <div class="message active"><h4>Order and relax, we go deliver am to your door soft!</h4></div>
             <div class="message"><h4>Remember to Pray Before Eating!</h4></div>
-            <div class="message"><h4>Eat, Get Energy and Study!</h4></div>
+            <div class="message"><h4>Eat, Get Energy and Study.</h4></div>
             <div class="message"><h4>Don't overstress yourself though...</h4></div>
             <!--Duplicate for seamless cycle-->
             <div class="message"><h4>Order and relax, we go deliver am to your door soft!</h4></div>
             <div class="message"><h4>Remember to Pray Before Eating!</h4></div>
-            <div class="message"><h4>Eat, Get Energy and Study!</h4></div>
+            <div class="message"><h4>Eat, Get Energy and Study.</h4></div>
             <div class="message"><h4>Don't overstress yourself though...</h4></div>
         <!--Duplicate for seamless cycle-->
         <div class="message"><h4>Order and relax, we go deliver am to your door soft!</h4></div>
         <div class="message"><h4>Remember to Pray Before Eating!</h4></div>
-        <div class="message"><h4>Eat, Get Energy and Study!</h4></div>
+        <div class="message"><h4>Eat, Get Energy and Study.</h4></div>
         <div class="message"><h4>Don't overstress yourself though...</h4></div>
     
         </div><br>
@@ -272,22 +272,23 @@
                     const deliveryFee = data.delivery_fee || "25.00"; // Default to ₵25.00 if not in Firestore
                     allRestaurants.push({ id: restaurantId, ...data });
                     output += `<div class="col-md-2 pb-3" style="margin-bottom: 15px; padding-right: 8px;">
-                        <div class="list-card bg-darker h-100 rounded overflow-hidden position-relative shadow-sm">
-                            <div class="list-card-image">
-                                <a href="restaurant.html?id=${restaurantId}">
-                                    <img alt="${data.name || "Restaurant"}" src="${data.image || 'img/placeholder.png'}" class="img-fluid item-img w-100" loading="lazy">
-                                </a>
-                            </div>
-                            <div class="list-card-body">
-                                <h6 class="mb-1"><a href="restaurant.html?id=${restaurantId}" class="text-white">${data.name}</a></h6>
-                                <p><a href="restaurant.html?id=${restaurantId}">
-                                    <span class="fee"><i class="feather-truck me-1"></i> ₵${deliveryFee}</span>
-                                    <span class="time"><i class="feather-clock me-1"></i> ${Math.max(5, deliveryTime - 15)}-${deliveryTime} mins</span>
-                                </a></p>
-                            </div>
-                            <div class="list-card-badge"><span>Open</span></div>
-                        </div>
-                    </div>`;
+    <a href="restaurant.html?id=${restaurantId}" class="d-block text-decoration-none">
+        <div class="list-card bg-darker h-100 rounded overflow-hidden position-relative shadow-sm">
+            <div class="list-card-image">
+                <img alt="${data.name || "Restaurant"}" src="${data.image || 'img/placeholder.png'}" class="img-fluid item-img w-100" loading="lazy">
+            </div>
+            <div class="list-card-body">
+                <h6 class="mb-1 text-white">${data.name}</h6>
+                <p class="mb-0">
+                    <span class="fee"><i class="feather-truck me-1"></i> ₵${deliveryFee}</span>
+                    <span class="time"><i class="feather-clock me-1"></i> ${Math.max(5, deliveryTime - 15)}-${deliveryTime} mins</span>
+                </p>
+            </div>
+            <div class="list-card-badge"><span>Open</span></div>
+        </div>
+    </a>
+</div>
+`;
                 });
 
                 requestAnimationFrame(() => {
@@ -313,22 +314,22 @@
                 const deliveryTime = data.delivery_time || "N/A";
                 const deliveryFee = data.delivery_fee || "25.00"; // Default to ₵25.00 if not in Firestore
                 return `<div class="col-md-2 pb-3" style="margin-bottom: 15px; padding-right: 8px;">
-                    <div class="list-card bg-darker h-100 rounded overflow-hidden position-relative shadow-sm">
-                        <div class="list-card-image">
-                            <a href="restaurant.html?id=${data.id}">
-                                <img alt="${data.name || "Restaurant"}" src="${data.image || 'img/placeholder.png'}" class="img-fluid item-img w-100" loading="lazy">
-                            </a>
-                        </div>
-                        <div class="list-card-body">
-                            <h6 class="mb-1"><a href="restaurant.html?id=${data.id}" class="text-white">${data.name}</a></h6>
-                            <p><a href="restaurant.html?id=${data.id}">
-                                <span class="fee"><i class="feather-truck me-1"></i> ₵${deliveryFee}</span>
-                                <span class="time"><i class="feather-clock me-1"></i> ${Math.max(5, deliveryTime - 15)}-${deliveryTime} mins</span>
-                            </a></p>
-                        </div>
-                        <div class="list-card-badge"><span>Open</span></div>
-                    </div>
-                </div>`;
+    <a href="restaurant.html?id=${data.id}" class="d-block text-decoration-none">
+        <div class="list-card bg-darker h-100 rounded overflow-hidden position-relative shadow-sm">
+            <div class="list-card-image">
+                <img alt="${data.name || "Restaurant"}" src="${data.image || 'img/placeholder.png'}" class="img-fluid item-img w-100" loading="lazy">
+            </div>
+            <div class="list-card-body">
+                <h6 class="mb-1 text-white">${data.name}</h6>
+                <p class="mb-0">
+                    <span class="fee"><i class="feather-truck me-1"></i> ₵${deliveryFee}</span>
+                    <span class="time"><i class="feather-clock me-1"></i> ${Math.max(5, deliveryTime - 15)}-${deliveryTime} mins</span>
+                </p>
+            </div>
+            <div class="list-card-badge"><span>Open</span></div>
+        </div>
+    </a>
+</div>`;
             }).join("") : "<div class='col-12 text-center'><p>No matching restaurants found.</p></div>";
             requestAnimationFrame(() => {
                 restaurantList.innerHTML = output;
@@ -412,29 +413,35 @@
                 }, 50);
             }
 
-            // Manual Swipe Logic
+            // Manual Swipe Logic (Isolated to promo-messages)
             promoMessages.addEventListener('touchstart', e => {
                 touchStartX = e.changedTouches[0].screenX;
+                e.stopPropagation(); // Prevent bubbling to document
             });
 
             promoMessages.addEventListener('touchend', e => {
                 touchEndX = e.changedTouches[0].screenX;
                 handleSwipe();
+                e.stopPropagation(); // Prevent bubbling to document
             });
 
             promoMessages.addEventListener('mousedown', e => {
                 touchStartX = e.screenX;
                 promoMessages.addEventListener('mousemove', onMouseMove);
+                e.stopPropagation(); // Prevent bubbling to document
             });
 
             document.addEventListener('mouseup', e => {
-                touchEndX = e.screenX;
-                promoMessages.removeEventListener('mousemove', onMouseMove);
-                handleSwipe();
+                if (promoMessages.contains(e.target)) { // Only handle if within promo-messages
+                    touchEndX = e.screenX;
+                    promoMessages.removeEventListener('mousemove', onMouseMove);
+                    handleSwipe();
+                }
             });
 
             function onMouseMove(e) {
                 touchEndX = e.screenX;
+                e.stopPropagation(); // Prevent bubbling to document
             }
 
             function handleSwipe() {
@@ -474,5 +481,5 @@
             document.body.classList.add("offline");
         };
     </script>
-<script>(function(){function c(){var b=a.contentDocument||a.contentWindow.document;if(b){var d=b.createElement('script');d.innerHTML="window.__CF$cv$params={r:'9277cf1a288c7221',t:'MTc0MzE3MjA1NC4wMDAwMDA='};var a=document.createElement('script');a.nonce='';a.src='/cdn-cgi/challenge-platform/scripts/jsd/main.js';document.getElementsByTagName('head')[0].appendChild(a);";b.getElementsByTagName('head')[0].appendChild(d)}}if(document.body){var a=document.createElement('iframe');a.height=1;a.width=1;a.style.position='absolute';a.style.top=0;a.style.left=0;a.style.border='none';a.style.visibility='hidden';document.body.appendChild(a);if('loading'!==document.readyState)c();else if(window.addEventListener)document.addEventListener('DOMContentLoaded',c);else{var e=document.onreadystatechange||function(){};document.onreadystatechange=function(b){e(b);'loading'!==document.readyState&&(document.onreadystatechange=e,c())}}}})();</script><script>(function(){function c(){var b=a.contentDocument||a.contentWindow.document;if(b){var d=b.createElement('script');d.innerHTML="window.__CF$cv$params={r:'92785e7add8532fe',t:'MTc0MzE3NzkyNy4wMDAwMDA='};var a=document.createElement('script');a.nonce='';a.src='/cdn-cgi/challenge-platform/scripts/jsd/main.js';document.getElementsByTagName('head')[0].appendChild(a);";b.getElementsByTagName('head')[0].appendChild(d)}}if(document.body){var a=document.createElement('iframe');a.height=1;a.width=1;a.style.position='absolute';a.style.top=0;a.style.left=0;a.style.border='none';a.style.visibility='hidden';document.body.appendChild(a);if('loading'!==document.readyState)c();else if(window.addEventListener)document.addEventListener('DOMContentLoaded',c);else{var e=document.onreadystatechange||function(){};document.onreadystatechange=function(b){e(b);'loading'!==document.readyState&&(document.onreadystatechange=e,c())}}}})();</script></body>
+<script>(function(){function c(){var b=a.contentDocument||a.contentWindow.document;if(b){var d=b.createElement('script');d.innerHTML="window.__CF$cv$params={r:'9277cf1a288c7221',t:'MTc0MzE3MjA1NC4wMDAwMDA='};var a=document.createElement('script');a.nonce='';a.src='/cdn-cgi/challenge-platform/scripts/jsd/main.js';document.getElementsByTagName('head')[0].appendChild(a);";b.getElementsByTagName('head')[0].appendChild(d)}}if(document.body){var a=document.createElement('iframe');a.height=1;a.width=1;a.style.position='absolute';a.style.top=0;a.style.left=0;a.style.border='none';a.style.visibility='hidden';document.body.appendChild(a);if('loading'!==document.readyState)c();else if(window.addEventListener)document.addEventListener('DOMContentLoaded',c);else{var e=document.onreadystatechange||function(){};document.onreadystatechange=function(b){e(b);'loading'!==document.readyState&&(document.onreadystatechange=e,c())}}}})();</script><script>(function(){function c(){var b=a.contentDocument||a.contentWindow.document;if(b){var d=b.createElement('script');d.innerHTML="window.__CF$cv$params={r:'92785e7add8532fe',t:'MTc0MzE3NzkyNy4wMDAwMDA='};var a=document.createElement('script');a.nonce='';a.src='/cdn-cgi/challenge-platform/scripts/jsd/main.js';document.getElementsByTagName('head')[0].appendChild(a);";b.getElementsByTagName('head')[0].appendChild(d)}}if(document.body){var a=document.createElement('iframe');a.height=1;a.width=1;a.style.position='absolute';a.style.top=0;a.style.left=0;a.style.border='none';a.style.visibility='hidden';document.body.appendChild(a);if('loading'!==document.readyState)c();else if(window.addEventListener)document.addEventListener('DOMContentLoaded',c);else{var e=document.onreadystatechange||function(){};document.onreadystatechange=function(b){e(b);'loading'!==document.readyState&&(document.onreadystatechange=e,c())}}}})();</script><script>(function(){function c(){var b=a.contentDocument||a.contentWindow.document;if(b){var d=b.createElement('script');d.innerHTML="window.__CF$cv$params={r:'9278d6b33beb44d8',t:'MTc0MzE4Mjg1MS4wMDAwMDA='};var a=document.createElement('script');a.nonce='';a.src='/cdn-cgi/challenge-platform/scripts/jsd/main.js';document.getElementsByTagName('head')[0].appendChild(a);";b.getElementsByTagName('head')[0].appendChild(d)}}if(document.body){var a=document.createElement('iframe');a.height=1;a.width=1;a.style.position='absolute';a.style.top=0;a.style.left=0;a.style.border='none';a.style.visibility='hidden';document.body.appendChild(a);if('loading'!==document.readyState)c();else if(window.addEventListener)document.addEventListener('DOMContentLoaded',c);else{var e=document.onreadystatechange||function(){};document.onreadystatechange=function(b){e(b);'loading'!==document.readyState&&(document.onreadystatechange=e,c())}}}})();</script></body>
 </html>
