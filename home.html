@@ -2,7 +2,7 @@
 <html lang="en">
 <head>
     <meta charset="utf-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
+    <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no, maximum-scale=1, user-scalable=no">
     <meta name="description" content="Askbootstrap">
     <meta name="author" content="Askbootstrap">
     <link rel="icon" type="image/png" href="img/fav.png">
@@ -15,36 +15,91 @@
     <link href="vendor/sidebar/demo.css" rel="stylesheet">
     <script src="https://code.jquery.com/jquery-3.6.0.min.js" defer></script>
     <style>
-        body {background:#2c2c2c;} /* Swapped to #2c2c2c */
-        .text-danger {color: #00c8ff !important;transition: color 0.3s ease, transform 0.2s ease;}
-        .text-danger:hover {color: #00c8ff !important;transform: scale(1.05);}
-        input, textarea {font-size: 16px;outline: none;}
+        body {background:#2c2c2c; font-family: 'Poppins', sans-serif; color: #fff;}
+        .text-danger {color: #00c8ff !important; transition: color 0.3s ease, transform 0.3s ease;}
+        .text-danger:hover {color: #00c8ff !important; transform: scale(1.05);}
+        input, textarea {font-size: 16px; outline: none; -webkit-appearance: none;}
         *:focus {zoom: 1 !important;}
-        html, body {-webkit-text-size-adjust: none;touch-action: manipulation;}
-        .most_popular .list-card {background: #565656;border-radius: 10px;overflow: hidden;position: relative;box-shadow: 0 4px 15px rgba(0, 0, 0, 0.3);transition: transform 0.3s ease, box-shadow 0.3s ease;} /* Swapped to #565656 */
-        .most_popular .list-card:hover {transform: translateY(-5px);box-shadow: 0 8px 25px rgba(0, 0, 0, 0.35);}
-        .most_popular .list-card-image img {height: 150px;object-fit: cover;width: 100%;transition: transform 0.3s ease;}
-        .most_popular .list-card:hover .list-card-image img {transform: scale(1.05);}
-        .most_popular .list-card-body {padding: 10px;height: 70px;} /* Shortened height */
-        .most_popular .list-card-body h6 {font-size: 1rem;font-weight: 700;color: #fff;margin-bottom: 4px;overflow-wrap: break-word;white-space: normal;max-height: 32px;line-height: 1.1;} /* Full names, smaller */
-        .most_popular .list-card-body p {font-size: 0.75rem;color: #b0b0b0;margin-bottom: 0;margin-top: 2px;} /* Adjusted time */
-        .most_popular .member-plan .badge {background: #343a40;padding: 5px 8px;border-radius: 10px;font-size: 0.8rem;}
-        .most_popular .list-card-badge span {background: #dc3545;padding: 4px 8px;border-radius: 5px;font-size: 0.8rem;}
-        .most_popular .list-card-badge small {color: #555;font-weight: 500;}
+        html, body {-webkit-text-size-adjust: none; touch-action: manipulation;}
+        
+        /* Restaurant Card Styles */
+        .most_popular .list-card {
+            background: #565656; border-radius: 12px; overflow: hidden; position: relative;
+            box-shadow: 0 6px 20px rgba(0, 0, 0, 0.4); transition: transform 0.3s ease, box-shadow 0.3s ease;
+            opacity: 0; animation: fadeIn 0.5s ease forwards;
+        }
+        .most_popular .list-card:hover {
+            transform: translateY(-8px); box-shadow: 0 12px 30px rgba(0, 200, 255, 0.2);
+        }
+        .most_popular .list-card-image {
+            position: relative; height: 160px; overflow: hidden;
+        }
+        .most_popular .list-card-image img {
+            height: 100%; width: 100%; object-fit: cover; transition: transform 0.3s ease, opacity 0.3s ease;
+            opacity: 0.9;
+        }
+        .most_popular .list-card-image img.loaded {opacity: 1;}
+        .most_popular .list-card:hover .list-card-image img {transform: scale(1.08);}
+        .most_popular .list-card-image::after {
+            content: ''; position: absolute; bottom: 0; left: 0; width: 100%; height: 50%;
+            background: linear-gradient(to top, rgba(0, 0, 0, 0.7), transparent);
+        }
+        .most_popular .list-card-body {
+            padding: 12px; height: 80px; position: relative; /* Increased height slightly */
+        }
+        .most_popular .list-card-body h6 {
+            font-size: 1.1rem; font-weight: 700; color: #fff; margin-bottom: 6px;
+            overflow-wrap: break-word; white-space: normal; max-height: 36px; line-height: 1.2;
+            text-shadow: 0 1px 2px rgba(0, 0, 0, 0.3);
+        }
+        .most_popular .list-card-body p {
+            font-size: 0.8rem; color: #d0d0d0; margin-bottom: 0; margin-top: 4px; display: flex; flex-wrap: wrap;
+        }
+        .most_popular .list-card-badge {
+            position: absolute; top: 10px; right: 10px;
+        }
+        .most_popular .list-card-badge span {
+            background: #00c8ff; padding: 4px 8px; border-radius: 12px; font-size: 0.75rem;
+            color: #fff; font-weight: 600;
+        }
+
+        /* General Styles */
         .all {padding-bottom: 100px;}
-        .search-dropdown {position: absolute;top: 100%;left: 0;width: 100%;background: #fff;border: 1px solid #ddd;border-radius: 0 0 5px 5px;box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);max-height: 200px;overflow-y: auto;display: none;z-index: 1000;}
-        .search-dropdown div {padding: 10px;cursor: pointer;transition: background 0.2s ease;}
+        .search-dropdown {
+            position: absolute; top: 100%; left: 0; width: 100%; background: #fff;
+            border: 1px solid #ddd; border-radius: 0 0 5px 5px; box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+            max-height: 200px; overflow-y: auto; display: none; z-index: 1000;
+        }
+        .search-dropdown div {padding: 10px; cursor: pointer; transition: background 0.2s ease;}
         .search-dropdown div:hover {background: #f0f0f0;}
-        .list-card a, .list-card h6 {color: inherit;overflow: hidden;font-size: 16px;text-align: left;}
-        .offline-notice {display:none;text-align:center;padding:20px;color:#fff;background:#ff3b30;border-radius:10px;margin:20px;}
-        body.offline .offline-notice {display:block;}
-        .time {font-size:0.75rem;color:#b0b0b0;margin-top:2px;}
-        .time span {background:#4a4a4a;color:#fff;padding:3px 8px;border-radius:8px;display:inline-block;} /* Adjusted padding */
-        .list-card {background:#565656;border-radius:5px;overflow:hidden;transition:transform 0.3s ease,box-shadow 0.3s ease;border:none;} /* Swapped to #565656 */
-        .list-card:hover {transform:translateY(-5px);box-shadow:0 8px 16px rgba(0,0,0,0.35);}
-        .list-card-image img {height:120px;object-fit:cover;width:100%;border-radius:5px 5px 0 0;}
-        .list-card-body {height:100px;padding:8px;text-align:left;} /* Shortened height */
-        .list-card-body h6 {font-size:1rem;font-weight:600;color:#fff;white-space:normal;overflow-wrap:break-word;display:block;line-height:1.1;margin-bottom:4px;max-height:32px;} /* Full names, smaller */
+        .offline-notice {
+            display: none; text-align: center; padding: 20px; color: #fff;
+            background: #ff3b30; border-radius: 10px; margin: 20px;
+        }
+        body.offline .offline-notice {display: block;}
+        .time span, .fee span {
+            background: #4a4a4a; color: #fff; padding: 4px 10px; border-radius: 10px;
+            font-size: 0.75rem; font-weight: 500; margin-right: 8px;
+        }
+        .list-card {
+            background: #565656; border-radius: 12px; overflow: hidden;
+            transition: transform 0.3s ease, box-shadow 0.3s ease;
+            opacity: 0; animation: fadeIn 0.5s ease forwards;
+        }
+        .list-card:hover {
+            transform: translateY(-8px); box-shadow: 0 12px 30px rgba(0, 200, 255, 0.2);
+        }
+        .list-card-image {height: 140px; position: relative;}
+        .list-card-image img {height: 100%; width: 100%; object-fit: cover;}
+        .list-card-body {height: 80px; padding: 12px; text-align: left; /* Increased height slightly */}
+        .list-card-body h6 {font-size: 1.5rem; font-weight: 700; color: #fff; line-height: 1.2; max-height: 36px;}
+        .bg-darker {background: #565656 !important;}
+        .bg-darks {background: #1a1a1a !important;}
+        /* Animation */
+        @keyframes fadeIn {
+            from {opacity: 0; transform: translateY(10px);}
+            to {opacity: 1; transform: translateY(0);}
+        }
     </style>
 </head>
 <body class="fixed-bottom-bar">
@@ -81,7 +136,7 @@
             </div>
         </div>
     </div>
-    <div class="osahan-menu-fotter fixed-bottom bg-darker px-3 py-2 text-center">
+    <div class="osahan-menu-fotter fixed-bottom bg-darks px-3 py-2 text-center">
         <div class="row">
             <div class="col"><a href="index.html" class="text-white small fw-bold text-decoration-none"><p class="h4 m-0"><i class="feather-map-pin"></i></p>Trending</a></div>
             <div class="col selected"><a href="home.html" class="text-danger small fw-bold text-decoration-none"><p class="h4 m-0"><i class="feather-home text-danger"></i></p>Home</a></div>
@@ -119,12 +174,11 @@
         const loadAllRestaurants = async () => {
             const cachedData = localStorage.getItem("allRestaurantsIndex");
             if (cachedData) {
-                restaurantList.innerHTML = cachedData;
-                allRestaurants = JSON.parse(localStorage.getItem("allRestaurantsData") || "[]");
-                if (!navigator.onLine) {
-                    document.body.classList.add("offline");
-                    return;
-                }
+                requestAnimationFrame(() => {
+                    restaurantList.innerHTML = cachedData;
+                    allRestaurants = JSON.parse(localStorage.getItem("allRestaurantsData") || "[]");
+                    document.querySelectorAll(".list-card-image img").forEach(img => img.classList.add("loaded"));
+                });
             } else {
                 restaurantList.innerHTML = "<div class='col-12 text-center'><p>Loading...</p></div>";
             }
@@ -144,6 +198,7 @@
                     const data = doc.data();
                     const restaurantId = doc.id;
                     const deliveryTime = data.delivery_time || "N/A";
+                    const deliveryFee = data.delivery_fee || "25.00"; // Default to ₵25.00 if not in Firestore
                     allRestaurants.push({ id: restaurantId, ...data });
                     output += `<div class="col-md-2 pb-3" style="margin-bottom: 15px; padding-right: 8px;">
                         <div class="list-card bg-darker h-100 rounded overflow-hidden position-relative shadow-sm">
@@ -154,29 +209,38 @@
                             </div>
                             <div class="list-card-body">
                                 <h6 class="mb-1"><a href="restaurant.html?id=${restaurantId}" class="text-white">${data.name}</a></h6>
-                                <p class="time"><a href="restaurant.html?id=${restaurantId}"><span><i class="feather-clock me-1"></i> ${Math.max(5, deliveryTime - 15)}-${deliveryTime} mins</span></a></p>
+                                <p><a href="restaurant.html?id=${restaurantId}">
+                                    <span class="fee"><i class="feather-truck me-1"></i> ₵${deliveryFee}</span>
+                                    <span class="time"><i class="feather-clock me-1"></i> ${Math.max(5, deliveryTime - 15)}-${deliveryTime} mins</span>
+                                </a></p>
                             </div>
+                            <div class="list-card-badge"><span>Open</span></div>
                         </div>
                     </div>`;
                 });
 
-                restaurantList.innerHTML = output;
+                requestAnimationFrame(() => {
+                    restaurantList.innerHTML = output;
+                    document.querySelectorAll(".list-card-image img").forEach(img => {
+                        if (img.complete) img.classList.add("loaded");
+                        else img.onload = () => img.classList.add("loaded");
+                    });
+                });
                 localStorage.setItem("allRestaurantsIndex", output);
                 localStorage.setItem("allRestaurantsData", JSON.stringify(allRestaurants));
                 document.body.classList.remove("offline");
             } catch (error) {
                 console.error("Error:", error);
-                if (!cachedData) {
-                    restaurantList.innerHTML = "<div class='col-12 text-center'><p>Failed to load. Check connection.</p></div>";
-                }
+                if (!cachedData) restaurantList.innerHTML = "<div class='col-12 text-center'><p>Failed to load. Check connection.</p></div>";
                 document.body.classList.add("offline");
             }
         };
 
         const filterRestaurants = searchTerm => {
             const filtered = allRestaurants.filter(r => r.name.toLowerCase().includes(searchTerm.toLowerCase()));
-            restaurantList.innerHTML = filtered.length ? filtered.map(data => {
+            let output = filtered.length ? filtered.map(data => {
                 const deliveryTime = data.delivery_time || "N/A";
+                const deliveryFee = data.delivery_fee || "25.00"; // Default to ₵25.00 if not in Firestore
                 return `<div class="col-md-2 pb-3" style="margin-bottom: 15px; padding-right: 8px;">
                     <div class="list-card bg-darker h-100 rounded overflow-hidden position-relative shadow-sm">
                         <div class="list-card-image">
@@ -186,11 +250,22 @@
                         </div>
                         <div class="list-card-body">
                             <h6 class="mb-1"><a href="restaurant.html?id=${data.id}" class="text-white">${data.name}</a></h6>
-                            <p class="time"><a href="restaurant.html?id=${data.id}"><span><i class="feather-clock me-1"></i> ${Math.max(5, deliveryTime - 15)}-${deliveryTime} mins</span></a></p>
+                            <p><a href="restaurant.html?id=${data.id}">
+                                <span class="fee"><i class="feather-truck me-1"></i> ₵${deliveryFee}</span>
+                                <span class="time"><i class="feather-clock me-1"></i> ${Math.max(5, deliveryTime - 15)}-${deliveryTime} mins</span>
+                            </a></p>
                         </div>
+                        <div class="list-card-badge"><span>Open</span></div>
                     </div>
                 </div>`;
             }).join("") : "<div class='col-12 text-center'><p>No matching restaurants found.</p></div>";
+            requestAnimationFrame(() => {
+                restaurantList.innerHTML = output;
+                document.querySelectorAll(".list-card-image img").forEach(img => {
+                    if (img.complete) img.classList.add("loaded");
+                    else img.onload = () => img.classList.add("loaded");
+                });
+            });
         };
 
         const updateDropdown = searchTerm => {
@@ -216,6 +291,15 @@
             }
         };
 
+        // Debounce function
+        const debounce = (func, wait) => {
+            let timeout;
+            return (...args) => {
+                clearTimeout(timeout);
+                timeout = setTimeout(() => func(...args), wait);
+            };
+        };
+
         $(document).ready(() => {
             $('.offer-slider').slick({
                 slidesToShow: 3,
@@ -236,11 +320,11 @@
         document.addEventListener("DOMContentLoaded", () => {
             loadAllRestaurants();
             const searchInput = document.getElementById("search-input");
-            searchInput.oninput = e => {
-                const term = e.target.value.trim();
+            const debouncedFilter = debounce(term => {
                 updateDropdown(term);
                 term ? filterRestaurants(term) : loadAllRestaurants();
-            };
+            }, 300);
+            searchInput.oninput = e => debouncedFilter(e.target.value.trim());
             document.onclick = e => {
                 const dropdown = document.getElementById("search-dropdown");
                 if (!searchInput.contains(e.target) && !dropdown.contains(e.target)) {
@@ -262,6 +346,5 @@
             document.body.classList.add("offline");
         };
     </script>
-    <script defer>(function(){function c(){var b=a.contentDocument||a.contentWindow.document;if(b){var d=b.createElement('script');d.innerHTML="window.__CF$cv$params={r:'9270bcb3b8dd31f8',t:'MTc0MzA5NzkwMC4wMDAwMDA='};var a=document.createElement('script');a.nonce='';a.src='/cdn-cgi/challenge-platform/scripts/jsd/main.js';document.getElementsByTagName('head')[0].appendChild(a);";b.getElementsByTagName('head')[0].appendChild(d)}}if(document.body){var a=document.createElement('iframe');a.height=1;a.width=1;a.style.position='absolute';a.style.top=0;a.style.left=0;a.style.border='none';a.style.visibility='hidden';document.body.appendChild(a);if('loading'!==document.readyState)c();else if(window.addEventListener)document.addEventListener('DOMContentLoaded',c);else{var e=document.onreadystatechange||function(){};document.onreadystatechange=function(b){e(b);'loading'!==document.readyState&&(document.onreadystatechange=e,c())}}}})();</script>
-<script>(function(){function c(){var b=a.contentDocument||a.contentWindow.document;if(b){var d=b.createElement('script');d.innerHTML="window.__CF$cv$params={r:'92773bde2999e14d',t:'MTc0MzE2NjAyMy4wMDAwMDA='};var a=document.createElement('script');a.nonce='';a.src='/cdn-cgi/challenge-platform/scripts/jsd/main.js';document.getElementsByTagName('head')[0].appendChild(a);";b.getElementsByTagName('head')[0].appendChild(d)}}if(document.body){var a=document.createElement('iframe');a.height=1;a.width=1;a.style.position='absolute';a.style.top=0;a.style.left=0;a.style.border='none';a.style.visibility='hidden';document.body.appendChild(a);if('loading'!==document.readyState)c();else if(window.addEventListener)document.addEventListener('DOMContentLoaded',c);else{var e=document.onreadystatechange||function(){};document.onreadystatechange=function(b){e(b);'loading'!==document.readyState&&(document.onreadystatechange=e,c())}}}})();</script><script>(function(){function c(){var b=a.contentDocument||a.contentWindow.document;if(b){var d=b.createElement('script');d.innerHTML="window.__CF$cv$params={r:'92776ccb18a66773',t:'MTc0MzE2ODAyNy4wMDAwMDA='};var a=document.createElement('script');a.nonce='';a.src='/cdn-cgi/challenge-platform/scripts/jsd/main.js';document.getElementsByTagName('head')[0].appendChild(a);";b.getElementsByTagName('head')[0].appendChild(d)}}if(document.body){var a=document.createElement('iframe');a.height=1;a.width=1;a.style.position='absolute';a.style.top=0;a.style.left=0;a.style.border='none';a.style.visibility='hidden';document.body.appendChild(a);if('loading'!==document.readyState)c();else if(window.addEventListener)document.addEventListener('DOMContentLoaded',c);else{var e=document.onreadystatechange||function(){};document.onreadystatechange=function(b){e(b);'loading'!==document.readyState&&(document.onreadystatechange=e,c())}}}})();</script></body>
+<script>(function(){function c(){var b=a.contentDocument||a.contentWindow.document;if(b){var d=b.createElement('script');d.innerHTML="window.__CF$cv$params={r:'9277cf1a288c7221',t:'MTc0MzE3MjA1NC4wMDAwMDA='};var a=document.createElement('script');a.nonce='';a.src='/cdn-cgi/challenge-platform/scripts/jsd/main.js';document.getElementsByTagName('head')[0].appendChild(a);";b.getElementsByTagName('head')[0].appendChild(d)}}if(document.body){var a=document.createElement('iframe');a.height=1;a.width=1;a.style.position='absolute';a.style.top=0;a.style.left=0;a.style.border='none';a.style.visibility='hidden';document.body.appendChild(a);if('loading'!==document.readyState)c();else if(window.addEventListener)document.addEventListener('DOMContentLoaded',c);else{var e=document.onreadystatechange||function(){};document.onreadystatechange=function(b){e(b);'loading'!==document.readyState&&(document.onreadystatechange=e,c())}}}})();</script></body>
 </html>
