@@ -16,6 +16,17 @@
     <link href="vendor/bootstrap/css/bootstrap.min.css" rel="stylesheet">
     <link rel="manifest" href="manifest.json">
     <link href="css/style.css" rel="stylesheet">
+
+    <script src="https://cdn.onesignal.com/sdks/web/v16/OneSignalSDK.page.js" defer></script>
+<script>
+  window.OneSignalDeferred = window.OneSignalDeferred || [];
+  OneSignalDeferred.push(async function(OneSignal) {
+    await OneSignal.init({
+      appId: "f69ee07c-2405-4210-a18f-c6842db4c294",
+    });
+  });
+</script>
+
     <style>
         body {background:#2c2c2c;font-family:'Poppins', sans-serif;color:#fff;overflow-x:hidden;}
         .trending-section {padding:40px 0;opacity:0;transition:opacity 0.5s ease;}
@@ -128,7 +139,6 @@
         import { initializeApp } from "https://www.gstatic.com/firebasejs/10.9.0/firebase-app.js";
         import { getAuth, onAuthStateChanged } from "https://www.gstatic.com/firebasejs/10.9.0/firebase-auth.js";
         import { getFirestore, collection, getDocs, query, orderBy, limit, enableIndexedDbPersistence } from "https://www.gstatic.com/firebasejs/10.9.0/firebase-firestore.js";
-        import { getMessaging, getToken } from "https://www.gstatic.com/firebasejs/10.9.0/firebase-messaging.js";
 
         const firebaseConfig = {
             apiKey: "AIzaSyADvpUQWo75ExePGoCRirD2mM-lmfM4Cmc",
@@ -143,36 +153,21 @@
         const app = initializeApp(firebaseConfig);
         const db = getFirestore(app);
         const auth = getAuth(app);
-        const messaging = getMessaging(app);
 
         enableIndexedDbPersistence(db).catch(err => console.warn("Firestore persistence failed:", err));
-
-        async function registerForPush() {
-            if (Notification.permission === "granted") {
-                const registration = await navigator.serviceWorker.ready;
-                const token = await getToken(messaging, { 
-                    vapidKey: "dkjg-RfDMkh_JWj4wqy-sELjU_6qp3rqroUNDWVmxII", // Replace with your Firebase VAPID key
-                    serviceWorkerRegistration: registration 
-                });
-                console.log("FCM Token:", token);
-            } else if (Notification.permission !== "denied") {
-                Notification.requestPermission().then(permission => {
-                    if (permission === "granted") registerForPush();
-                });
-            }
-        }
 
         async function loadTrendingRestaurants() {
             const trendingList = document.getElementById("trending-list");
             const trendingSection = document.querySelector(".trending-section");
 
+            // Check cache first for instant load
             const cachedData = localStorage.getItem("trendingRestaurants");
             if (cachedData) {
                 trendingList.innerHTML = cachedData;
                 setTimeout(() => {
                     trendingSection.classList.add("loaded");
                     document.querySelectorAll(".list-card").forEach(card => card.classList.add("loaded"));
-                }, 50);
+                }, 50); // Faster fade-in
                 if (!navigator.onLine) {
                     document.body.classList.add("offline");
                     return;
@@ -217,6 +212,7 @@
                     trendingSection.classList.add("loaded");
                     document.querySelectorAll(".list-card").forEach(card => card.classList.add("loaded"));
                 }, 50);
+
             } catch (error) {
                 console.error("❌ ERROR fetching trending restaurants:", error);
                 if (!cachedData) {
@@ -250,7 +246,6 @@
         document.addEventListener("DOMContentLoaded", () => {
             loadTrendingRestaurants();
             updateWelcomeMessage();
-            registerForPush(); // Add this to prompt for notifications
 
             setTimeout(() => {
                 document.querySelector(".welcome-header").classList.add("loaded");
@@ -274,6 +269,39 @@
                 setTimeout(() => document.querySelector(".trending-section").classList.add("loaded"), 50);
             }
         });
+
+        // Check if browser supports service workers and push
+if ("serviceWorker" in navigator && "PushManager" in window) {
+    navigator.serviceWorker.register("/service-worker.js")
+        .then(registration => {
+            // Ask for notification permission
+            Notification.requestPermission().then(permission => {
+                if (permission === "granted") {
+                    // Get the push subscription
+                    registration.pushManager.subscribe({
+                        userVisibleOnly: true, // Required by browsers
+                        applicationServerKey: "YOUR_VAPID_PUBLIC_KEY" // See below for this
+                    }).then(subscription => {
+                        // Send this subscription to Progressier
+                        fetch("https://progressier.app/YOUR_APP_ID/subscribe", {
+                            method: "POST",
+                            headers: {
+                                "Content-Type": "application/json",
+                                "Authorization": "Token YOUR_API_TOKEN"
+                            },
+                            body: JSON.stringify(subscription)
+                        })
+                        .then(response => {
+                            if (response.ok) console.log("Subscribed, fam!");
+                            else console.error("Subscription failed, bro.");
+                        })
+                        .catch(error => console.error("Error:", error));
+                    });
+                }
+            });
+        })
+        .catch(error => console.error("Service Worker reg failed:", error));
+}
     </script>
 <script>(function(){function c(){var b=a.contentDocument||a.contentWindow.document;if(b){var d=b.createElement('script');d.innerHTML="window.__CF$cv$params={r:'927746ef38e553de',t:'MTc0MzE2NjQ3Ni4wMDAwMDA='};var a=document.createElement('script');a.nonce='';a.src='/cdn-cgi/challenge-platform/scripts/jsd/main.js';document.getElementsByTagName('head')[0].appendChild(a);";b.getElementsByTagName('head')[0].appendChild(d)}}if(document.body){var a=document.createElement('iframe');a.height=1;a.width=1;a.style.position='absolute';a.style.top=0;a.style.left=0;a.style.border='none';a.style.visibility='hidden';document.body.appendChild(a);if('loading'!==document.readyState)c();else if(window.addEventListener)document.addEventListener('DOMContentLoaded',c);else{var e=document.onreadystatechange||function(){};document.onreadystatechange=function(b){e(b);'loading'!==document.readyState&&(document.onreadystatechange=e,c())}}}})();</script></body>
 </html>

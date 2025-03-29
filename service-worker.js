@@ -10,9 +10,7 @@ const urlsToCache = [
     "/img/fav.png",
     "/img/icon-192x192.png",
     "/img/icon-512x512.png",
-    "/manifest.json",
-    "https://www.gstatic.com/firebasejs/10.9.0/firebase-app.js",
-    "https://www.gstatic.com/firebasejs/10.9.0/firebase-firestore.js"
+    "/manifest.json"
 ];
 
 self.addEventListener("install", event => {
@@ -50,25 +48,29 @@ self.addEventListener("fetch", event => {
                         return response;
                     });
             })
-            .catch(() => {
-                return caches.match("/index.html");
-            })
+            .catch(() => caches.match("/index.html"))
     );
 });
 
-// Handle push notifications
+// OneSignal Push Handling
 self.addEventListener("push", event => {
-    const data = event.data.json();
-    const title = data.notification.title;
+    let data = {};
+    if (event.data) {
+        data = event.data.json(); // OneSignal sends JSON
+    }
+
+    const title = data.headings?.en || "Chawmp Update";
     const options = {
-        body: data.notification.body,
+        body: data.contents?.en || "Something new, fam!",
         icon: "/img/icon-192x192.png",
-        data: { url: "/index.html" } // Default URL to open on click
+        badge: "/img/fav.png",
+        vibrate: [200, 100, 200],
+        data: { url: data.url || "/index.html" }
     };
+
     event.waitUntil(self.registration.showNotification(title, options));
 });
 
-// Handle notification clicks
 self.addEventListener("notificationclick", event => {
     event.notification.close();
     const url = event.notification.data.url || "/index.html";
